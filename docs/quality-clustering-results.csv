@@ -1,0 +1,4 @@
+cluster,n_customers,avg_return_rate_pct,avg_orders_lifetime,avg_order_value,avg_account_age_yrs,pct_quality_issue_returns
+0,6646,44.8,27.2,484.01,3.43,0.22
+1,43829,6.8,39.6,157.25,3.42,0.38
+2,9525,57.7,58.8,129.18,3.42,0.19

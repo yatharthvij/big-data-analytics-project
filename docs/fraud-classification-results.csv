@@ -1,0 +1,11 @@
+model,class,precision,recall,f1
+Logistic Regression,Legitimate,1.0,1.0,1.0
+Logistic Regression,Policy Abuser,0.993,0.99,0.991
+Logistic Regression,Fraudulent Return,0.999,0.994,0.997
+Logistic Regression,Wardrobing,0.985,0.996,0.991
+Logistic Regression,WEIGHTED AVG,0.998,0.998,0.998
+Random Forest,Legitimate,1.0,1.0,1.0
+Random Forest,Policy Abuser,0.999,0.996,0.997
+Random Forest,Fraudulent Return,0.997,0.999,0.998
+Random Forest,Wardrobing,0.996,0.999,0.998
+Random Forest,WEIGHTED AVG,0.999,0.999,0.999

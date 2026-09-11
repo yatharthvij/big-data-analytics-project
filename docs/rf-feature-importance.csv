@@ -1,0 +1,16 @@
+feature,importance
+days_to_return,0.15162096839093767
+wishlist_to_cart_time_hrs,0.12565614563074756
+return_rate_pct,0.11699784173545302
+return_to_order_ratio,0.11460078676073712
+tracking_number_valid,0.0722718286295406
+total_returns_lifetime,0.0679591918697122
+customer_support_contacts,0.0440308658627133
+refund_amount_requested_usd,0.042977059012518797
+refund_to_order_value_ratio,0.038166393422725625
+fraud_signal_score,0.0350694488046908
+avg_order_value_usd,0.03407382243513488
+is_high_value_item,0.02686127225829273
+total_orders_lifetime,0.021381516186132765
+item_returned_opened,0.020345123698270594
+previous_dispute_count,0.014218488642113282
