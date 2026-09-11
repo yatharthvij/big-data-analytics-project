@@ -1,0 +1,4 @@
+model,rmse_usd,mae_usd,r2
+Naive: refund = order value (no ML),18.63,13.88,
+Linear Regression,11.11,8.62,0.993
+Gradient-Boosted Trees (GBTRegressor),18.39,10.64,0.982
