@@ -126,17 +126,14 @@ consumed by the report and deck).
 
 ## Team
 
-<!-- TODO: fill in before submission. Max 6 members. The same split is a graded appendix
-     requirement — Appendix B of the report carries this table and must match. -->
-
 | Name | Roll no. | Workstream owned | Artifacts |
 |---|---|---|---|
-| _TBD_ | _TBD_ | Data acquisition & Bronze/Silver pipeline | `notebooks/01_data_engineering.ipynb` |
-| _TBD_ | _TBD_ | Feature engineering & Gold layer | `notebooks/01_data_engineering.ipynb` §4 |
-| _TBD_ | _TBD_ | Classification modeling & evaluation | `notebooks/02_ml_modeling.ipynb` §2 |
-| _TBD_ | _TBD_ | Clustering & segmentation | `notebooks/02_ml_modeling.ipynb` §3 |
-| _TBD_ | _TBD_ | Architecture & enterprise design | Report §3 |
-| _TBD_ | _TBD_ | Narrative, report & deck | The report; the deck |
+| Subham Ranjan | A017 | Data acquisition & Bronze/Silver pipeline | `notebooks/01_data_engineering.ipynb` |
+| Shriya | A023 | Feature engineering & Gold layer | `notebooks/01_data_engineering.ipynb` §4 |
+| Abhinav Kumar | A035 | Classification modeling & evaluation | `notebooks/02_ml_modeling.ipynb` §2 |
+| Dev Vagrecha | A049 | Clustering & segmentation | `notebooks/02_ml_modeling.ipynb` §3 |
+| Samruddhi Pradhan | A054 | Architecture & enterprise design | Report §3 |
+| Yatharth Vij | A072 | Narrative, report & deck | The report; the deck |
 
 ## AI usage disclosure
 

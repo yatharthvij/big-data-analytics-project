@@ -25,6 +25,12 @@ project back up.
 - **docs/** — per-model results write-ups (`fraud-classification-results.md`,
   `quality-clustering-results.md`), each with an explicit **weaknesses** section. Structure mirrors
   a stronger reference project from the same course (see below).
+- **Deck slide 10** ends with a short video (`deliverables/presentation/assets/thank-you.mp4`,
+  ~13s) — live `<video controls>` in the HTML, falls back to a Playwright-captured poster frame
+  (`thank-you-poster.jpg`) under `@media print` since it can't play inside a static PDF.
+- **Team**: Subham Ranjan (A017), Shriya (A023), Abhinav Kumar (A035), Dev Vagrecha (A049),
+  Samruddhi Pradhan (A054), Yatharth Vij (A072) — filled in identically in `README.md`, the
+  report's Appendix B, and the deck's title/closing slides.
 
 ## Known caveat baked into every deliverable
 
@@ -46,12 +52,10 @@ it. Do not casually rename these top-level folders again without checking notebo
 
 ## Remaining before submission
 
-1. Fill in the team table (names + roll numbers, max 6) — must match identically in `README.md` and
-   the report's Appendix B.
+1. ~~Fill in the team table~~ — done, see Team above.
 2. Confirm the actual submission/presentation dates — guidelines list "8 Sept (tentative)" /
    "11–12 Sept (tentative)"; user has not confirmed final dates as of this writing.
-3. Push to GitHub with the commit history already reflecting phase-by-phase progress (data
-   engineering → ML → docs → deliverables → structure cleanup) — meaningful history is a grading
-   requirement.
+3. ~~Push to GitHub with meaningful commit history~~ — done, pushed to
+   `github.com/yatharthvij/big-data-analytics-project`.
 4. Optional polish: the architecture diagram's Sqoop-box annotation slightly touches its connector
    line in the report SVG (cosmetic only, still legible) — revisit if there's time.

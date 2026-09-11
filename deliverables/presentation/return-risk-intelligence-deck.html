@@ -78,6 +78,7 @@ h1 .c,h2 .c{font-style:italic;color:var(--cyan-lt)}
 
 .chip{display:inline-block;padding:3px 9px;border-radius:4px;font-size:10.5px;font-weight:700;
   letter-spacing:.06em;font-family:var(--mono)}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
 .todo{border:1px dashed var(--gold);background:rgba(193,101,46,.10);color:var(--gold-lt);
   padding:2px 8px;border-radius:4px;font-weight:700;font-size:11.5px}
 .pull{font-family:var(--serif);font-style:italic;font-size:clamp(15px,1.8vw,21px);
@@ -136,6 +137,15 @@ tr.hi td{background:rgba(30,158,114,.055)}
 
 .legend{display:flex;gap:16px;font-size:11px;color:var(--soft);margin-top:6px;flex-wrap:wrap}
 .legend .sw{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+
+.video-wrap{position:relative;border-radius:var(--rad);overflow:hidden;
+  border:1px solid var(--line);box-shadow:0 2px 10px rgba(19,26,36,.10);background:#000}
+.video-wrap video{display:block;width:100%;aspect-ratio:16/9;object-fit:contain;background:#000}
+.video-wrap .video-print-fallback{display:none;width:100%;aspect-ratio:16/9;object-fit:contain}
+@media print{
+  .video-wrap video{display:none}
+  .video-wrap .video-print-fallback{display:block}
+}
 
 .rail{position:fixed;top:0;left:0;height:3px;z-index:40;width:10%;
   background:linear-gradient(90deg,var(--cyan),var(--gold));
@@ -211,7 +221,7 @@ tr.hi td{background:rgba(30,158,114,.055)}
     (Random Forest vs. Logistic Regression) and K-Means clustering &nbsp;·&nbsp; this dataset is
     synthetic — the honest read on that starts on slide 7.
   </p>
-  <p class="cap u" style="margin-top:9px">NMIMS MBA · Big Data Analytics · Consulting Presentation &nbsp;·&nbsp; <span class="todo">TEAM: add names &amp; roll numbers</span></p>
+  <p class="cap u" style="margin-top:9px">NMIMS MBA · Big Data Analytics · Consulting Presentation &nbsp;·&nbsp; Subham Ranjan A017 · Shriya A023 · Abhinav Kumar A035 · Dev Vagrecha A049 · Samruddhi Pradhan A054 · Yatharth Vij A072</p>
 </section>
 
 <!-- ==================================================== 02 · business problem -->
@@ -614,28 +624,29 @@ tr.hi td{background:rgba(30,158,114,.055)}
 
 <!-- ============================================================== 10 · close -->
 <section class="s" id="s10">
-  <div class="u">
-    <div class="kick">Thank you</div>
-    <h1>One number, and the five things we will <em>not</em> hide behind it.</h1>
-  </div>
-
-  <div class="row c-46 u">
-    <div class="p b">
-      <div class="eye" style="color:var(--cyan-lt)">The number</div>
-      <div class="n lg cy">$4.64M</div>
-      <p class="note">of refund dollars sits with non-legitimate returns — <b>43.8%</b> of the money,
-      from <b>29.9%</b> of orders. <b>$1.88M</b> of it is reachable today with a single no-ML policy
-      rule; the rest needs the triage model.</p>
+  <div class="row c-64 u" style="align-items:center">
+    <div class="video-wrap">
+      <video controls preload="metadata" poster="assets/thank-you-poster.jpg">
+        <source src="assets/thank-you.mp4" type="video/mp4">
+      </video>
+      <img class="video-print-fallback" src="assets/thank-you-poster.jpg" alt="Video still — plays in the live HTML deck">
     </div>
-    <div class="p">
-      <div class="eye">The caveats travel with it</div>
-      <ul class="ql">
-        <li><b>Synthetic dataset.</b> 0.999 F1 is a Kaggle artifact, not a production number — budget for 80–90%.</li>
-        <li><b>No temporal holdout.</b> Random 75/25 split; concept drift is unmeasured here.</li>
-        <li><b>No production fraud labels.</b> Real retailers rarely have a clean ground-truth column.</li>
-        <li><b>Clusters are gradients, not species.</b> Behavioral segments, not causal explanations.</li>
-        <li><b>2 models proven, not deployed.</b> This is a pipeline proof-of-concept, ready to re-train on live outcomes.</li>
-      </ul>
+    <div>
+      <div class="kick">Thank you</div>
+      <h1 style="font-size:clamp(30px,4.6vw,58px)">Thank you.<br>Questions <em>welcome</em>.</h1>
+      <p class="sub">We'd rather be asked about the caveats than the number — <b>$4.64M</b> of
+      non-legitimate refund exposure, <b>$1.88M</b> of it reachable today with a single no-ML
+      policy rule, the rest behind the honest-limitations discussion on slide 7.</p>
+      <div class="chips" style="margin-top:6px">
+        <span class="chip" style="background:rgba(42,111,176,.1);color:var(--cyan-lt)">Subham Ranjan · A017</span>
+        <span class="chip" style="background:rgba(193,101,46,.1);color:var(--gold-lt)">Shriya · A023</span>
+        <span class="chip" style="background:rgba(30,158,114,.1);color:var(--green-lt)">Abhinav Kumar · A035</span>
+      </div>
+      <div class="chips" style="margin-top:6px">
+        <span class="chip" style="background:rgba(199,65,58,.1);color:var(--red-lt)">Dev Vagrecha · A049</span>
+        <span class="chip" style="background:rgba(42,111,176,.1);color:var(--cyan-lt)">Samruddhi Pradhan · A054</span>
+        <span class="chip" style="background:rgba(193,101,46,.1);color:var(--gold-lt)">Yatharth Vij · A072</span>
+      </div>
     </div>
   </div>
 
@@ -646,11 +657,7 @@ tr.hi td{background:rgba(30,158,114,.055)}
     <div class="p flat"><div class="eye">Reproducibility</div><p class="note">seed=42 throughout · every number here read from the notebooks' own output</p></div>
   </div>
 
-  <div class="u" style="margin-top:14px;display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:12px">
-    <p class="sub" style="margin:0;font-family:var(--serif);font-style:italic;font-size:clamp(15px,1.7vw,20px);color:var(--ink)">Questions — we'd rather be asked about the caveats than the number.</p>
-    <span class="todo">TEAM: add names &amp; roll numbers</span>
-  </div>
-  <p class="cap u" style="margin-top:8px;max-width:none">Dataset: <code class="m">ecommerce_return_abuse_dataset.csv</code> (Kaggle) · full references, AI-usage disclosure and team contributions in the consulting report's Appendix.</p>
+  <p class="cap u" style="margin-top:10px;max-width:none">Dataset: <code class="m">ecommerce_return_abuse_dataset.csv</code> (Kaggle) · full caveats on slide 7 · references, AI-usage disclosure and team contributions in the consulting report's Appendix.</p>
 </section>
 
 </div>
