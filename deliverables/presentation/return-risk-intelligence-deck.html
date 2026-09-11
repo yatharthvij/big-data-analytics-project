@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Return Risk Intelligence — Executive Deck</title>
+<style>
+  :root{
+    --surface-1:#fcfcfb; --page:#f2f1ee; --ink:#0b0b0b; --ink-2:#52514e; --muted:#898781;
+    --grid:#e1e0d9; --baseline:#c3c2b7; --border:rgba(11,11,11,0.10);
+    --blue:#2a78d6; --orange:#eb6834; --aqua:#1baf7a; --yellow:#eda100; --violet:#4a3aa7;
+    --accent:#184f95;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--page);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);}
+  .slide{
+    width:1120px;height:630px;margin:22px auto;background:var(--surface-1);
+    border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.12);
+    padding:52px 64px;position:relative;overflow:hidden;
+    page-break-after:always;
+  }
+  .slide .kicker{font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--accent);text-transform:uppercase;margin-bottom:10px;}
+  .slide h1{font-size:34px;margin:0 0 14px;letter-spacing:-0.01em;line-height:1.15;}
+  .slide h2{font-size:26px;margin:0 0 18px;border-bottom:2px solid var(--accent);padding-bottom:12px;}
+  .slide p.lead{font-size:16.5px;color:var(--ink-2);max-width:820px;margin:0 0 10px;}
+  .slide .pagenum{position:absolute;bottom:24px;right:28px;font-size:11px;color:var(--muted);}
+  .slide .brand{position:absolute;bottom:24px;left:64px;font-size:11px;color:var(--muted);}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;}
+  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--grid);}
+  th{color:var(--ink-2);font-weight:600;font-size:11.5px;border-bottom:2px solid var(--baseline);}
+  td.num, th.num{text-align:right;font-variant-numeric:tabular-nums;}
+  .kpi-row{display:flex;gap:16px;margin:18px 0;}
+  .kpi{flex:1;border:1px solid var(--border);border-radius:8px;padding:18px 20px;background:#fff;}
+  .kpi .v{font-size:30px;font-weight:700;font-variant-numeric:tabular-nums;}
+  .kpi .l{font-size:12px;color:var(--muted);margin-top:4px;}
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:28px;}
+  .cols3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;}
+  .card{border:1px solid var(--border);border-radius:8px;padding:16px 18px;background:#fff;}
+  .card h3{margin:0 0 6px;font-size:14.5px;}
+  .card p{margin:0;font-size:12.5px;color:var(--ink-2);line-height:1.5;}
+  ul.tight{margin:0;padding-left:18px;}
+  ul.tight li{margin-bottom:8px;font-size:14px;}
+  .legend{display:flex;gap:16px;font-size:11px;color:var(--ink-2);margin-top:6px;}
+  .legend .sw{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:-1px;}
+  .callout{background:#fdf6ee;border-left:3px solid var(--orange);border-radius:4px;padding:10px 14px;font-size:12.5px;margin-top:10px;}
+  .center{display:flex;flex-direction:column;justify-content:center;height:100%;}
+  @media print{
+    body{background:#fff;}
+    .slide{margin:0;box-shadow:none;border-radius:0;width:297mm;height:167mm;}
+    @page{size:297mm 167mm;margin:0;}
+  }
+</style>
+</head>
+<body>
+
+<!-- 1. TITLE -->
+<div class="slide center">
+  <div class="kicker">NMIMS MBA · Big Data Analytics · Group Project</div>
+  <h1 style="font-size:44px;max-width:900px;">Return Risk Intelligence:<br>Predicting Return Fraud &amp; Product Quality Issues</h1>
+  <p class="lead">A PySpark/MLlib pipeline that triages e-commerce returns into fraud, policy
+  abuse, and genuine quality issues — so audit capacity goes where it's actually needed.</p>
+  <div class="brand">Consulting Presentation</div>
+  <div class="pagenum">1 / 10</div>
+</div>
+
+<!-- 2. BUSINESS PROBLEM -->
+<div class="slide">
+  <div class="kicker">The Problem</div>
+  <h2>Manual return audits don't scale — and they treat three different problems as one</h2>
+  <div class="cols" style="margin-top:22px;">
+    <div>
+      <p class="lead" style="font-size:15px;">Retailers process every disputed return the same way:
+      spreadsheet review, inconsistent criteria, growing backlog. Meanwhile <b>29.9%</b> of returns
+      in our dataset are <i>not</i> genuine — and each needs a different response.</p>
+      <ul class="tight" style="margin-top:16px;">
+        <li><b>Return fraud</b> — deceptive claims → needs a Fraud &amp; Risk response</li>
+        <li><b>Policy abuse</b> — exploiting lenient terms → needs a Policy response</li>
+        <li><b>Product quality</b> — genuine defects → needs a QA/Vendor response</li>
+      </ul>
+    </div>
+    <div class="kpi-row" style="flex-direction:column;">
+      <div class="kpi"><div class="v">29.9%</div><div class="l">of returns are non-legitimate</div></div>
+      <div class="kpi"><div class="v">60,000</div><div class="l">orders analyzed, 35 features each</div></div>
+    </div>
+  </div>
+  <div class="pagenum">2 / 10</div>
+</div>
+
+<!-- 3. INDUSTRY / DATA OVERVIEW -->
+<div class="slide">
+  <div class="kicker">Data Overview</div>
+  <h2>60,000 orders, zero missing values, a realistic 70/12/10/8 class split</h2>
+  <svg viewBox="0 0 900 60" width="100%" height="60">
+    <g font-size="13" font-family="system-ui,sans-serif">
+      <rect x="0" y="14" width="630.6" height="32" fill="#2a78d6"/>
+      <rect x="630.6" y="14" width="108" height="32" fill="#eb6834"/>
+      <rect x="738.6" y="14" width="91.8" height="32" fill="#1baf7a"/>
+      <rect x="830.4" y="14" width="69.6" height="32" fill="#eda100"/>
+    </g>
+  </svg>
+  <div class="legend">
+    <span><span class="sw" style="background:#2a78d6"></span>Legitimate — 70.1% (42,060)</span>
+    <span><span class="sw" style="background:#eb6834"></span>Policy Abuser — 12.0% (7,192)</span>
+    <span><span class="sw" style="background:#1baf7a"></span>Fraudulent Return — 10.2% (6,112)</span>
+    <span><span class="sw" style="background:#eda100"></span>Wardrobing — 7.7% (4,636)</span>
+  </div>
+  <div class="cols3" style="margin-top:26px;">
+    <div class="card"><h3>Behavioral signals</h3><p>Photo evidence, tracking validity, address
+    changes, refund-to-different-account, multiple accounts, dispute history</p></div>
+    <div class="card"><h3>Customer history</h3><p>Lifetime orders/returns, return rate, account
+    age, loyalty segment</p></div>
+    <div class="card"><h3>Context</h3><p>12 product categories, 12 return reasons, 8 countries,
+    payment method, shipping carrier</p></div>
+  </div>
+  <div class="pagenum">3 / 10</div>
+</div>
+
+<!-- 4. ARCHITECTURE -->
+<div class="slide">
+  <div class="kicker">Solution Architecture</div>
+  <h2>Sqoop / Flume / API ingestion → Bronze/Silver/Gold lakehouse → MLlib</h2>
+  <svg viewBox="0 0 1000 280" width="100%" height="330" role="img" aria-label="architecture">
+    <defs><marker id="a2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#898781"/></marker></defs>
+    <g font-size="12.5" fill="#0b0b0b" font-family="system-ui,sans-serif">
+      <rect x="10" y="14" width="180" height="50" rx="6" fill="#fdf6ee" stroke="#eb6834" stroke-width="1.5"/>
+      <text x="100" y="36" text-anchor="middle" font-weight="600">Transactional DB</text>
+      <text x="100" y="52" text-anchor="middle" fill="#898781" font-size="10.5">orders, returns</text>
+
+      <rect x="10" y="80" width="180" height="50" rx="6" fill="#fdf6ee" stroke="#eb6834" stroke-width="1.5"/>
+      <text x="100" y="102" text-anchor="middle" font-weight="600">Event/Log Streams</text>
+      <text x="100" y="118" text-anchor="middle" fill="#898781" font-size="10.5">clickstream</text>
+
+      <rect x="10" y="146" width="180" height="50" rx="6" fill="#fdf6ee" stroke="#eb6834" stroke-width="1.5"/>
+      <text x="100" y="168" text-anchor="middle" font-weight="600">Carrier/Support APIs</text>
+      <text x="100" y="184" text-anchor="middle" fill="#898781" font-size="10.5">tracking, tickets</text>
+
+      <rect x="270" y="14" width="180" height="50" rx="6" fill="#f3f6fc" stroke="#2a78d6" stroke-width="1.5"/>
+      <text x="360" y="36" text-anchor="middle" font-weight="600">Sqoop</text>
+      <text x="360" y="52" text-anchor="middle" fill="#898781" font-size="10.5">incremental batch</text>
+
+      <rect x="270" y="80" width="180" height="50" rx="6" fill="#f3f6fc" stroke="#2a78d6" stroke-width="1.5"/>
+      <text x="360" y="102" text-anchor="middle" font-weight="600">Flume</text>
+      <text x="360" y="118" text-anchor="middle" fill="#898781" font-size="10.5">streaming ingestion</text>
+
+      <rect x="270" y="146" width="180" height="50" rx="6" fill="#f3f6fc" stroke="#2a78d6" stroke-width="1.5"/>
+      <text x="360" y="168" text-anchor="middle" font-weight="600">API Connectors</text>
+      <text x="360" y="184" text-anchor="middle" fill="#898781" font-size="10.5">scheduled pulls</text>
+
+      <rect x="540" y="4" width="220" height="222" rx="8" fill="#fcfcfb" stroke="#183835" stroke-opacity=".15" stroke-width="1.5"/>
+      <text x="650" y="24" text-anchor="middle" font-weight="700" font-size="13.5">Lakehouse</text>
+      <rect x="554" y="36" width="192" height="46" rx="5" fill="#f0efec" stroke="#898781"/>
+      <text x="650" y="55" text-anchor="middle" font-weight="600">Bronze</text><text x="650" y="70" text-anchor="middle" fill="#898781" font-size="10">raw, replayable</text>
+      <rect x="554" y="92" width="192" height="46" rx="5" fill="#eaf5ef" stroke="#1baf7a"/>
+      <text x="650" y="111" text-anchor="middle" font-weight="600">Silver</text><text x="650" y="126" text-anchor="middle" fill="#898781" font-size="10">validated, features</text>
+      <rect x="554" y="148" width="192" height="46" rx="5" fill="#fdf4e3" stroke="#eda100"/>
+      <text x="650" y="167" text-anchor="middle" font-weight="600">Gold</text><text x="650" y="182" text-anchor="middle" fill="#898781" font-size="10">encoded, model-ready</text>
+      <text x="650" y="214" text-anchor="middle" fill="#898781" font-size="10">partitioned by date &amp; country</text>
+
+      <rect x="810" y="46" width="180" height="50" rx="6" fill="#f7f0fc" stroke="#4a3aa7" stroke-width="1.5"/>
+      <text x="900" y="68" text-anchor="middle" font-weight="600">PySpark MLlib</text>
+      <text x="900" y="84" text-anchor="middle" fill="#898781" font-size="10.5">fraud + clustering</text>
+
+      <rect x="810" y="112" width="180" height="50" rx="6" fill="#f7f0fc" stroke="#4a3aa7" stroke-width="1.5"/>
+      <text x="900" y="134" text-anchor="middle" font-weight="600">BI Dashboards</text>
+      <text x="900" y="150" text-anchor="middle" fill="#898781" font-size="10.5">ops review queues</text>
+    </g>
+    <path d="M190,39 L266,39" stroke="#898781" stroke-width="1.4" marker-end="url(#a2)"/>
+    <path d="M190,105 L266,105" stroke="#898781" stroke-width="1.4" marker-end="url(#a2)"/>
+    <path d="M190,171 L266,171" stroke="#898781" stroke-width="1.4" marker-end="url(#a2)"/>
+    <path d="M450,39 Q500,39 536,60" stroke="#898781" stroke-width="1.4" fill="none" marker-end="url(#a2)"/>
+    <path d="M450,105 L536,105" stroke="#898781" stroke-width="1.4" marker-end="url(#a2)"/>
+    <path d="M450,171 Q500,171 536,116" stroke="#898781" stroke-width="1.4" fill="none" marker-end="url(#a2)"/>
+    <path d="M762,59 L806,71" stroke="#898781" stroke-width="1.4" marker-end="url(#a2)"/>
+    <path d="M762,59 Q790,100 806,137" stroke="#898781" stroke-width="1.4" fill="none" marker-end="url(#a2)"/>
+  </svg>
+  <div class="pagenum">4 / 10</div>
+</div>
+
+<!-- 5. FEATURE ENGINEERING -->
+<div class="slide">
+  <div class="kicker">Data Engineering</div>
+  <h2>Engineered features validate before they ever reach a model</h2>
+  <div class="cols" style="margin-top:8px;">
+    <div>
+      <table>
+        <tr><th>Feature</th><th>Serves</th></tr>
+        <tr><td><code>fraud_signal_score</code></td><td>Fraud</td></tr>
+        <tr><td><code>return_to_order_ratio</code></td><td>Return risk</td></tr>
+        <tr><td><code>refund_to_order_value_ratio</code></td><td>Fraud</td></tr>
+        <tr><td><code>is_quality_issue_reason</code></td><td>Quality</td></tr>
+        <tr><td><code>high_value_no_evidence</code></td><td>Fraud</td></tr>
+      </table>
+      <p style="font-size:12px;color:var(--ink-2);margin-top:10px;">Outliers capped at 1st/99th
+      percentile, not deleted — extreme values are often the fraud signal itself.</p>
+    </div>
+    <div class="card">
+      <h3>Sanity check that mattered</h3>
+      <table>
+        <tr><th></th><th class="num">Fraudulent Return</th><th class="num">Legitimate</th></tr>
+        <tr><td>avg fraud_signal_score</td><td class="num">2.73</td><td class="num">0.84</td></tr>
+        <tr><td>avg return_to_order_ratio</td><td class="num">0.47</td><td class="num">0.05</td></tr>
+      </table>
+      <p style="margin-top:10px;">Clear separation confirmed <i>before</i> trusting these features
+      for modeling — not assumed.</p>
+    </div>
+  </div>
+  <div class="pagenum">5 / 10</div>
+</div>
+
+<!-- 6. MODEL 1: CLASSIFICATION -->
+<div class="slide">
+  <div class="kicker">Approach 1 — Classification</div>
+  <h2>Random Forest vs. Logistic Regression on return-fraud type</h2>
+  <table style="margin-top:10px;">
+    <tr><th>Model</th><th class="num">Weighted Precision</th><th class="num">Weighted Recall</th><th class="num">Weighted F1</th></tr>
+    <tr><td>Logistic Regression (baseline)</td><td class="num">0.998</td><td class="num">0.998</td><td class="num">0.998</td></tr>
+    <tr><td><b>Random Forest (final)</b></td><td class="num"><b>0.999</b></td><td class="num"><b>0.999</b></td><td class="num"><b>0.999</b></td></tr>
+  </table>
+  <p style="font-size:12.5px;color:var(--ink-2);margin-top:8px;">Class-weighted training (inverse
+  frequency) handles the 70/12/10/8 imbalance. GBTClassifier isn't usable — Spark MLlib supports
+  binary GBT only; Random Forest natively handles 4 classes.</p>
+  <div class="callout">
+  <b>Honest read:</b> 0.999 F1 is unrealistically high — this is a Kaggle synthetic dataset with a
+  near-deterministic labeling rule. We treat this as proof of pipeline &amp; methodology; a
+  realistic production target is <b>80–90% weighted F1</b>.
+  </div>
+  <div class="pagenum">6 / 10</div>
+</div>
+
+<!-- 7. MODEL 2: CLUSTERING -->
+<div class="slide">
+  <div class="kicker">Approach 2 — Clustering</div>
+  <h2>K-Means finds 3 behavioral segments the fraud label alone can't see</h2>
+  <table style="margin-top:10px;">
+    <tr><th>Cluster</th><th class="num">n</th><th class="num">Avg return rate</th><th class="num">Avg order value</th><th class="num">% quality-issue</th></tr>
+    <tr><td><b>0 — High-value fraud-risk</b></td><td class="num">6,646</td><td class="num">44.8%</td><td class="num">$484</td><td class="num">22%</td></tr>
+    <tr><td><b>1 — Core legitimate base</b></td><td class="num">43,829</td><td class="num">6.8%</td><td class="num">$157</td><td class="num"><b>38%</b></td></tr>
+    <tr><td><b>2 — Frequent policy-abuse</b></td><td class="num">9,525</td><td class="num">57.7%</td><td class="num">$129</td><td class="num">19%</td></tr>
+  </table>
+  <p style="font-size:13px;margin-top:14px;"><b>Key insight:</b> the largest, almost entirely
+  legitimate segment still carries the <i>highest</i> quality-issue-return rate — a QA/vendor
+  problem hiding inside "normal" customers, invisible to a fraud-only view.</p>
+  <div class="pagenum">7 / 10</div>
+</div>
+
+<!-- 8. BUSINESS RECOMMENDATIONS -->
+<div class="slide">
+  <div class="kicker">Recommendations</div>
+  <h2>Three interventions, three owners — not one blanket policy</h2>
+  <div class="cols3" style="margin-top:14px;">
+    <div class="card"><h3>Fraud &amp; Risk</h3><p>Route the highest fraud-score decile + Cluster 0
+    to manual review. Deploy as a triage score, not auto-block. Re-threshold asymmetrically —
+    a false flag costs more than a slow review.</p></div>
+    <div class="card"><h3>QA / Vendor Mgmt</h3><p>Own Cluster 1's 38% quality-issue rate.
+    Cross-reference dominant product category × return reason to target vendor escalations.</p></div>
+    <div class="card"><h3>Customer Policy</h3><p>Tighten return windows / restocking fees for
+    Cluster 2's frequent-low-value pattern — more precise than a fraud investigation.</p></div>
+  </div>
+  <p style="margin-top:22px;font-size:13px;color:var(--ink-2);"><b>Before go-live:</b> re-validate
+  on real labeled outcomes (not this synthetic set), add a time-based holdout to catch drift, and
+  build the human-in-the-loop labeling loop from the review queue.</p>
+  <div class="pagenum">8 / 10</div>
+</div>
+
+<!-- 9. RISKS & ROADMAP -->
+<div class="slide">
+  <div class="kicker">Risks &amp; Future Roadmap</div>
+  <h2>What has to be true before this goes to production</h2>
+  <div class="cols" style="margin-top:14px;">
+    <div>
+      <h3 style="font-size:15px;">Risks</h3>
+      <ul class="tight">
+        <li>Synthetic-data metrics won't hold on live traffic — treat as a pipeline
+        proof-of-concept, not a performance guarantee</li>
+        <li>Real retailers rarely have clean fraud labels — needs a labeling process</li>
+        <li>No temporal holdout here — drift is unmeasured, must be built into the rollout</li>
+      </ul>
+    </div>
+    <div>
+      <h3 style="font-size:15px;">Roadmap</h3>
+      <ul class="tight">
+        <li>Real-time scoring at return-request time, not batch</li>
+        <li>Feedback loop from reviewer overrides back into re-training</li>
+        <li>Add unstructured support-ticket text once Flume/API ingestion is live</li>
+      </ul>
+    </div>
+  </div>
+  <div class="pagenum">9 / 10</div>
+</div>
+
+<!-- 10. THANK YOU -->
+<div class="slide center">
+  <h1 style="font-size:40px;">Thank You</h1>
+  <p class="lead">Return Risk Intelligence — questions welcome.</p>
+  <p class="lead" style="margin-top:30px;font-size:13px;">Full detail: consulting report,
+  <code>notebooks/01_data_engineering.ipynb</code>, <code>notebooks/02_ml_modeling.ipynb</code>,
+  and <code>docs/</code> results write-ups.</p>
+  <div class="pagenum">10 / 10</div>
+</div>
+
+</body>
+</html>
