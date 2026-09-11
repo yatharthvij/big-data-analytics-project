@@ -79,7 +79,7 @@
     </div>
     <div class="kpi-row" style="flex-direction:column;">
       <div class="kpi"><div class="v">29.9%</div><div class="l">of returns are non-legitimate</div></div>
-      <div class="kpi"><div class="v">60,000</div><div class="l">orders analyzed, 35 features each</div></div>
+      <div class="kpi"><div class="v">$4.64M</div><div class="l">refund $ requested by those returns — 43.8% of all refund $</div></div>
     </div>
   </div>
   <div class="pagenum">2 / 10</div>
@@ -223,6 +223,39 @@
   near-deterministic labeling rule. We treat this as proof of pipeline &amp; methodology; a
   realistic production target is <b>80–90% weighted F1</b>.
   </div>
+
+  <h3 style="font-size:13.5px;margin:18px 0 8px;color:var(--ink-2);">Confusion matrix (Random Forest, test set, row %)</h3>
+  <svg viewBox="0 0 680 150" width="620" role="img" aria-label="Confusion matrix heatmap, row-normalized">
+    <g font-family="system-ui,sans-serif">
+      <g font-size="10" fill="#52514e" font-weight="600" text-anchor="middle">
+        <text x="220" y="12">Legitimate</text><text x="340" y="12">Policy Abuser</text>
+        <text x="460" y="12">Fraud. Return</text><text x="580" y="12">Wardrobing</text>
+      </g>
+      <text x="0" y="34" font-size="10" fill="#0b0b0b" font-weight="600">Legitimate</text>
+      <rect x="160" y="20" width="120" height="30" fill="#184f95"/><text x="220" y="39" text-anchor="middle" fill="#fff" font-size="10" font-weight="600">100.0%</text>
+      <rect x="280" y="20" width="120" height="30" fill="#fcfcfb" stroke="#e1e0d9"/><text x="340" y="39" text-anchor="middle" fill="#898781" font-size="9.5">0%</text>
+      <rect x="400" y="20" width="120" height="30" fill="#fcfcfb" stroke="#e1e0d9"/><text x="460" y="39" text-anchor="middle" fill="#898781" font-size="9.5">0%</text>
+      <rect x="520" y="20" width="120" height="30" fill="#fcfcfb" stroke="#e1e0d9"/><text x="580" y="39" text-anchor="middle" fill="#898781" font-size="9.5">0%</text>
+
+      <text x="0" y="70" font-size="10" fill="#0b0b0b" font-weight="600">Policy Abuser</text>
+      <rect x="160" y="56" width="120" height="30" fill="#fcfcfb" stroke="#e1e0d9"/><text x="220" y="75" text-anchor="middle" fill="#898781" font-size="9.5">0%</text>
+      <rect x="280" y="56" width="120" height="30" fill="#184f95"/><text x="340" y="75" text-anchor="middle" fill="#fff" font-size="10" font-weight="600">99.6%</text>
+      <rect x="400" y="56" width="120" height="30" fill="#e9f0fa" stroke="#e1e0d9"/><text x="460" y="75" text-anchor="middle" fill="#52514e" font-size="9.5">0.2%</text>
+      <rect x="520" y="56" width="120" height="30" fill="#e9f0fa" stroke="#e1e0d9"/><text x="580" y="75" text-anchor="middle" fill="#52514e" font-size="9.5">0.2%</text>
+
+      <text x="0" y="106" font-size="10" fill="#0b0b0b" font-weight="600">Fraud. Return</text>
+      <rect x="160" y="92" width="120" height="30" fill="#fcfcfb" stroke="#e1e0d9"/><text x="220" y="111" text-anchor="middle" fill="#898781" font-size="9.5">0%</text>
+      <rect x="280" y="92" width="120" height="30" fill="#e9f0fa" stroke="#e1e0d9"/><text x="340" y="111" text-anchor="middle" fill="#52514e" font-size="9.5">0.1%</text>
+      <rect x="400" y="92" width="120" height="30" fill="#184f95"/><text x="460" y="111" text-anchor="middle" fill="#fff" font-size="10" font-weight="600">99.9%</text>
+      <rect x="520" y="92" width="120" height="30" fill="#fcfcfb" stroke="#e1e0d9"/><text x="580" y="111" text-anchor="middle" fill="#898781" font-size="9.5">0%</text>
+
+      <text x="0" y="142" font-size="10" fill="#0b0b0b" font-weight="600">Wardrobing</text>
+      <rect x="160" y="128" width="120" height="30" fill="#fcfcfb" stroke="#e1e0d9"/><text x="220" y="147" text-anchor="middle" fill="#898781" font-size="9.5">0%</text>
+      <rect x="280" y="128" width="120" height="30" fill="#e9f0fa" stroke="#e1e0d9"/><text x="340" y="147" text-anchor="middle" fill="#52514e" font-size="9.5">0.1%</text>
+      <rect x="400" y="128" width="120" height="30" fill="#fcfcfb" stroke="#e1e0d9"/><text x="460" y="147" text-anchor="middle" fill="#898781" font-size="9.5">0%</text>
+      <rect x="520" y="128" width="120" height="30" fill="#184f95"/><text x="580" y="147" text-anchor="middle" fill="#fff" font-size="10" font-weight="600">99.9%</text>
+    </g>
+  </svg>
   <div class="pagenum">6 / 10</div>
 </div>
 
@@ -239,6 +272,27 @@
   <p style="font-size:13px;margin-top:14px;"><b>Key insight:</b> the largest, almost entirely
   legitimate segment still carries the <i>highest</i> quality-issue-return rate — a QA/vendor
   problem hiding inside "normal" customers, invisible to a fraud-only view.</p>
+
+  <svg viewBox="0 0 620 190" width="560" role="img" aria-label="Grouped bar chart: return rate vs quality-issue rate per cluster" style="margin-top:10px;">
+    <g font-family="system-ui,sans-serif">
+      <line x1="0" y1="150" x2="600" y2="150" stroke="#c3c2b7" stroke-width="1"/>
+      <rect x="60" y="52.9" width="36" height="97.1" fill="#2a78d6"/><text x="78" y="46" text-anchor="middle" font-size="10.5" fill="#0b0b0b">44.8%</text>
+      <rect x="106" y="102.3" width="36" height="47.7" fill="#eb6834"/><text x="124" y="96" text-anchor="middle" font-size="10.5" fill="#0b0b0b">22%</text>
+      <text x="101" y="168" text-anchor="middle" font-size="10.5" fill="#0b0b0b" font-weight="600">Cluster 0</text>
+
+      <rect x="280" y="135.3" width="36" height="14.7" fill="#2a78d6"/><text x="298" y="129" text-anchor="middle" font-size="10.5" fill="#0b0b0b">6.8%</text>
+      <rect x="326" y="67.7" width="36" height="82.3" fill="#eb6834"/><text x="344" y="61" text-anchor="middle" font-size="10.5" fill="#0b0b0b" font-weight="700">38%</text>
+      <text x="321" y="168" text-anchor="middle" font-size="10.5" fill="#0b0b0b" font-weight="600">Cluster 1</text>
+
+      <rect x="500" y="25.0" width="36" height="125.0" fill="#2a78d6"/><text x="518" y="18" text-anchor="middle" font-size="10.5" fill="#0b0b0b">57.7%</text>
+      <rect x="546" y="108.8" width="36" height="41.2" fill="#eb6834"/><text x="564" y="102" text-anchor="middle" font-size="10.5" fill="#0b0b0b">19%</text>
+      <text x="541" y="168" text-anchor="middle" font-size="10.5" fill="#0b0b0b" font-weight="600">Cluster 2</text>
+    </g>
+  </svg>
+  <div class="legend">
+    <span><span class="sw" style="background:#2a78d6"></span>Avg return rate</span>
+    <span><span class="sw" style="background:#eb6834"></span>% quality-issue driven</span>
+  </div>
   <div class="pagenum">7 / 10</div>
 </div>
 
@@ -246,6 +300,11 @@
 <div class="slide">
   <div class="kicker">Recommendations</div>
   <h2>Three interventions, three owners — not one blanket policy</h2>
+  <div class="callout" style="margin-top:12px;">
+  <b>Ship this first, no ML required:</b> require photo evidence above a value threshold —
+  the "high-value + no evidence" pattern alone touches <b>$1.88M</b> of non-legitimate refund
+  exposure (4,673 orders) and can go live before the classifier does.
+  </div>
   <div class="cols3" style="margin-top:14px;">
     <div class="card"><h3>Fraud &amp; Risk</h3><p>Route the highest fraud-score decile + Cluster 0
     to manual review. Deploy as a triage score, not auto-block. Re-threshold asymmetrically —
@@ -255,7 +314,7 @@
     <div class="card"><h3>Customer Policy</h3><p>Tighten return windows / restocking fees for
     Cluster 2's frequent-low-value pattern — more precise than a fraud investigation.</p></div>
   </div>
-  <p style="margin-top:22px;font-size:13px;color:var(--ink-2);"><b>Before go-live:</b> re-validate
+  <p style="margin-top:16px;font-size:12.5px;color:var(--ink-2);"><b>Before go-live:</b> re-validate
   on real labeled outcomes (not this synthetic set), add a time-based holdout to catch drift, and
   build the human-in-the-loop labeling loop from the review queue.</p>
   <div class="pagenum">8 / 10</div>

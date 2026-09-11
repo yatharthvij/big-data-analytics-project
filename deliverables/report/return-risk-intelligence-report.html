@@ -86,14 +86,18 @@
   customers/returns by behavior to surface product-quality problems the fraud label alone can't see.</p>
 
   <div class="kpi-row">
-    <div class="kpi"><div class="v">29.9%</div><div class="l">of returns are non-legitimate (policy abuse, fraud, or wardrobing)</div></div>
+    <div class="kpi"><div class="v">$4.64M</div><div class="l">refund dollars requested by non-legitimate returns — 43.8% of all refund $, from 29.9% of orders</div></div>
     <div class="kpi"><div class="v">0.999</div><div class="l">weighted F1, Random Forest classifier (test set)</div></div>
     <div class="kpi"><div class="v">3</div><div class="l">behavioral customer segments identified (K-Means)</div></div>
     <div class="kpi"><div class="v">38%</div><div class="l">of returns in the core legitimate segment are quality-issue driven</div></div>
   </div>
 
-  <p><b>Three findings drive the recommendations:</b></p>
+  <p><b>Four findings drive the recommendations:</b></p>
   <ol>
+    <li><b>Non-legitimate returns are disproportionately expensive, not just disproportionately
+    frequent.</b> They're 29.9% of orders but <b>43.8% of refund dollars requested</b> — fraudulent
+    returns alone average <b>$434.73</b> per claim vs. <b>$141.14</b> for legitimate returns, a
+    <b>3.1×</b> gap. Bad actors aren't just more numerous, they're targeting higher-value claims.</li>
     <li><b>Fraud is classifiable with high confidence</b> from behavioral and evidence signals
     (tracking validity, photo evidence, address changes, refund-to-different-account) combined
     into an engineered <code>fraud_signal_score</code> — a Random Forest model built on these
@@ -132,6 +136,18 @@
   (Policy Abuser 12.0%, Fraudulent Return 10.2%, Wardrobing 7.7%). Every one of those returns
   today gets the same manual-review treatment as a genuine defective-product return — the highest-value
   lever is triage, not blanket policy tightening, which would punish the 70% of legitimate customers too.</p>
+
+  <div class="callout">
+  <b>The dollar exposure is concentrated, not evenly spread:</b> non-legitimate returns account for
+  <b>$4.64M of the $10.57M</b> in total refund dollars requested across the dataset — 43.8% of the
+  money, from 29.9% of the orders. <b>Fraudulent Return</b> claims alone total <b>$2.66M</b> at an
+  average <b>$434.73</b> per claim — <b>3.1×</b> the $141.14 average for legitimate returns. A
+  further <b>$1.88M</b> sits in a single specific, rule-based pattern independent of any ML model:
+  non-legitimate returns that are both a high-value item <i>and</i> missing photo evidence
+  (4,673 orders) — an immediately actionable policy (require photo evidence above a value
+  threshold) that doesn't need to wait for the classifier to ship. Figures computed directly from
+  <code>data/processed/silver</code>; see Section 6 for how they translate into recommendations.
+  </div>
 </section>
 
 <section>
@@ -208,7 +224,7 @@
       <rect x="220" y="20" width="150" height="46" rx="6" fill="#f3f6fc" stroke="#2a78d6" stroke-width="1.5"/>
       <text x="295" y="38" text-anchor="middle" font-weight="600">Sqoop</text>
       <text x="295" y="52" text-anchor="middle" fill="#898781" font-size="9.5">incremental append</text>
-      <text x="295" y="62" text-anchor="middle" fill="#898781" font-size="9.5">--split-by, --check-column order_date</text>
+      <text x="295" y="62" text-anchor="middle" fill="#898781" font-size="8">--split-by · --check-column</text>
 
       <rect x="220" y="80" width="150" height="46" rx="6" fill="#f3f6fc" stroke="#2a78d6" stroke-width="1.5"/>
       <text x="295" y="100" text-anchor="middle" font-weight="600">Flume</text>
@@ -243,7 +259,6 @@
 
       <text x="520" y="198" text-anchor="middle" fill="#898781" font-size="9.5">partitioned by date &amp; country</text>
     </g>
-    <path d="M370,43 L426,43 L426,100 L426,100" stroke="#898781" stroke-width="1.4" fill="none"/>
     <path d="M370,43 Q400,43 426,110" stroke="#898781" stroke-width="1.4" fill="none" marker-end="url(#arrow)"/>
     <path d="M370,103 L426,103" stroke="#898781" stroke-width="1.4" marker-end="url(#arrow)"/>
     <path d="M370,163 Q400,163 426,120" stroke="#898781" stroke-width="1.4" fill="none" marker-end="url(#arrow)"/>
@@ -331,6 +346,57 @@
   headline accuracy alone, since a "predict Legitimate always" model would score ~70% accuracy
   while catching zero fraud.</p>
 
+  <h4>Confusion matrix (Random Forest, test set, row-normalized %)</h4>
+  <svg viewBox="0 0 760 230" width="100%" role="img" aria-label="Confusion matrix heatmap for the Random Forest classifier, row-normalized percentages">
+    <g font-family="system-ui,sans-serif">
+      <!-- column headers: cols start x=150, width 134, gap 6 -> 150,290,430,570 -->
+      <g font-size="10" fill="#52514e" font-weight="600" text-anchor="middle">
+        <text x="217" y="14">Legitimate</text>
+        <text x="357" y="14">Policy Abuser</text>
+        <text x="497" y="14">Fraud. Return</text>
+        <text x="637" y="14">Wardrobing</text>
+      </g>
+      <text x="455" y="-4" font-size="9.5" fill="#898781" text-anchor="middle">Predicted class →</text>
+
+      <!-- row: Legitimate (n=10,487) -->
+      <text x="0" y="42" font-size="10.5" fill="#0b0b0b" font-weight="600">Legitimate</text>
+      <text x="0" y="54" font-size="9" fill="#898781">n=10,487</text>
+      <rect x="150" y="24" width="134" height="34" fill="#184f95"/><text x="217" y="45" text-anchor="middle" fill="#fff" font-size="10.5" font-weight="600">100.0%</text>
+      <rect x="290" y="24" width="134" height="34" fill="#fcfcfb" stroke="#e1e0d9"/><text x="357" y="45" text-anchor="middle" fill="#898781" font-size="10">0%</text>
+      <rect x="430" y="24" width="134" height="34" fill="#fcfcfb" stroke="#e1e0d9"/><text x="497" y="45" text-anchor="middle" fill="#898781" font-size="10">0%</text>
+      <rect x="570" y="24" width="134" height="34" fill="#fcfcfb" stroke="#e1e0d9"/><text x="637" y="45" text-anchor="middle" fill="#898781" font-size="10">0%</text>
+
+      <!-- row: Policy Abuser (n=1,782) -->
+      <text x="0" y="87" font-size="10.5" fill="#0b0b0b" font-weight="600">Policy Abuser</text>
+      <text x="0" y="99" font-size="9" fill="#898781">n=1,782</text>
+      <rect x="150" y="69" width="134" height="34" fill="#fcfcfb" stroke="#e1e0d9"/><text x="217" y="90" text-anchor="middle" fill="#898781" font-size="10">0%</text>
+      <rect x="290" y="69" width="134" height="34" fill="#184f95"/><text x="357" y="90" text-anchor="middle" fill="#fff" font-size="10.5" font-weight="600">99.6%</text>
+      <rect x="430" y="69" width="134" height="34" fill="#e9f0fa" stroke="#e1e0d9"/><text x="497" y="90" text-anchor="middle" fill="#52514e" font-size="10">0.2%</text>
+      <rect x="570" y="69" width="134" height="34" fill="#e9f0fa" stroke="#e1e0d9"/><text x="637" y="90" text-anchor="middle" fill="#52514e" font-size="10">0.2%</text>
+
+      <!-- row: Fraudulent Return (n=1,488) -->
+      <text x="0" y="132" font-size="10.5" fill="#0b0b0b" font-weight="600">Fraudulent Return</text>
+      <text x="0" y="144" font-size="9" fill="#898781">n=1,488</text>
+      <rect x="150" y="114" width="134" height="34" fill="#fcfcfb" stroke="#e1e0d9"/><text x="217" y="135" text-anchor="middle" fill="#898781" font-size="10">0%</text>
+      <rect x="290" y="114" width="134" height="34" fill="#e9f0fa" stroke="#e1e0d9"/><text x="357" y="135" text-anchor="middle" fill="#52514e" font-size="10">0.1%</text>
+      <rect x="430" y="114" width="134" height="34" fill="#184f95"/><text x="497" y="135" text-anchor="middle" fill="#fff" font-size="10.5" font-weight="600">99.9%</text>
+      <rect x="570" y="114" width="134" height="34" fill="#fcfcfb" stroke="#e1e0d9"/><text x="637" y="135" text-anchor="middle" fill="#898781" font-size="10">0%</text>
+
+      <!-- row: Wardrobing (n=1,131) -->
+      <text x="0" y="177" font-size="10.5" fill="#0b0b0b" font-weight="600">Wardrobing</text>
+      <text x="0" y="189" font-size="9" fill="#898781">n=1,131</text>
+      <rect x="150" y="159" width="134" height="34" fill="#fcfcfb" stroke="#e1e0d9"/><text x="217" y="180" text-anchor="middle" fill="#898781" font-size="10">0%</text>
+      <rect x="290" y="159" width="134" height="34" fill="#e9f0fa" stroke="#e1e0d9"/><text x="357" y="180" text-anchor="middle" fill="#52514e" font-size="10">0.1%</text>
+      <rect x="430" y="159" width="134" height="34" fill="#fcfcfb" stroke="#e1e0d9"/><text x="497" y="180" text-anchor="middle" fill="#898781" font-size="10">0%</text>
+      <rect x="570" y="159" width="134" height="34" fill="#184f95"/><text x="637" y="180" text-anchor="middle" fill="#fff" font-size="10.5" font-weight="600">99.9%</text>
+
+      <text x="0" y="212" font-size="9.5" fill="#898781">↑ Actual class (test set, n=14,888 total)</text>
+    </g>
+  </svg>
+  <p style="font-size:12px;color:var(--ink-2);">Diagonal-dominant, as expected from the headline F1 —
+  read alongside the caveat below rather than as evidence the leakage concern is resolved: a
+  synthetic near-deterministic label produces exactly this kind of clean diagonal.</p>
+
   <h4>Top feature importances (Random Forest)</h4>
   <svg viewBox="0 0 700 190" width="100%" role="img" aria-label="Horizontal bar chart of top 8 Random Forest feature importances">
     <!-- bars, max value 0.1516 scaled to width 430 -->
@@ -392,6 +458,37 @@
     <tr><td><b>1 — Core legitimate base</b></td><td class="num">43,829</td><td class="num">6.8%</td><td class="num">$157.25</td><td class="num"><b>38%</b></td><td>96% Legitimate</td></tr>
     <tr><td><b>2 — Frequent policy-abuse</b></td><td class="num">9,525</td><td class="num">57.7%</td><td class="num">$129.18</td><td class="num">19%</td><td>Policy Abuser-heavy</td></tr>
   </table>
+
+  <svg viewBox="0 0 620 190" width="100%" role="img" aria-label="Grouped bar chart comparing average return rate and quality-issue return rate across the three clusters">
+    <g font-family="system-ui,sans-serif">
+      <line x1="0" y1="150" x2="600" y2="150" stroke="#c3c2b7" stroke-width="1"/>
+      <!-- Cluster 0 -->
+      <rect x="60" y="52.9" width="36" height="97.1" fill="#2a78d6"/><text x="78" y="46" text-anchor="middle" font-size="10.5" fill="#0b0b0b">44.8%</text>
+      <rect x="106" y="102.3" width="36" height="47.7" fill="#eb6834"/><text x="124" y="96" text-anchor="middle" font-size="10.5" fill="#0b0b0b">22%</text>
+      <text x="101" y="168" text-anchor="middle" font-size="10.5" fill="#0b0b0b" font-weight="600">Cluster 0</text>
+      <text x="101" y="180" text-anchor="middle" font-size="9" fill="#898781">High-value fraud-risk</text>
+
+      <!-- Cluster 1 -->
+      <rect x="280" y="135.3" width="36" height="14.7" fill="#2a78d6"/><text x="298" y="129" text-anchor="middle" font-size="10.5" fill="#0b0b0b">6.8%</text>
+      <rect x="326" y="67.7" width="36" height="82.3" fill="#eb6834"/><text x="344" y="61" text-anchor="middle" font-size="10.5" fill="#0b0b0b" font-weight="700">38%</text>
+      <text x="321" y="168" text-anchor="middle" font-size="10.5" fill="#0b0b0b" font-weight="600">Cluster 1</text>
+      <text x="321" y="180" text-anchor="middle" font-size="9" fill="#898781">Core legitimate base</text>
+
+      <!-- Cluster 2 -->
+      <rect x="500" y="25.0" width="36" height="125.0" fill="#2a78d6"/><text x="518" y="18" text-anchor="middle" font-size="10.5" fill="#0b0b0b">57.7%</text>
+      <rect x="546" y="108.8" width="36" height="41.2" fill="#eb6834"/><text x="564" y="102" text-anchor="middle" font-size="10.5" fill="#0b0b0b">19%</text>
+      <text x="541" y="168" text-anchor="middle" font-size="10.5" fill="#0b0b0b" font-weight="600">Cluster 2</text>
+      <text x="541" y="180" text-anchor="middle" font-size="9" fill="#898781">Frequent policy-abuse</text>
+    </g>
+  </svg>
+  <div class="legend">
+    <span><span class="sw" style="background:#2a78d6"></span>Avg return rate</span>
+    <span><span class="sw" style="background:#eb6834"></span>% of returns that are quality-issue driven</span>
+  </div>
+  <p style="font-size:12px;color:var(--ink-2);margin-top:6px;">Cluster 1 has by far the lowest
+  return rate but the <i>highest</i> quality-issue share — the two metrics move in opposite
+  directions, which is exactly why a single blended "return rate" KPI hides this segment's problem.</p>
+
   <p>Full weaknesses discussion (cluster stability, k-choice sensitivity, causal limits) in
   <code>docs/quality-clustering-results.md</code>.</p>
 </section>
@@ -399,10 +496,16 @@
 <section class="break">
   <h2>6 · Business Insights &amp; Strategic Recommendations</h2>
   <ol>
+    <li><b>Require photo evidence above a value threshold — ship this before the model.</b> The
+    "high-value item + no photo evidence" pattern alone touches <b>$1.88M</b> of non-legitimate
+    refund exposure (4,673 orders) and needs no ML: a policy rule, live immediately, independent of
+    the classifier's rollout timeline.</li>
     <li><b>Deploy the fraud classifier as a triage score, not an auto-block.</b> Route the highest
     <code>fraud_signal_score</code> decile plus Cluster 0 members to manual fraud review; auto-approve
     the lowest-risk tail. Re-validate precision/recall on live traffic before trusting this
-    dataset's 0.999 F1 — budget for 80–90% in the initial production SLA.</li>
+    dataset's 0.999 F1 — budget for 80–90% in the initial production SLA. Prioritize Fraudulent
+    Return claims specifically: at $434.73 average vs. $141.14 for legitimate returns, each one
+    caught is worth ~3× a typical legitimate claim in review effort saved.</li>
     <li><b>Give Cluster 1 (core legitimate, 73% of customers) to QA, not fraud.</b> Its 38%
     quality-issue-return rate is the highest of the three segments despite near-zero fraud —
     cross-reference dominant <code>product_category</code> within this cluster against
