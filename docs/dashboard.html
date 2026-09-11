@@ -1,0 +1,791 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Return Risk Intelligence — Analytics Dashboard</title>
+<style>
+:root{
+  color-scheme: light;
+  --page:#f9f9f7; --surface:#fcfcfb; --surface-2:#f2f1ee;
+  --ink:#0b0b0b; --ink-2:#52514e; --muted:#898781;
+  --grid:#e1e0d9; --baseline:#c3c2b7; --border:rgba(11,11,11,.10);
+  --good-text:#006300;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100;
+  --s1-wash:rgba(42,120,214,.10); --s2-wash:rgba(235,104,52,.10);
+  --s3-wash:rgba(27,175,122,.10); --s4-wash:rgba(237,161,0,.12);
+  --good:#0ca30c; --warn:#fab219; --serious:#ec835a; --crit:#d03b3b;
+  --good-wash:rgba(12,163,12,.09); --warn-wash:rgba(250,178,25,.14);
+  --shadow:0 1px 2px rgba(11,11,11,.04), 0 4px 14px rgba(11,11,11,.04);
+  --rad:12px;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    color-scheme: dark;
+    --page:#0d0d0d; --surface:#1a1a19; --surface-2:#222221;
+    --ink:#ffffff; --ink-2:#c3c2b7; --muted:#8f8d86;
+    --grid:#2c2c2a; --baseline:#383835; --border:rgba(255,255,255,.10);
+    --good-text:#0ca30c;
+    --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500;
+    --s1-wash:rgba(57,135,229,.14); --s2-wash:rgba(217,89,38,.14);
+    --s3-wash:rgba(25,158,112,.14); --s4-wash:rgba(201,133,0,.16);
+    --good:#0ca30c; --warn:#fab219; --serious:#ec835a; --crit:#e66767;
+    --good-wash:rgba(12,163,12,.14); --warn-wash:rgba(250,178,25,.12);
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 4px 18px rgba(0,0,0,.35);
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--page); color:var(--ink);
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  font-size:14px; line-height:1.5; -webkit-font-smoothing:antialiased;
+}
+a{color:var(--s1)}
+code{font-family:"SF Mono",ui-monospace,Menlo,Consolas,"Liberation Mono",monospace;
+  background:var(--surface-2); border:1px solid var(--border); border-radius:4px;
+  padding:1px 5px; font-size:12px}
+.wrap{max-width:1180px; margin:0 auto; padding:0 20px}
+
+/* ---- top bar ---- */
+.topbar{position:sticky; top:0; z-index:20; background:var(--page);
+  border-bottom:1px solid var(--border); backdrop-filter:blur(6px)}
+.topbar .row{display:flex; align-items:center; justify-content:space-between;
+  gap:18px; padding:12px 20px; flex-wrap:wrap}
+.brand{display:flex; align-items:baseline; gap:9px; font-weight:700; font-size:14px}
+.brand .tag{font-size:10px; font-weight:800; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--ink-2); background:var(--surface-2); border:1px solid var(--border);
+  border-radius:5px; padding:2px 7px}
+nav.jump{display:flex; gap:2px; flex-wrap:wrap}
+nav.jump a{font-size:12.5px; font-weight:600; color:var(--ink-2); text-decoration:none;
+  padding:7px 10px; border-radius:7px; white-space:nowrap}
+nav.jump a:hover{background:var(--surface-2); color:var(--ink)}
+
+/* ---- hero ---- */
+.hero{padding:34px 0 6px}
+.eyebrow{font-size:11px; font-weight:800; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--s1); margin-bottom:8px}
+h1{font-size:clamp(24px,3.4vw,34px); font-weight:800; letter-spacing:-.01em; margin:0 0 10px}
+.lede{color:var(--ink-2); font-size:14.5px; max-width:74ch; margin:0 0 22px; line-height:1.62}
+.lede b{color:var(--ink)}
+
+/* ---- stat tiles ---- */
+.kpis{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:12px}
+.kpis.sec{grid-template-columns:repeat(4,1fr); margin-bottom:30px}
+@media(max-width:900px){.kpis,.kpis.sec{grid-template-columns:repeat(2,1fr)}}
+.tile{background:var(--surface); border:1px solid var(--border); border-radius:var(--rad);
+  padding:16px 17px; box-shadow:var(--shadow)}
+.tile .lbl{font-size:11px; font-weight:700; letter-spacing:.03em; color:var(--muted);
+  text-transform:uppercase; margin-bottom:7px}
+.tile .val{font-size:clamp(24px,3vw,32px); font-weight:800; letter-spacing:-.02em; line-height:1}
+.tile .cap{font-size:12px; color:var(--ink-2); margin-top:8px; line-height:1.5}
+.tile.b{border-top:3px solid var(--s1)}
+.tile.o{border-top:3px solid var(--s2)}
+.tile.a{border-top:3px solid var(--s3)}
+.tile.y{border-top:3px solid var(--s4)}
+.kpis.sec .tile .val{font-size:clamp(18px,2.2vw,24px)}
+
+/* ---- sections ---- */
+section.blk{padding:44px 0 8px; border-top:1px solid var(--border)}
+section.blk:first-of-type{border-top:none}
+.blk h2{font-size:20px; font-weight:800; letter-spacing:-.01em; margin:0 0 6px;
+  display:flex; align-items:center; gap:10px}
+.blk h2 .n{font-family:"SF Mono",ui-monospace,monospace; font-size:12px; font-weight:700;
+  color:var(--muted); background:var(--surface-2); border:1px solid var(--border);
+  border-radius:5px; padding:2px 7px}
+.blk .sub{color:var(--ink-2); font-size:13.5px; max-width:78ch; margin:0 0 20px; line-height:1.6}
+.grid2{display:grid; grid-template-columns:1.15fr .85fr; gap:16px; align-items:start}
+.grid2.rev{grid-template-columns:.85fr 1.15fr}
+@media(max-width:860px){.grid2,.grid2.rev{grid-template-columns:1fr}}
+
+.card{background:var(--surface); border:1px solid var(--border); border-radius:var(--rad);
+  padding:18px 20px; box-shadow:var(--shadow); margin-bottom:16px}
+.card h3{font-size:13px; font-weight:800; margin:0 0 3px; letter-spacing:.01em}
+.card .note{font-size:12px; color:var(--muted); margin:0 0 16px}
+.card .foot{font-size:11.5px; color:var(--muted); margin-top:12px; line-height:1.5}
+
+/* ---- legend ---- */
+.legend{display:flex; gap:16px; flex-wrap:wrap; font-size:12px; color:var(--ink-2); margin-bottom:14px}
+.legend .k{display:inline-flex; align-items:center; gap:6px}
+.legend .sw{width:10px; height:10px; border-radius:2.5px; display:inline-block}
+
+/* ---- horizontal bar chart (css) ---- */
+.hbars{display:flex; flex-direction:column; gap:9px}
+.hbars .r{display:grid; grid-template-columns:132px 1fr 54px; align-items:center; gap:10px}
+.hbars .r .lb{font-size:12.2px; color:var(--ink-2); text-align:right; overflow:hidden;
+  text-overflow:ellipsis; white-space:nowrap}
+.hbars .r .tr{position:relative; height:16px; background:var(--surface-2); border-radius:3px}
+.hbars .r .tr.tall{height:22px; border-radius:4px}
+.hbars .r .fl{position:absolute; left:0; top:0; height:100%; border-radius:0 3px 3px 0;
+  background:var(--s1)}
+.hbars .r .tr.tall .fl{border-radius:0 4px 4px 0}
+.hbars .r .vv{font-size:12px; font-weight:700; font-variant-numeric:tabular-nums; color:var(--ink)}
+.hbars .r.hi .lb{color:var(--ink); font-weight:700}
+.hbars .r.hi .fl{background:var(--s3)}
+.hbars .r.hi .vv{color:var(--s3)}
+
+/* grouped horizontal bars: two series stacked thin within one row */
+.gbar-row{display:grid; grid-template-columns:150px 1fr; gap:10px; align-items:center; margin-bottom:12px}
+.gbar-row .lb{font-size:12.5px; font-weight:700; color:var(--ink); text-align:right}
+.gbar-stack{display:flex; flex-direction:column; gap:4px}
+.gbar-stack .tr{position:relative; height:13px; background:var(--surface-2); border-radius:3px}
+.gbar-stack .fl{position:absolute; left:0; top:0; height:100%; border-radius:0 3px 3px 0}
+.gbar-stack .fl.s1{background:var(--s1)}
+.gbar-stack .fl.s2{background:var(--s2)}
+.gbar-stack .vv{position:absolute; right:6px; top:0; height:100%; display:flex;
+  align-items:center; font-size:10.5px; font-weight:700; color:var(--ink); font-variant-numeric:tabular-nums}
+
+/* ---- vertical columns ---- */
+.vcols{display:flex; align-items:flex-end; gap:22px; height:170px; padding:0 6px 0 0}
+.vcols .col{display:flex; flex-direction:column; align-items:center; justify-content:flex-end;
+  flex:1; height:100%}
+.vcols .col .cap-lbl{font-size:12px; font-weight:700; margin-bottom:6px; font-variant-numeric:tabular-nums}
+.vcols .col .bar{width:100%; max-width:56px; border-radius:4px 4px 0 0; background:var(--baseline)}
+.vcols .col .bar.win{background:var(--s3)}
+.vcols .col .xl{font-size:11px; color:var(--ink-2); margin-top:8px; text-align:center; line-height:1.3}
+.vcols .col .xl b{display:block; color:var(--ink); font-size:11.5px}
+
+/* ---- tooltip ---- */
+#tip{position:fixed; z-index:100; pointer-events:none; background:var(--ink); color:var(--surface);
+  font-size:11.5px; padding:7px 10px; border-radius:7px; max-width:240px; line-height:1.45;
+  opacity:0; transform:translateY(3px); transition:opacity .12s, transform .12s; box-shadow:0 6px 18px rgba(0,0,0,.25)}
+#tip.show{opacity:1; transform:translateY(0)}
+#tip .v{font-weight:800}
+.hit{cursor:default}
+
+/* ---- table ---- */
+table.dt{width:100%; border-collapse:collapse; font-size:12.5px}
+table.dt th{text-align:left; font-size:10px; font-weight:800; letter-spacing:.06em;
+  text-transform:uppercase; color:var(--muted); padding:0 10px 8px 0; border-bottom:1px solid var(--baseline)}
+table.dt th.r,table.dt td.r{text-align:right}
+table.dt td{padding:8px 10px 8px 0; border-bottom:1px solid var(--grid); color:var(--ink-2)}
+table.dt tr:last-child td{border-bottom:none}
+table.dt td.nm{color:var(--ink); font-weight:700}
+table.dt td.m,table.dt th.m{font-variant-numeric:tabular-nums}
+table.dt tr.hi td{background:var(--s3-wash)}
+.dot{display:inline-block; width:8px; height:8px; border-radius:2px; margin-right:6px; vertical-align:1px}
+
+details.dtl{margin-top:8px}
+details.dtl summary{cursor:pointer; font-size:12px; font-weight:700; color:var(--s1);
+  list-style:none; padding:4px 0}
+details.dtl summary::-webkit-details-marker{display:none}
+details.dtl summary::before{content:"▸ "; font-size:10px}
+details.dtl[open] summary::before{content:"▾ "}
+details.dtl .dt-wrap{margin-top:8px; overflow-x:auto}
+
+/* ---- line chart ---- */
+.linechart{width:100%; height:auto}
+.linechart .grid-line{stroke:var(--grid); stroke-width:1}
+.linechart .axis{stroke:var(--baseline); stroke-width:1}
+.linechart .lbl{fill:var(--muted); font-size:9.5px; font-family:inherit}
+.linechart .pt{cursor:default}
+.linechart .pt-ring{fill:var(--surface)}
+
+/* ---- status chips ---- */
+.chip{display:inline-flex; align-items:center; gap:5px; font-size:10.5px; font-weight:800;
+  letter-spacing:.03em; text-transform:uppercase; padding:3px 8px; border-radius:5px}
+.chip .d{width:6px; height:6px; border-radius:50%}
+.chip.warn{background:var(--warn-wash); color:#8a5a00}
+.chip.warn .d{background:var(--warn)}
+.chip.good{background:var(--good-wash); color:var(--good-text)}
+.chip.good .d{background:var(--good)}
+@media (prefers-color-scheme: dark){ .chip.warn{color:#f0c04a} }
+
+/* ---- findings / risks / recs lists ---- */
+ul.flist{list-style:none; margin:0; padding:0}
+ul.flist li{padding:10px 0; border-bottom:1px solid var(--grid); font-size:13px;
+  color:var(--ink-2); line-height:1.55}
+ul.flist li:last-child{border-bottom:none}
+ul.flist li b{color:var(--ink)}
+ul.flist li .chip{margin-right:8px; transform:translateY(-1px)}
+
+.callout{border-radius:var(--rad); padding:16px 18px; margin-bottom:18px; border:1px solid}
+.callout.good{background:var(--good-wash); border-color:rgba(12,163,12,.35)}
+.callout .hd{font-size:10.5px; font-weight:800; letter-spacing:.1em; text-transform:uppercase;
+  margin-bottom:6px; color:var(--good-text)}
+.callout p{margin:0; font-size:13px; color:var(--ink); line-height:1.55}
+
+.dec{display:flex; gap:13px; padding:13px 0; border-bottom:1px solid var(--grid)}
+.dec:last-child{border-bottom:none}
+.dec .num{font-family:"SF Mono",ui-monospace,monospace; font-weight:800; font-size:12px;
+  color:var(--s1); min-width:20px; padding-top:2px}
+.dec h4{font-size:13.5px; font-weight:800; margin:0 0 4px}
+.dec p{font-size:12.5px; color:var(--ink-2); margin:0; line-height:1.5}
+.dec .own{font-size:10.5px; font-weight:800; letter-spacing:.06em; text-transform:uppercase;
+  color:var(--s2); margin-top:5px}
+
+/* ---- footer ---- */
+footer{border-top:1px solid var(--border); margin-top:50px; padding:26px 0 50px}
+footer .links{display:flex; gap:18px; flex-wrap:wrap; font-size:12.5px; font-weight:600; margin-bottom:12px}
+footer .fine{font-size:11.5px; color:var(--muted); line-height:1.6}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="row">
+    <div class="brand">Return Risk Intelligence <span class="tag">Group 3 · Dashboard</span></div>
+    <nav class="jump">
+      <a href="#overview">Overview</a>
+      <a href="#distribution">Return Mix</a>
+      <a href="#classification">Fraud</a>
+      <a href="#clustering">Clustering</a>
+      <a href="#quality">Quality</a>
+      <a href="#regression">Regression</a>
+      <a href="#recommendations">Recommendations</a>
+    </nav>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <section id="overview" class="hero">
+    <div class="eyebrow">Big Data Analytics · NMIMS MBA Group Project · Group 3</div>
+    <h1>Return Risk Intelligence — Analytics Dashboard</h1>
+    <p class="lede">A one-page reference view of the <b>60,000-order</b> PySpark/MLlib pipeline behind
+    the <a href="../deliverables/report/return-risk-intelligence-report.html">consulting report</a>
+    and <a href="../deliverables/presentation/return-risk-intelligence-deck.html">executive deck</a> —
+    every number below is read directly from <code>docs/*.csv</code>, generated by
+    <code>notebooks/01_data_engineering.ipynb</code> and <code>notebooks/02_ml_modeling.ipynb</code>.</p>
+
+    <div class="kpis">
+      <div class="tile b"><div class="lbl">Non-legitimate refund exposure</div>
+        <div class="val">$4.64M</div>
+        <div class="cap"><b>43.8%</b> of all refund $ requested, from just <b>29.9%</b> of orders</div></div>
+      <div class="tile o"><div class="lbl">Classifier performance (test)</div>
+        <div class="val">0.999</div>
+        <div class="cap">weighted F1, Random Forest — synthetic-dataset caveat below, not a production number</div></div>
+      <div class="tile a"><div class="lbl">Behavioral segments (K-Means)</div>
+        <div class="val">3</div>
+        <div class="cap">genuine silhouette maximum, 0.560 at k=3, over a k=2…6 sweep</div></div>
+      <div class="tile y"><div class="lbl">Hidden in the "legitimate" 73%</div>
+        <div class="val">38%</div>
+        <div class="cap">of Cluster 1's own returns are still quality-issue driven</div></div>
+    </div>
+
+    <div class="kpis sec">
+      <div class="tile"><div class="lbl">Fraud + Wardrobing rate</div><div class="val">17.9%</div>
+        <div class="cap">vs. Appriss Retail's reported 15.14% industry rate</div></div>
+      <div class="tile"><div class="lbl">Reachable today, zero ML</div><div class="val">$1.88M</div>
+        <div class="cap">photo-evidence policy rule, 4,673 orders</div></div>
+      <div class="tile"><div class="lbl">Refund-pricing error cut</div><div class="val">40%</div>
+        <div class="cap">Linear Regression RMSE vs. naive "refund = order value"</div></div>
+      <div class="tile"><div class="lbl">Fraud claim vs. legitimate</div><div class="val">3.1×</div>
+        <div class="cap">$434.73 avg. Fraudulent Return claim vs. $141.14 avg. legitimate</div></div>
+    </div>
+  </section>
+
+  <!-- ============================================================ RETURN MIX -->
+  <section id="distribution" class="blk">
+    <h2><span class="n">01</span>Return type mix — orders vs. dollars</h2>
+    <p class="sub">29.9% of orders are non-legitimate, but they don't carry 29.9% of the money — the
+    dollar share and the order share diverge sharply once you split by class.</p>
+
+    <div class="grid2">
+      <div class="card">
+        <h3>Share of orders vs. share of refund $ requested</h3>
+        <p class="note">Per <code>abuse_type</code>, indexed to 100% within each series</p>
+        <div class="legend">
+          <span class="k"><span class="sw" style="background:var(--s1)"></span>% of orders</span>
+          <span class="k"><span class="sw" style="background:var(--s2)"></span>% of refund $ requested</span>
+        </div>
+        <div id="mixChart">
+          <div class="gbar-row"><div class="lb">Legitimate</div>
+            <div class="gbar-stack">
+              <div class="tr hit" data-tip="Legitimate · % of orders&#10;<b>70.1%</b>"><div class="fl s1" style="width:70.1%"></div><span class="vv">70.1%</span></div>
+              <div class="tr hit" data-tip="Legitimate · % of refund $&#10;<b>56.2%</b>"><div class="fl s2" style="width:56.2%"></div><span class="vv">56.2%</span></div>
+            </div></div>
+          <div class="gbar-row"><div class="lb">Policy Abuser</div>
+            <div class="gbar-stack">
+              <div class="tr hit" data-tip="Policy Abuser · % of orders&#10;<b>12.0%</b>"><div class="fl s1" style="width:12.0%"></div><span class="vv">12.0%</span></div>
+              <div class="tr hit" data-tip="Policy Abuser · % of refund $&#10;<b>7.2%</b>"><div class="fl s2" style="width:7.2%"></div><span class="vv">7.2%</span></div>
+            </div></div>
+          <div class="gbar-row"><div class="lb">Fraudulent Return</div>
+            <div class="gbar-stack">
+              <div class="tr hit" data-tip="Fraudulent Return · % of orders&#10;<b>10.2%</b>"><div class="fl s1" style="width:10.2%"></div><span class="vv">10.2%</span></div>
+              <div class="tr hit" data-tip="Fraudulent Return · % of refund $&#10;<b>25.2%</b>"><div class="fl s2" style="width:25.2%"></div><span class="vv">25.2%</span></div>
+            </div></div>
+          <div class="gbar-row"><div class="lb">Wardrobing</div>
+            <div class="gbar-stack">
+              <div class="tr hit" data-tip="Wardrobing · % of orders&#10;<b>7.7%</b>"><div class="fl s1" style="width:7.7%"></div><span class="vv">7.7%</span></div>
+              <div class="tr hit" data-tip="Wardrobing · % of refund $&#10;<b>11.5%</b>"><div class="fl s2" style="width:11.5%"></div><span class="vv">11.5%</span></div>
+            </div></div>
+        </div>
+        <p class="foot">Fraudulent Return is 10.2% of orders but <b>25.2%</b> of refund dollars —
+        the clearest read of "bad actors skew toward higher-value claims."</p>
+      </div>
+
+      <div class="card">
+        <h3>Class breakdown</h3>
+        <p class="note">Raw counts and dollars, from <code>data/processed/silver</code></p>
+        <div style="overflow-x:auto">
+        <table class="dt">
+          <thead><tr><th>Class</th><th class="r">Orders</th><th class="r">Refund $</th><th class="r">Avg $/claim</th></tr></thead>
+          <tbody>
+            <tr><td class="nm"><span class="dot" style="background:var(--s1)"></span>Legitimate</td><td class="r m">42,060</td><td class="r m">$5.94M</td><td class="r m">$141.14</td></tr>
+            <tr><td class="nm"><span class="dot" style="background:var(--s2)"></span>Policy Abuser</td><td class="r m">7,192</td><td class="r m">$0.76M</td><td class="r m">$105.67</td></tr>
+            <tr class="hi"><td class="nm"><span class="dot" style="background:var(--s3)"></span>Fraudulent Return</td><td class="r m">6,112</td><td class="r m">$2.66M</td><td class="r m">$434.73</td></tr>
+            <tr><td class="nm"><span class="dot" style="background:var(--s4)"></span>Wardrobing</td><td class="r m">4,636</td><td class="r m">$1.22M</td><td class="r m">$263.16</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <p class="foot">Total: 60,000 orders · $10.57M refund dollars requested. Fraudulent Return
+        (highlighted) has both the highest average claim and the widest orders→dollars gap.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ CLASSIFICATION -->
+  <section id="classification" class="blk">
+    <h2><span class="n">02</span>Approach 1 — Fraud classification</h2>
+    <p class="sub">Random Forest (200 trees, maxDepth=10, class-weighted) vs. multinomial Logistic
+    Regression, on <code>abuse_label</code>. Spark MLlib's <code>GBTClassifier</code> is binary-only,
+    so Random Forest — which natively supports multi-class — is the primary model.</p>
+
+    <div class="grid2">
+      <div class="card">
+        <h3>Per-class precision / recall / F1 (test set)</h3>
+        <p class="note">n = 14,888 test rows, 75/25 split, seed=42</p>
+        <div style="overflow-x:auto">
+        <table class="dt">
+          <thead><tr><th>Model</th><th>Class</th><th class="r">Precision</th><th class="r">Recall</th><th class="r">F1</th></tr></thead>
+          <tbody>
+            <tr><td class="nm">Logistic Reg.</td><td>Legitimate</td><td class="r m">1.000</td><td class="r m">1.000</td><td class="r m">1.000</td></tr>
+            <tr><td></td><td>Policy Abuser</td><td class="r m">0.993</td><td class="r m">0.990</td><td class="r m">0.991</td></tr>
+            <tr><td></td><td>Fraudulent Return</td><td class="r m">0.999</td><td class="r m">0.994</td><td class="r m">0.997</td></tr>
+            <tr><td></td><td>Wardrobing</td><td class="r m">0.985</td><td class="r m">0.996</td><td class="r m">0.991</td></tr>
+            <tr><td class="nm">Random Forest</td><td>Legitimate</td><td class="r m">1.000</td><td class="r m">1.000</td><td class="r m">1.000</td></tr>
+            <tr><td></td><td>Policy Abuser</td><td class="r m">0.999</td><td class="r m">0.996</td><td class="r m">0.997</td></tr>
+            <tr><td></td><td>Fraudulent Return</td><td class="r m">0.997</td><td class="r m">0.999</td><td class="r m">0.998</td></tr>
+            <tr><td></td><td>Wardrobing</td><td class="r m">0.996</td><td class="r m">0.999</td><td class="r m">0.998</td></tr>
+            <tr class="hi"><td class="nm">Random Forest</td><td class="nm">Weighted avg</td><td class="r m">0.999</td><td class="r m">0.999</td><td class="r m">0.999</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Top feature importances</h3>
+        <p class="note">Random Forest, top 8 of 15 features used</p>
+        <div class="hbars" id="fiChart">
+          <div class="r"><div class="lb">days_to_return</div><div class="tr hit" data-tip="days_to_return&#10;importance <b>0.152</b>"><div class="fl" style="width:100%"></div></div><div class="vv">0.152</div></div>
+          <div class="r"><div class="lb">wishlist_to_cart_hrs</div><div class="tr hit" data-tip="wishlist_to_cart_time_hrs&#10;importance <b>0.126</b>"><div class="fl" style="width:83.1%"></div></div><div class="vv">0.126</div></div>
+          <div class="r"><div class="lb">return_rate_pct</div><div class="tr hit" data-tip="return_rate_pct&#10;importance <b>0.117</b>"><div class="fl" style="width:77.2%"></div></div><div class="vv">0.117</div></div>
+          <div class="r"><div class="lb">return_to_order_ratio</div><div class="tr hit" data-tip="return_to_order_ratio&#10;importance <b>0.115</b>"><div class="fl" style="width:75.6%"></div></div><div class="vv">0.115</div></div>
+          <div class="r"><div class="lb">tracking_number_valid</div><div class="tr hit" data-tip="tracking_number_valid&#10;importance <b>0.072</b>"><div class="fl" style="width:47.6%"></div></div><div class="vv">0.072</div></div>
+          <div class="r"><div class="lb">total_returns_lifetime</div><div class="tr hit" data-tip="total_returns_lifetime&#10;importance <b>0.068</b>"><div class="fl" style="width:44.8%"></div></div><div class="vv">0.068</div></div>
+          <div class="r"><div class="lb">support_contacts</div><div class="tr hit" data-tip="customer_support_contacts&#10;importance <b>0.044</b>"><div class="fl" style="width:29.0%"></div></div><div class="vv">0.044</div></div>
+          <div class="r"><div class="lb">refund_amount_usd</div><div class="tr hit" data-tip="refund_amount_requested_usd&#10;importance <b>0.043</b>"><div class="fl" style="width:28.4%"></div></div><div class="vv">0.043</div></div>
+        </div>
+        <p class="foot">Spread across ~15 features, no single dominant leak — engineered ratios
+        (<code>return_to_order_ratio</code>) rank alongside raw behavioral fields.</p>
+        <details class="dtl"><summary>View data table</summary><div class="dt-wrap">
+        <table class="dt"><thead><tr><th>Feature</th><th class="r">Importance</th></tr></thead><tbody>
+          <tr><td>days_to_return</td><td class="r m">0.1516</td></tr>
+          <tr><td>wishlist_to_cart_time_hrs</td><td class="r m">0.1257</td></tr>
+          <tr><td>return_rate_pct</td><td class="r m">0.1170</td></tr>
+          <tr><td>return_to_order_ratio</td><td class="r m">0.1146</td></tr>
+          <tr><td>tracking_number_valid</td><td class="r m">0.0723</td></tr>
+          <tr><td>total_returns_lifetime</td><td class="r m">0.0680</td></tr>
+          <tr><td>customer_support_contacts</td><td class="r m">0.0440</td></tr>
+          <tr><td>refund_amount_requested_usd</td><td class="r m">0.0430</td></tr>
+        </tbody></table></div></details>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <h3>Does the model earn its complexity?</h3>
+        <p class="note">Binary "does this return need a second look" framing, vs. a free 4-flag rule</p>
+        <div class="legend">
+          <span class="k"><span class="sw" style="background:var(--s1)"></span>Precision</span>
+          <span class="k"><span class="sw" style="background:var(--s2)"></span>Recall</span>
+          <span class="k"><span class="sw" style="background:var(--s3)"></span>F1</span>
+        </div>
+        <div class="gbar-row"><div class="lb">4-flag rule<br><span style="font-weight:400;color:var(--muted)">(no ML)</span></div>
+          <div class="gbar-stack">
+            <div class="tr hit" data-tip="4-flag rule · Precision&#10;<b>0.811</b>"><div class="fl s1" style="width:81.1%"></div><span class="vv">0.811</span></div>
+            <div class="tr hit" data-tip="4-flag rule · Recall&#10;<b>0.489</b>"><div class="fl s2" style="width:48.9%"></div><span class="vv">0.489</span></div>
+            <div class="tr hit" data-tip="4-flag rule · F1&#10;<b>0.610</b>"><div class="fl" style="width:61.0%;background:var(--s3)"></div><span class="vv">0.610</span></div>
+          </div></div>
+        <div class="gbar-row"><div class="lb">Random Forest</div>
+          <div class="gbar-stack">
+            <div class="tr hit" data-tip="Random Forest · Precision&#10;<b>1.000</b>"><div class="fl s1" style="width:100%"></div><span class="vv">1.000</span></div>
+            <div class="tr hit" data-tip="Random Forest · Recall&#10;<b>1.000</b>"><div class="fl s2" style="width:100%"></div><span class="vv">1.000</span></div>
+            <div class="tr hit" data-tip="Random Forest · F1&#10;<b>1.000</b>"><div class="fl" style="width:100%;background:var(--s3)"></div><span class="vv">1.000</span></div>
+          </div></div>
+        <p class="foot">The free rule catches only <b>49%</b> of non-legitimate returns and still
+        misfires on 501 legitimate orders (2,652 flagged vs. RF's 4,401 correct).</p>
+      </div>
+
+      <div class="card">
+        <h3>Cost-sensitive threshold sweep</h3>
+        <p class="note">Random Forest's Fraudulent Return probability — the costliest class</p>
+        <div class="legend">
+          <span class="k"><span class="sw" style="background:var(--s1)"></span>Precision</span>
+          <span class="k"><span class="sw" style="background:var(--s2)"></span>Recall</span>
+        </div>
+        <svg class="linechart" viewBox="0 0 460 195" role="img" aria-label="Precision and recall vs. decision threshold, 0.1 to 0.9">
+          <g class="grid-line">
+            <line x1="40" y1="160" x2="440" y2="160"/>
+            <line x1="40" y1="113.3" x2="440" y2="113.3"/>
+            <line x1="40" y1="66.7" x2="440" y2="66.7"/>
+            <line x1="40" y1="20" x2="440" y2="20"/>
+          </g>
+          <g class="lbl" text-anchor="end">
+            <text x="34" y="163">0.85</text><text x="34" y="116.3">0.90</text>
+            <text x="34" y="69.7">0.95</text><text x="34" y="23">1.00</text>
+          </g>
+          <line class="axis" x1="40" y1="160" x2="440" y2="160"/>
+          <polyline points="40,72.3 90,32.1 140,22.8 190,22.8 240,20.9 290,20 340,20 390,20 440,20"
+            fill="none" stroke="var(--s1)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+          <polyline points="40,20 90,20 140,20 190,20.9 240,21.9 290,27.5 340,41.5 390,62.9 440,125.5"
+            fill="none" stroke="var(--s2)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+          <g class="lbl" text-anchor="middle">
+            <text x="40" y="178">0.1</text><text x="140" y="178">0.3</text><text x="240" y="178">0.5</text>
+            <text x="340" y="178">0.7</text><text x="440" y="178">0.9</text>
+          </g>
+          <text x="240" y="192" text-anchor="middle" class="lbl" style="font-size:10px">Decision threshold on Fraudulent Return probability</text>
+          <g>
+            <circle class="pt-ring" cx="440" cy="125.5" r="6"/><circle class="pt hit" cx="440" cy="125.5" r="4" fill="var(--s2)" data-tip="Threshold 0.9 · Recall&#10;<b>0.887</b>"/>
+            <circle class="pt-ring" cx="40" cy="72.3" r="6"/><circle class="pt hit" cx="40" cy="72.3" r="4" fill="var(--s1)" data-tip="Threshold 0.1 · Precision&#10;<b>0.944</b>"/>
+          </g>
+        </svg>
+        <p class="foot">Precision stays ≥0.94 across the whole sweep; recall degrades past ~0.7 —
+        the point a stricter cutoff starts costing caught fraud faster than it buys back precision.</p>
+        <details class="dtl"><summary>View data table</summary><div class="dt-wrap">
+        <table class="dt"><thead><tr><th>Threshold</th><th class="r">Flagged</th><th class="r">Precision</th><th class="r">Recall</th></tr></thead><tbody>
+          <tr><td>0.1</td><td class="r m">1,577</td><td class="r m">0.944</td><td class="r m">1.000</td></tr>
+          <tr><td>0.3</td><td class="r m">1,493</td><td class="r m">0.997</td><td class="r m">1.000</td></tr>
+          <tr><td>0.5</td><td class="r m">1,487</td><td class="r m">0.999</td><td class="r m">0.998</td></tr>
+          <tr><td>0.7</td><td class="r m">1,454</td><td class="r m">1.000</td><td class="r m">0.977</td></tr>
+          <tr><td>0.9</td><td class="r m">1,320</td><td class="r m">1.000</td><td class="r m">0.887</td></tr>
+        </tbody></table></div></details>
+      </div>
+    </div>
+
+    <div class="callout" style="background:var(--warn-wash); border-color:rgba(250,178,25,.4)">
+      <div class="hd" style="color:#8a5a00">Model-evaluation caveat</div>
+      <p>0.998–0.999 weighted F1 is unrealistically high for a live fraud operation. This is a
+      Kaggle <b>synthetic</b> dataset whose label generator likely composes <code>abuse_type</code>
+      from a fairly clean rule — producing near-separable classes real transactional data never
+      gives you. Presented as proof of the pipeline and methodology, not a performance guarantee.
+      Realistic production target: <b>80–90% weighted F1</b>. Full discussion in
+      <a href="fraud-classification-results.md">fraud-classification-results.md</a>.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ CLUSTERING -->
+  <section id="clustering" class="blk">
+    <h2><span class="n">03</span>Approach 2 — Clustering (quality &amp; segments)</h2>
+    <p class="sub">K-Means, features deliberately excluding the fraud-flag columns the classifier
+    uses — so clustering surfaces behavior/quality patterns a supervised label can't. k=3 selected
+    by silhouette score over k=2…6.</p>
+
+    <div class="grid2">
+      <div class="card">
+        <h3>Return rate vs. quality-issue rate per cluster</h3>
+        <p class="note">The two metrics move in opposite directions for Cluster 1</p>
+        <div class="legend">
+          <span class="k"><span class="sw" style="background:var(--s1)"></span>Avg return rate</span>
+          <span class="k"><span class="sw" style="background:var(--s2)"></span>% quality-issue returns</span>
+        </div>
+        <div class="gbar-row"><div class="lb">Cluster 0<br><span style="font-weight:400;color:var(--muted)">high-value fraud-risk</span></div>
+          <div class="gbar-stack">
+            <div class="tr hit" data-tip="Cluster 0 · Return rate&#10;<b>44.8%</b>"><div class="fl s1" style="width:44.8%"></div><span class="vv">44.8%</span></div>
+            <div class="tr hit" data-tip="Cluster 0 · Quality-issue&#10;<b>22%</b>"><div class="fl s2" style="width:22%"></div><span class="vv">22%</span></div>
+          </div></div>
+        <div class="gbar-row"><div class="lb">Cluster 1<br><span style="font-weight:400;color:var(--muted)">core legitimate</span></div>
+          <div class="gbar-stack">
+            <div class="tr hit" data-tip="Cluster 1 · Return rate&#10;<b>6.8%</b>"><div class="fl s1" style="width:6.8%"></div><span class="vv">6.8%</span></div>
+            <div class="tr hit" data-tip="Cluster 1 · Quality-issue&#10;<b>38%</b>"><div class="fl s2" style="width:38%"></div><span class="vv">38%</span></div>
+          </div></div>
+        <div class="gbar-row"><div class="lb">Cluster 2<br><span style="font-weight:400;color:var(--muted)">frequent policy-abuse</span></div>
+          <div class="gbar-stack">
+            <div class="tr hit" data-tip="Cluster 2 · Return rate&#10;<b>57.7%</b>"><div class="fl s1" style="width:57.7%"></div><span class="vv">57.7%</span></div>
+            <div class="tr hit" data-tip="Cluster 2 · Quality-issue&#10;<b>19%</b>"><div class="fl s2" style="width:19%"></div><span class="vv">19%</span></div>
+          </div></div>
+        <p class="foot">Cluster 1 has the <b>lowest</b> return rate but the <b>highest</b>
+        quality-issue share — exactly why a single blended "return rate" KPI hides this segment's problem.</p>
+      </div>
+
+      <div class="card">
+        <h3>Choosing k by silhouette score</h3>
+        <p class="note">k=3 is the genuine maximum, not a business-convenience pick</p>
+        <svg class="linechart" viewBox="0 0 460 195" role="img" aria-label="Silhouette score for k = 2 through 6">
+          <g class="grid-line">
+            <line x1="40" y1="160" x2="440" y2="160"/>
+            <line x1="40" y1="113.3" x2="440" y2="113.3"/>
+            <line x1="40" y1="66.7" x2="440" y2="66.7"/>
+            <line x1="40" y1="20" x2="440" y2="20"/>
+          </g>
+          <g class="lbl" text-anchor="end">
+            <text x="34" y="163">0.0</text><text x="34" y="116.3">0.2</text>
+            <text x="34" y="69.7">0.4</text><text x="34" y="23">0.6</text>
+          </g>
+          <line class="axis" x1="40" y1="160" x2="440" y2="160"/>
+          <polyline points="40,40.5 140,29.3 240,109.3 340,91.0 440,96.4"
+            fill="none" stroke="var(--s1)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+          <g class="lbl" text-anchor="middle">
+            <text x="40" y="178">k=2</text><text x="140" y="178">k=3</text><text x="240" y="178">k=4</text>
+            <text x="340" y="178">k=5</text><text x="440" y="178">k=6</text>
+          </g>
+          <circle class="pt-ring" cx="40" cy="40.5" r="6"/><circle class="pt hit" cx="40" cy="40.5" r="4" fill="var(--s1)" data-tip="k=2 · silhouette&#10;<b>0.512</b>"/>
+          <circle class="pt-ring" cx="140" cy="29.3" r="7"/><circle class="pt hit" cx="140" cy="29.3" r="5" fill="var(--s3)" data-tip="k=3 · silhouette (max)&#10;<b>0.560</b>"/>
+          <circle class="pt-ring" cx="240" cy="109.3" r="6"/><circle class="pt hit" cx="240" cy="109.3" r="4" fill="var(--s1)" data-tip="k=4 · silhouette&#10;<b>0.217</b>"/>
+          <circle class="pt-ring" cx="340" cy="91.0" r="6"/><circle class="pt hit" cx="340" cy="91.0" r="4" fill="var(--s1)" data-tip="k=5 · silhouette&#10;<b>0.296</b>"/>
+          <circle class="pt-ring" cx="440" cy="96.4" r="6"/><circle class="pt hit" cx="440" cy="96.4" r="4" fill="var(--s1)" data-tip="k=6 · silhouette&#10;<b>0.273</b>"/>
+          <text x="140" y="18" text-anchor="middle" style="font-size:10.5px;font-weight:800;fill:var(--s3)">max</text>
+        </svg>
+        <p class="foot">Scores drop sharply past k=3 — finer segmentations mostly split noise
+        rather than real structure.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Cluster profiles</h3>
+      <div style="overflow-x:auto">
+      <table class="dt">
+        <thead><tr><th>Cluster</th><th class="r">n</th><th class="r">Avg return rate</th><th class="r">Avg order value</th><th class="r">% quality-issue</th><th>Dominant mix</th></tr></thead>
+        <tbody>
+          <tr><td class="nm"><span class="dot" style="background:var(--s1)"></span>0 — High-value fraud-risk</td><td class="r m">6,646</td><td class="r m">44.8%</td><td class="r m">$484.01</td><td class="r m">22%</td><td>Fraudulent Return-heavy</td></tr>
+          <tr class="hi"><td class="nm"><span class="dot" style="background:var(--s2)"></span>1 — Core legitimate base</td><td class="r m">43,829</td><td class="r m">6.8%</td><td class="r m">$157.25</td><td class="r m">38%</td><td>96% Legitimate</td></tr>
+          <tr><td class="nm"><span class="dot" style="background:var(--s3)"></span>2 — Frequent policy-abuse</td><td class="r m">9,525</td><td class="r m">57.7%</td><td class="r m">$129.18</td><td class="r m">19%</td><td>Policy Abuser-heavy</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ QUALITY -->
+  <section id="quality" class="blk">
+    <h2><span class="n">04</span>Quality deep-dive by category</h2>
+    <p class="sub">Every quality-issue return in the full dataset, ranked by dollar exposure. The
+    honest finding is a negative one: the "% of category's own orders" column is tightly banded
+    across all 12 categories — no single category or vendor stands out.</p>
+
+    <div class="card">
+      <h3>Quality-issue refund $ by product category</h3>
+      <p class="note">Sorted by dollar exposure · bar length = $ exposure · right column = share of that category's own orders</p>
+      <div class="hbars" id="qdChart">
+        <div class="r"><div class="lb">Clothing</div><div class="tr tall hit" data-tip="Clothing · $667,224&#10;31.7% of category orders"><div class="fl" style="width:100%"></div></div><div class="vv">31.7%</div></div>
+        <div class="r"><div class="lb">Electronics</div><div class="tr tall hit" data-tip="Electronics · $463,754&#10;34.2% of category orders"><div class="fl" style="width:69.5%"></div></div><div class="vv">34.2%</div></div>
+        <div class="r"><div class="lb">Shoes</div><div class="tr tall hit" data-tip="Shoes · $407,751&#10;32.3% of category orders"><div class="fl" style="width:61.1%"></div></div><div class="vv">32.3%</div></div>
+        <div class="r"><div class="lb">Home &amp; Kitchen</div><div class="tr tall hit" data-tip="Home &amp; Kitchen · $322,774&#10;33.8% of category orders"><div class="fl" style="width:48.4%"></div></div><div class="vv">33.8%</div></div>
+        <div class="r"><div class="lb">Beauty</div><div class="tr tall hit" data-tip="Beauty · $278,267&#10;31.5% of category orders"><div class="fl" style="width:41.7%"></div></div><div class="vv">31.5%</div></div>
+        <div class="r"><div class="lb">Sports</div><div class="tr tall hit" data-tip="Sports · $267,284&#10;33.1% of category orders"><div class="fl" style="width:40.1%"></div></div><div class="vv">33.1%</div></div>
+        <div class="r"><div class="lb">Books</div><div class="tr tall hit" data-tip="Books · $183,429&#10;33.7% of category orders"><div class="fl" style="width:27.5%"></div></div><div class="vv">33.7%</div></div>
+        <div class="r"><div class="lb">Toys</div><div class="tr tall hit" data-tip="Toys · $159,335&#10;32.9% of category orders"><div class="fl" style="width:23.9%"></div></div><div class="vv">32.9%</div></div>
+        <div class="r"><div class="lb">Jewelry</div><div class="tr tall hit" data-tip="Jewelry · $153,877&#10;33.8% of category orders"><div class="fl" style="width:23.1%"></div></div><div class="vv">33.8%</div></div>
+        <div class="r"><div class="lb">Furniture</div><div class="tr tall hit" data-tip="Furniture · $127,151&#10;34.2% of category orders"><div class="fl" style="width:19.1%"></div></div><div class="vv">34.2%</div></div>
+        <div class="r"><div class="lb">Grocery</div><div class="tr tall hit" data-tip="Grocery · $123,784&#10;32.7% of category orders"><div class="fl" style="width:18.6%"></div></div><div class="vv">32.7%</div></div>
+        <div class="r"><div class="lb">Tools</div><div class="tr tall hit" data-tip="Tools · $129,884&#10;35.2% of category orders (highest)"><div class="fl" style="width:19.5%;background:var(--s2)"></div></div><div class="vv" style="color:var(--s2)">35.2%</div></div>
+      </div>
+      <p class="foot">Dollar exposure ranges 5.4× top-to-bottom ($667K → $124K) but the quality-issue
+      <b>share</b> only ranges <b>31.5%–35.2%</b> (right column) — Clothing tops the $ ranking purely
+      because it's the largest category by volume, not because of an elevated defect rate. This is a
+      <b>broad-based</b> quality problem, not a one-vendor problem.</p>
+      <details class="dtl"><summary>View data table</summary><div class="dt-wrap">
+      <table class="dt"><thead><tr><th>Category</th><th class="r">Quality returns</th><th class="r">Refund $</th><th class="r">% of category orders</th></tr></thead><tbody>
+        <tr><td>Clothing</td><td class="r m">3,951</td><td class="r m">$667,224</td><td class="r m">31.7%</td></tr>
+        <tr><td>Electronics</td><td class="r m">2,907</td><td class="r m">$463,754</td><td class="r m">34.2%</td></tr>
+        <tr><td>Shoes</td><td class="r m">2,399</td><td class="r m">$407,751</td><td class="r m">32.3%</td></tr>
+        <tr><td>Home &amp; Kitchen</td><td class="r m">1,971</td><td class="r m">$322,774</td><td class="r m">33.8%</td></tr>
+        <tr><td>Beauty</td><td class="r m">1,621</td><td class="r m">$278,267</td><td class="r m">31.5%</td></tr>
+        <tr><td>Sports</td><td class="r m">1,572</td><td class="r m">$267,284</td><td class="r m">33.1%</td></tr>
+        <tr><td>Books</td><td class="r m">1,132</td><td class="r m">$183,429</td><td class="r m">33.7%</td></tr>
+        <tr><td>Toys</td><td class="r m">975</td><td class="r m">$159,335</td><td class="r m">32.9%</td></tr>
+        <tr><td>Jewelry</td><td class="r m">881</td><td class="r m">$153,877</td><td class="r m">33.8%</td></tr>
+        <tr><td>Furniture</td><td class="r m">796</td><td class="r m">$127,151</td><td class="r m">34.2%</td></tr>
+        <tr><td>Grocery</td><td class="r m">751</td><td class="r m">$123,784</td><td class="r m">32.7%</td></tr>
+        <tr><td>Tools</td><td class="r m">813</td><td class="r m">$129,884</td><td class="r m">35.2%</td></tr>
+      </tbody></table></div></details>
+    </div>
+  </section>
+
+  <!-- ============================================================ REGRESSION -->
+  <section id="regression" class="blk">
+    <h2><span class="n">05</span>Approach 3 — Refund-exposure regression</h2>
+    <p class="sub">Every row in this dataset is already a return, so literal "return probability"
+    has no non-return population to model against. The honest analog: price the refund dollar
+    exposure the moment a return is filed.</p>
+
+    <div class="grid2 rev">
+      <div class="card">
+        <h3>Model comparison</h3>
+        <div style="overflow-x:auto">
+        <table class="dt">
+          <thead><tr><th>Model</th><th class="r">RMSE ($)</th><th class="r">MAE ($)</th><th class="r">R²</th></tr></thead>
+          <tbody>
+            <tr><td>Naive: refund = order value</td><td class="r m">18.63</td><td class="r m">13.88</td><td class="r m">—</td></tr>
+            <tr class="hi"><td class="nm">Linear Regression</td><td class="r m">11.11</td><td class="r m">8.62</td><td class="r m">0.993</td></tr>
+            <tr><td>GBTRegressor</td><td class="r m">18.39</td><td class="r m">10.64</td><td class="r m">0.982</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <p class="foot"><code>avg_order_value_usd</code> alone drives <b>92.5%</b> of GBTRegressor's
+        feature importance — refund amount is close to linear in order value, so the simpler model
+        wins honestly. Full discussion in <a href="regression-results.md">regression-results.md</a>.</p>
+      </div>
+
+      <div class="card">
+        <h3>RMSE by model — lower is better</h3>
+        <p class="note">Linear Regression wins, the reverse of Approach 1</p>
+        <div class="vcols">
+          <div class="col"><div class="cap-lbl">$18.63</div><div class="bar" style="height:100%"></div>
+            <div class="xl"><b>Naive</b>refund = order value</div></div>
+          <div class="col"><div class="cap-lbl" style="color:var(--s3)">$11.11</div><div class="bar win" style="height:59.6%"></div>
+            <div class="xl"><b style="color:var(--s3)">Linear Regression</b>winner</div></div>
+          <div class="col"><div class="cap-lbl">$18.39</div><div class="bar" style="height:98.7%"></div>
+            <div class="xl"><b>GBTRegressor</b>more complex, barely helps</div></div>
+        </div>
+        <p class="foot">Linear Regression cuts the naive baseline's error by <b>40%</b>; GBTRegressor
+        barely clears it — model complexity should match the problem's actual shape.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ RECOMMENDATIONS -->
+  <section id="recommendations" class="blk">
+    <h2><span class="n">06</span>Key findings, risks &amp; recommendations</h2>
+    <p class="sub">What the three models, taken together, tell us — and what to do about it.</p>
+
+    <div class="grid2">
+      <div class="card">
+        <h3>Key findings</h3>
+        <ul class="flist">
+          <li><b>Non-legit returns skew expensive, not just frequent.</b> 29.9% of orders carry 43.8%
+          of refund $ ($4.64M) — Fraudulent Return claims average 3.1× a legitimate return.</li>
+          <li><b>The classifier earns its complexity.</b> Random Forest hits perfect precision/recall
+          on the binary framing where a free 4-flag heuristic tops out at F1 0.61.</li>
+          <li><b>The quality problem is broad-based, not one vendor.</b> Quality-issue rates band
+          31.5%–35.2% across all 12 categories.</li>
+          <li><b>A simpler model wins honestly on refund pricing.</b> Linear Regression beats both a
+          naive baseline (40% RMSE) and a more complex GBTRegressor.</li>
+          <li><b>The dataset's fraud rate is industry-realistic.</b> 17.9% sits close to Appriss
+          Retail's reported 15.14%.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Risks &amp; roadmap</h3>
+        <ul class="flist">
+          <li><span class="chip warn"><span class="d"></span>Risk</span><b>Synthetic-data overfit.</b>
+          Re-train on real labeled outcomes before go-live; budget for 80–90% F1, not 99.9%.</li>
+          <li><span class="chip warn"><span class="d"></span>Risk</span><b>No production ground-truth
+          labels.</b> Build human-in-the-loop labeling from the review queue this system creates.</li>
+          <li><span class="chip warn"><span class="d"></span>Risk</span><b>Quality finding explains
+          what, not why.</b> Broad-based isn't root-caused — needs a packaging/supplier QA audit.</li>
+          <li><b>Roadmap.</b> Real-time scoring at return-request time, a feedback loop from reviewer
+          overrides, and a rolling time-based validation window once live data exists.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout good">
+      <div class="hd">Ship this first — no ML required</div>
+      <p>Require photo evidence above a value threshold. The "high-value item + no photo evidence"
+      pattern alone touches <b>$1.88M</b> of non-legitimate refund exposure across <b>4,673 orders</b>
+      — live immediately, independent of the classifier's rollout timeline.</p>
+    </div>
+
+    <div class="card">
+      <div class="dec"><div class="num">01</div><div>
+        <h4>Deploy the fraud classifier as a triage score, not an auto-block.</h4>
+        <p>Route the highest <code>fraud_signal_score</code> decile + Cluster 0 to manual review;
+        auto-approve the lowest-risk tail. Re-threshold asymmetrically using the sweep above.</p>
+        <div class="own">Owner · Fraud &amp; Risk</div></div></div>
+      <div class="dec"><div class="num">02</div><div>
+        <h4>Give Cluster 1's 38% quality-issue rate to QA as a systemic audit, not a vendor hunt.</h4>
+        <p>Banded 31.5%–35.2% across all 12 categories — 73% of customers, near-zero fraud, but the
+        highest quality complaint rate of any segment.</p>
+        <div class="own">Owner · QA / Vendor Management</div></div></div>
+      <div class="dec"><div class="num">03</div><div>
+        <h4>Tighten policy — don't investigate — for Cluster 2.</h4>
+        <p>High order/return volume, low order value, Policy-Abuser-dominated. A shorter return
+        window or restocking fee targets this pattern more precisely than a fraud investigation.</p>
+        <div class="own">Owner · Customer Policy</div></div></div>
+      <div class="dec"><div class="num">04</div><div>
+        <h4>Feed the refund-exposure regressor to Finance, not just Fraud &amp; Risk.</h4>
+        <p>Linear Regression prices expected refund dollars the moment a return is filed — a
+        reserve-accounting input independent of fraud/abuse/genuine status.</p>
+        <div class="own">Owner · Finance / Customer Ops</div></div></div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="links">
+      <a href="../deliverables/report/return-risk-intelligence-report.html">Consulting report ↗</a>
+      <a href="../deliverables/presentation/return-risk-intelligence-deck.html">Executive deck ↗</a>
+      <a href="../notebooks/01_data_engineering.ipynb">01_data_engineering.ipynb</a>
+      <a href="../notebooks/02_ml_modeling.ipynb">02_ml_modeling.ipynb</a>
+      <a href="../README.md">README</a>
+    </div>
+    <p class="fine">Dataset: <code>ecommerce_return_abuse_dataset.csv</code> (Kaggle), 60,000 orders
+    × 35 features. Every number on this page is read from <code>docs/*.csv</code>, generated by
+    running the two notebooks top to bottom (seed=42 throughout) — see each chart's "View data
+    table" for the exact source figures. NMIMS MBA · Big Data Analytics · Group 3.</p>
+  </footer>
+
+</div>
+
+<div id="tip" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  var tip = document.getElementById('tip');
+  var hideTimer = null;
+  function showTip(el, evt){
+    var raw = el.getAttribute('data-tip');
+    if (!raw) return;
+    while (tip.firstChild) tip.removeChild(tip.firstChild);
+    var lines = raw.split(/\n|&#10;/);
+    lines.forEach(function(line, i){
+      var d = document.createElement('div');
+      if (i > 0) d.className = 'v';
+      // Split each line on <b>...</b> and build real text/element nodes --
+      // never innerHTML -- so tooltip content (all first-party, but still) is never parsed as markup.
+      var m = /^(.*)<b>(.*)<\/b>(.*)$/.exec(line);
+      if (m) {
+        if (m[1]) d.appendChild(document.createTextNode(m[1]));
+        var b = document.createElement('b');
+        b.textContent = m[2];
+        d.appendChild(b);
+        if (m[3]) d.appendChild(document.createTextNode(m[3]));
+      } else {
+        d.textContent = line;
+      }
+      tip.appendChild(d);
+    });
+    tip.classList.add('show');
+    positionTip(evt);
+  }
+  function positionTip(evt){
+    var x = evt.clientX, y = evt.clientY;
+    var pad = 14;
+    var tw = tip.offsetWidth || 160, th = tip.offsetHeight || 40;
+    var left = x + pad, top = y + pad;
+    if (left + tw > window.innerWidth - 8) left = x - tw - pad;
+    if (top + th > window.innerHeight - 8) top = y - th - pad;
+    tip.style.left = left + 'px';
+    tip.style.top = top + 'px';
+  }
+  function hideTip(){ tip.classList.remove('show'); }
+
+  document.addEventListener('mousemove', function(evt){
+    var el = evt.target.closest ? evt.target.closest('.hit') : null;
+    if (el) { showTip(el, evt); }
+    else { hideTip(); }
+  });
+  document.querySelectorAll('.hit').forEach(function(el){
+    el.setAttribute('tabindex', '0');
+    el.addEventListener('focus', function(){
+      var r = el.getBoundingClientRect();
+      showTip(el, {clientX:r.left, clientY:r.top});
+    });
+    el.addEventListener('blur', hideTip);
+  });
+})();
+</script>
+</body>
+</html>
