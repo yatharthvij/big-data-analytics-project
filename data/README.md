@@ -19,7 +19,7 @@ Silver and Gold are written out:
 | `processed/silver/` | Cleaned, outlier-capped, feature-engineered table (Parquet) |
 | `processed/gold_train/`, `processed/gold_test/` | Encoded + scaled `features` vector, 75/25 split, seed=42 |
 | `processed/feature_pipeline_model/` | Fitted `PipelineModel` (indexers, encoders, scaler) for consistent transforms on new data |
-| `processed/models/` | Saved Random Forest, Logistic Regression, and K-Means models (written by `notebooks/02_ml_modeling.ipynb`) |
+| `processed/models/` | Saved Random Forest, Logistic Regression, K-Means, and both refund-exposure regressors (Linear Regression, GBTRegressor) — written by `notebooks/02_ml_modeling.ipynb` |
 
 Re-run `01_data_engineering.ipynb` then `02_ml_modeling.ipynb` (in that order) to rebuild everything
 from the raw CSV — see the root `README.md` for the exact commands.

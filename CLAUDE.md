@@ -41,6 +41,14 @@ project back up.
 - **Deck slide 10** ends with a short video (`deliverables/presentation/assets/thank-you.mp4`,
   ~13s) — live `<video controls>` in the HTML, falls back to a Playwright-captured poster frame
   (`thank-you-poster.jpg`) under `@media print` since it can't play inside a static PDF.
+- **Deck is dark-themed** (screen and exported PDF both) — a full palette flip, not just a CSS
+  variable swap, since the SVG charts and several inline styles use hardcoded hex rather than the
+  `:root` custom properties. If you touch deck colors again, search for literal hex codes
+  (`grep -oE '#[0-9A-Fa-f]{6}'`) as well as `var(--...)` — both exist in this file.
+- **Deck slide 6** is "Key findings & Risks/roadmap" (two-column), not Feature Engineering —
+  repurposed since Feature Engineering isn't one of the guidelines' 8 named exec-deck topics and
+  is already covered in the notebook + Report §4.3. Slides 7 ("Approach 1 — Classification") and
+  9 (recommendations) cross-reference slide 6 by number; keep those in sync if slides move again.
 - **Team**: Subham Ranjan (A017), Shriya (A023), Abhinav Kumar (A035), Dev Vagrecha (A049),
   Samruddhi Pradhan (A054), Yatharth Vij (A072) — filled in identically in `README.md`, the
   report's Appendix B, and the deck's title/closing slides.
@@ -74,8 +82,15 @@ it. Do not casually rename these top-level folders again without checking notebo
    found by re-reading the guidelines PDF (Business Insights/Recommendations were one combined
    section, should be two; "return probability" in the project's own title had no model behind it;
    Industry Background was entirely absent).
-4. Optional polish: the architecture diagram's Sqoop-box annotation slightly touches its connector
-   line in the report SVG (cosmetic only, still legible) — revisit if there's time.
+4. ~~Sqoop-box annotation overlap~~ — fixed (text shortened, dead overlapping path removed).
+5. ~~Full project audit for broken/inconsistent content~~ — done. Found and fixed: a deck-only CSS
+   bug (`.r` class zeroed `padding-right` unconditionally, collapsing the gap between adjacent
+   right-aligned table headers whenever a `.r` column wasn't the last one — now scoped to
+   `:last-child`); the deck's title-slide caption still said "two independent... approaches" and
+   omitted regression entirely, after the rest of the project had moved to three; `data/README.md`
+   didn't mention the two regression models now saved to `processed/models/`; a dead, unused
+   `.todo` CSS rule (harmless, removed for cleanliness). Numbers were cross-checked against the
+   underlying `docs/*.csv` files and all matched exactly — no data/reporting discrepancies found.
 
 Note: timelines/submission dates are deliberately not mentioned anywhere in this repo (README,
 report, deck) — user's instruction. Don't reintroduce specific dates without asking.

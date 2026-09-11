@@ -80,8 +80,6 @@ h1 .c,h2 .c{font-style:italic;color:var(--cyan-lt)}
 .chip{display:inline-block;padding:3px 9px;border-radius:4px;font-size:10.5px;font-weight:700;
   letter-spacing:.06em;font-family:var(--mono)}
 .chips{display:flex;flex-wrap:wrap;gap:7px}
-.todo{border:1px dashed var(--gold);background:rgba(214,138,74,.16);color:var(--gold-lt);
-  padding:2px 8px;border-radius:4px;font-weight:700;font-size:11.5px}
 .pull{font-family:var(--serif);font-style:italic;font-size:clamp(15px,1.8vw,21px);
   line-height:1.4;color:var(--ink);padding-left:18px;border-left:3px solid var(--gold);margin:4px 0}
 .ql{list-style:none}
@@ -105,7 +103,8 @@ table.seg,table.rank{width:100%;border-collapse:collapse;font-size:12.6px}
 table.seg th,table.rank th{text-align:left;font-size:9.8px;font-weight:800;
   letter-spacing:.1em;text-transform:uppercase;color:var(--dim);
   padding:0 10px 7px 0;border-bottom:1px solid var(--line2)}
-table th.r,table td.r{text-align:right;padding-right:0}
+table th.r,table td.r{text-align:right}
+table th.r:last-child,table td.r:last-child{padding-right:0}
 table.seg td,table.rank td{padding:8px 10px 8px 0;border-bottom:1px solid var(--line);color:var(--body)}
 table tr:last-child td{border-bottom:none}
 td.nm{font-weight:750;color:var(--ink)}
@@ -218,8 +217,8 @@ tr.hi td{background:rgba(63,190,142,.10)}
   <p class="cap u" style="margin-top:16px;max-width:none">
     <b>60,000 orders · 35 features</b>, Kaggle e-commerce return-abuse dataset &nbsp;·&nbsp;
     Fraudulent Return claims average <b>$434.73</b> vs. <b>$141.14</b> for legitimate returns — a
-    <b>3.1×</b> gap &nbsp;·&nbsp; two independent PySpark MLlib approaches: multi-class classification
-    (Random Forest vs. Logistic Regression) and K-Means clustering &nbsp;·&nbsp; this dataset is
+    <b>3.1×</b> gap &nbsp;·&nbsp; three independent PySpark MLlib approaches: multi-class classification
+    (Random Forest vs. Logistic Regression), K-Means clustering, and refund-exposure regression &nbsp;·&nbsp; this dataset is
     synthetic, so treat 0.999 F1 as a pipeline proof, not a production number (more on slide 7).
   </p>
   <p class="cap u" style="margin-top:9px">NMIMS MBA · Big Data Analytics · Consulting Presentation &nbsp;·&nbsp; Subham Ranjan A017 · Shriya A023 · Abhinav Kumar A035 · Dev Vagrecha A049 · Samruddhi Pradhan A054 · Yatharth Vij A072</p>
