@@ -67,7 +67,8 @@ citations in `deliverables/report/return-risk-intelligence-report.html` Appendix
 
 ```
 big-data-analytics-project/
-├── docs/                      Guides and per-model results — each with its own weaknesses section
+├── docs/                      Guides, per-model results, and a one-page analytics dashboard
+│   ├── dashboard.html                    Single-page KPI/chart summary of every result below
 │   ├── fraud-classification-results.md   Classification results + honest limitations
 │   ├── fraud-classification-results.csv  Model comparison metrics
 │   ├── rf-feature-importance.csv         Random Forest feature importances
