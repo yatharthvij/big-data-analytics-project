@@ -208,7 +208,7 @@ tr.hi td{background:rgba(30,158,114,.055)}
       <div class="cap"><b>43.8%</b> of all refund dollars requested, from just <b>29.9%</b> of orders — bad actors skew toward higher-value claims</div></div>
     <div class="p g"><div class="eye">Classifier performance (test set)</div>
       <div class="n xl go">0.999</div>
-      <div class="cap">weighted F1, Random Forest — synthetic-dataset caveat on slide 6, not a production guarantee</div></div>
+      <div class="cap">weighted F1, Random Forest — synthetic-dataset caveat on slide 7, not a production guarantee</div></div>
     <div class="p j"><div class="eye">Hidden in the "legitimate" majority</div>
       <div class="n xl gr">38%</div>
       <div class="cap">of returns in the largest, 96%-legitimate customer segment are still quality-issue driven</div></div>
@@ -219,7 +219,7 @@ tr.hi td{background:rgba(30,158,114,.055)}
     Fraudulent Return claims average <b>$434.73</b> vs. <b>$141.14</b> for legitimate returns — a
     <b>3.1×</b> gap &nbsp;·&nbsp; two independent PySpark MLlib approaches: multi-class classification
     (Random Forest vs. Logistic Regression) and K-Means clustering &nbsp;·&nbsp; this dataset is
-    synthetic, so treat 0.999 F1 as a pipeline proof, not a production number (more on slide 6).
+    synthetic, so treat 0.999 F1 as a pipeline proof, not a production number (more on slide 7).
   </p>
   <p class="cap u" style="margin-top:9px">NMIMS MBA · Big Data Analytics · Consulting Presentation &nbsp;·&nbsp; Subham Ranjan A017 · Shriya A023 · Abhinav Kumar A035 · Dev Vagrecha A049 · Samruddhi Pradhan A054 · Yatharth Vij A072</p>
 </section>
@@ -268,8 +268,45 @@ tr.hi td{background:rgba(30,158,114,.055)}
   </div>
 </section>
 
-<!-- ====================================================== 03 · data overview -->
+<!-- ==================================================== 03 · industry background -->
 <section class="s" id="s3">
+  <div class="u">
+    <div class="kick">Industry background</div>
+    <h2>This is not a hypothetical problem — <em>the industry is already living it</em>.</h2>
+    <p class="sub">E-commerce carries a structurally higher return burden than brick-and-mortar, and
+    fraud/abuse is a large, growing share of it. This project sits squarely inside an industry-wide
+    shift already underway.</p>
+  </div>
+
+  <div class="row c3 u">
+    <div class="p b"><div class="eye" style="color:var(--cyan-lt)">NRF · 2025 Retail Returns Landscape</div>
+      <div class="n lg cy">19.3%</div>
+      <div class="cap">of online sales are returned — above the 15.8% all-channel average.
+      $849.9B in merchandise returns forecast for 2025.</div></div>
+    <div class="p g"><div class="eye" style="color:var(--gold-lt)">Appriss Retail × Deloitte · 2024</div>
+      <div class="n lg go">15.14%</div>
+      <div class="cap">of all returns are fraudulent — $103B lost in 2024 (up from $101B in 2023),
+      across 60+ retailers studied.</div></div>
+    <div class="p j"><div class="eye" style="color:var(--green-lt)">Same 2024 study</div>
+      <div class="n lg gr">60%</div>
+      <div class="cap">of retail executives specifically flag <b>wardrobing</b> — one of our four
+      target classes — as a major fraud pattern. 85% now deploy AI to fight it.</div></div>
+  </div>
+
+  <div class="ground u" style="margin-top:14px;">
+    <div class="gl">How our dataset compares</div>
+    <p>This dataset's combined Fraudulent Return + Wardrobing rate is <b>10.2% + 7.7% = 17.9%</b> —
+    close to Appriss's industry-wide <b>15.14%</b> fraud rate. The class <b>prevalence</b> here is
+    realistically calibrated to real-world reporting, even though (see slide 7) the class
+    <b>separability</b> the model achieves is not something to expect on live data.</p>
+  </div>
+  <p class="cap u" style="margin-top:8px;">Sources: National Retail Federation, <i>2025 Retail
+  Returns Landscape</i> (nrf.com) · Appriss Retail with Deloitte, <i>Fraudulent Returns and Claims
+  Cost Retailers $103B in 2024</i> (apprissretail.com). Full citations in the report's Appendix C.</p>
+</section>
+
+<!-- ====================================================== 04 · data overview -->
+<section class="s" id="s4">
   <div class="u">
     <div class="kick">Data overview <span style="color:var(--gold-lt)">· 60,000 orders, 35 features</span></div>
     <h2>A realistic imbalance — and the dollars don't split the way the order counts do.</h2>
@@ -305,8 +342,8 @@ tr.hi td{background:rgba(30,158,114,.055)}
   </div>
 </section>
 
-<!-- ====================================================== 04 · architecture -->
-<section class="s" id="s4">
+<!-- ====================================================== 05 · architecture -->
+<section class="s" id="s5">
   <div class="u">
     <div class="kick">Solution architecture <span style="color:var(--gold-lt)">· one picture</span></div>
     <h2>Sqoop / Flume / API ingestion → <em>Bronze/Silver/Gold lakehouse</em> → PySpark MLlib.</h2>
@@ -386,8 +423,8 @@ tr.hi td{background:rgba(30,158,114,.055)}
   </div>
 </section>
 
-<!-- ==================================================== 05 · feature engineering -->
-<section class="s" id="s5">
+<!-- ==================================================== 06 · feature engineering -->
+<section class="s" id="s6">
   <div class="u">
     <div class="kick">Data engineering</div>
     <h2>Engineered features <em>validated</em> before they ever reach a model.</h2>
@@ -425,8 +462,8 @@ tr.hi td{background:rgba(30,158,114,.055)}
   </div>
 </section>
 
-<!-- ============================================================= 06 · model 1 -->
-<section class="s" id="s6">
+<!-- ============================================================= 07 · model 1 -->
+<section class="s" id="s7">
   <div class="u">
     <div class="kick">Approach 1 — Classification</div>
     <h2>Random Forest vs. Logistic Regression on <em>return-fraud type</em>.</h2>
@@ -478,8 +515,8 @@ tr.hi td{background:rgba(30,158,114,.055)}
   </p>
 </section>
 
-<!-- ============================================================= 07 · model 2 -->
-<section class="s" id="s7">
+<!-- ============================================================= 08 · model 2 -->
+<section class="s" id="s8">
   <div class="u">
     <div class="kick">Approach 2 — Clustering</div>
     <h2>K-Means finds 3 behavioral segments <em>the fraud label can't see</em>.</h2>
@@ -528,11 +565,11 @@ tr.hi td{background:rgba(30,158,114,.055)}
   </div>
 </section>
 
-<!-- ==================================================== 08 · recommendations -->
-<section class="s" id="s8">
+<!-- ==================================================== 09 · recommendations -->
+<section class="s" id="s9">
   <div class="u">
     <div class="kick">What we're recommending</div>
-    <h2>Three interventions, three owners — <em>ship the free one first</em>.</h2>
+    <h2>Four interventions, four owners — <em>ship the free one first</em>.</h2>
   </div>
 
   <div class="brk u">
@@ -550,21 +587,30 @@ tr.hi td{background:rgba(30,158,114,.055)}
       "Legitimate → Fraudulent Return" flag costs more in trust than a slow review costs in ops time.</p>
       <div class="own">Owner · Fraud &amp; Risk</div></div></div>
     <div class="dec"><div class="num">02</div><div>
-      <h4>Give Cluster 1's 38% quality-issue rate to QA, not fraud.</h4>
-      <p>Cross-reference dominant product category × return reason within the core-legitimate
-      segment to target vendor escalations — <b>73% of customers</b>, near-zero fraud, but the
-      highest quality complaint rate of any segment.</p>
+      <h4>Give Cluster 1's 38% quality-issue rate to QA as a systemic audit, not a vendor hunt.</h4>
+      <p>Quality-issue rates are broad-based — banded 31.5%–35.2% across all 12 categories, not one
+      bad vendor. <b>73% of customers</b>, near-zero fraud, but the highest quality complaint rate
+      of any segment.</p>
       <div class="own">Owner · QA / Vendor Management</div></div></div>
     <div class="dec"><div class="num">03</div><div>
       <h4>Tighten policy — don't investigate — for Cluster 2.</h4>
       <p>High order/return volume, low order value, Policy-Abuser-dominated. A shorter return window
       or restocking fee targets this pattern more precisely than a fraud investigation would.</p>
       <div class="own">Owner · Customer Policy</div></div></div>
+    <div class="dec"><div class="num">04</div><div>
+      <h4>Feed the refund-exposure regressor to Finance, not just Fraud &amp; Risk.</h4>
+      <p>Linear Regression prices expected refund dollars the moment a return is filed — a
+      reserve-accounting input independent of whether it turns out to be fraud, abuse, or genuine.</p>
+      <div class="own">Owner · Finance / Customer Ops</div></div></div>
   </div>
+  <p class="cap u" style="margin-top:10px;"><b>Risks &amp; roadmap:</b> re-validate on real labeled
+  outcomes before trusting this dataset's metrics; no temporal holdout here, so add a rolling
+  time-based validation window in production; build the human-in-the-loop labeling loop from the
+  review queue this system creates.</p>
 </section>
 
-<!-- ============================================================= 09 · close -->
-<section class="s" id="s9">
+<!-- ============================================================= 10 · close -->
+<section class="s" id="s10">
   <div class="row c-64 u" style="align-items:center">
     <div class="video-wrap">
       <video controls preload="metadata" poster="assets/thank-you-poster.jpg">

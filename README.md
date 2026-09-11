@@ -44,13 +44,20 @@ big-data-analytics-project/
 ├── docs/                      Guides and per-model results — each with its own weaknesses section
 │   ├── fraud-classification-results.md   Classification results + honest limitations
 │   ├── fraud-classification-results.csv  Model comparison metrics (written by notebook 02)
+│   ├── rf-feature-importance.csv         Random Forest feature importances
+│   ├── baseline-comparison-results.csv   Free 4-flag rule vs. Random Forest
+│   ├── threshold-analysis-results.csv    Precision/recall sweep on Fraudulent Return probability
 │   ├── quality-clustering-results.md     Clustering results + honest limitations
-│   ├── quality-clustering-results.csv    Cluster profile (written by notebook 02)
-│   ├── rf-feature-importance.csv         Random Forest feature importances (written by notebook 02)
+│   ├── quality-clustering-results.csv    Cluster profile
+│   ├── silhouette-selection-results.csv  k=2..6 silhouette sweep behind the k=3 choice
+│   ├── quality-deep-dive-results.csv     Quality-issue $ by product category (all 12)
+│   ├── regression-results.md             Regression results + honest limitations
+│   ├── regression-results.csv            Linear Regression vs. GBTRegressor vs. naive baseline
+│   ├── regression-feature-importance.csv GBTRegressor feature importances
 │   └── ProjectGuideLines *.pdf           Course guidelines (project brief)
 ├── notebooks/                 The executable PySpark deliverable (Phases 2 & 3)
 │   ├── 01_data_engineering.ipynb     Bronze → Silver → Gold: outliers, features, encoding, scaling
-│   └── 02_ml_modeling.ipynb          Random Forest + Logistic Regression, K-Means, evaluation
+│   └── 02_ml_modeling.ipynb          Classification + clustering + regression, all evaluated
 ├── data/                       The data lake — raw + processed (Bronze/Silver/Gold). Gitignored.
 ├── deliverables/
 │   ├── report/                       Consulting report — HTML + PDF
@@ -72,26 +79,33 @@ Silver→Gold transformation logic (implemented in full) is built to generalize 
 | Layer | What lives there | Why |
 |---|---|---|
 | **Bronze** | Raw CSV, explicit schema, untouched | Permanent replayable record |
-| **Silver** | Outlier-capped, feature-engineered table | Cleaned once, reused by both models |
+| **Silver** | Outlier-capped, feature-engineered table | Cleaned once, reused by all three models |
 | **Gold** | Encoded + scaled `features` vector, train/test split | Model-ready, consistent across classification and clustering |
 
 Full diagram with ingestion tools (Sqoop batch / Flume streaming / API connectors) in
 `deliverables/report/return-risk-intelligence-report.html`, Section 3.
 
-## Models (Phase 3 — at least two required; we shipped two independent approaches)
+## Models (Phase 3 — at least two required; we shipped three independent approaches)
 
 1. **Multi-class classification** — Random Forest (200 trees, class-weighted) vs. multinomial
    Logistic Regression baseline, on `abuse_type`. Spark MLlib's `GBTClassifier` only supports
    binary classification, so Random Forest — which natively handles 4 classes — is the primary
    model. Weighted F1: **0.999** (Random Forest) vs. 0.998 (baseline) — see the honest-limitations
-   caveat above before quoting this number as a production expectation.
-2. **K-Means clustering** — 3 behavioral segments from customer/order features that deliberately
-   **exclude** the fraud-flag columns used by the classifier, so it's an independent lens. Finds
-   a 43,829-customer "core legitimate" segment that is still 38% quality-issue-driven — the
-   headline insight for the QA/vendor recommendation.
+   caveat above before quoting this number as a production expectation. Also benchmarked against a
+   free 4-flag rule-based baseline (F1 0.61) and a cost-sensitive threshold sweep on
+   Fraudulent-Return probability.
+2. **K-Means clustering** — 3 behavioral segments (k=3 is the genuine silhouette maximum, not a
+   business-convenience choice) from customer/order features that deliberately **exclude** the
+   fraud-flag columns used by the classifier. Finds a 43,829-customer "core legitimate" segment
+   that is still 38% quality-issue-driven, and a category-level deep-dive that found the quality
+   problem is **broad-based** (31.5%–35.2% across all 12 categories) rather than one bad vendor.
+3. **Regression** — Linear Regression vs. GBTRegressor predicting refund dollar exposure, the
+   honest analog of "return probability" on a dataset where every row is already a return. Linear
+   Regression wins (R²=0.993), beating a naive "refund = order value" baseline by 40% RMSE — a
+   deliberate, disclosed contrast with Approach 1, where the more complex model won instead.
 
 Full results, each with its own weaknesses section: `docs/fraud-classification-results.md`,
-`docs/quality-clustering-results.md`.
+`docs/quality-clustering-results.md`, `docs/regression-results.md`.
 
 ## Running it
 

@@ -11,20 +11,33 @@ project back up.
   0 errors. Bronze (explicit schema) → Silver (0 nulls/dupes verified, IQR-capped outliers, 7
   engineered features, sanity-checked) → Gold (StringIndexer+OHE for nominals, ordinal map for
   `customer_segment`, StandardScaler, 75/25 split seed=42). Writes to `data/processed/`.
-- **Phase 3 (ML, PySpark MLlib)** — `notebooks/02_ml_modeling.ipynb`. Executed end-to-end, 0 errors.
-  Two independent approaches: Random Forest (class-weighted, primary) vs. Logistic Regression
-  baseline on `abuse_label` (weighted F1 0.999 / 0.998 — see the honest-limitations note below
-  before quoting this), and K-Means clustering (k=3 by silhouette) on features that deliberately
-  exclude fraud flags, for quality/customer segmentation. Writes metric CSVs to `docs/` and models
-  to `data/processed/models/`.
-- **Deliverables** — `deliverables/report/` (11-page HTML+PDF consulting report) and
+- **Phase 3 (ML, PySpark MLlib)** — `notebooks/02_ml_modeling.ipynb`. Executed end-to-end, 0 errors,
+  22 code cells. **Three independent approaches**, one per named sub-problem in the project's own
+  title:
+  1. Classification — Random Forest (class-weighted, primary) vs. Logistic Regression on
+     `abuse_label` (weighted F1 0.999/0.998 — see honest-limitations note), benchmarked against a
+     free 4-flag rule-based baseline (F1 0.61) and a cost-sensitive threshold sweep on Fraudulent
+     Return probability.
+  2. K-Means clustering (k=3, genuine silhouette maximum, not a business-convenience pick) on
+     fraud-flag-excluded features, closed out with an actual category-level quality deep-dive
+     (found the quality problem is broad-based 31.5–35.2% across all 12 categories, not one vendor).
+  3. Regression — Linear Regression vs. GBTRegressor predicting refund dollar exposure, the honest
+     analog of "return probability" on a dataset with no non-return population. Linear Regression
+     wins (R²=0.993, beats naive "refund=order value" baseline by 40% RMSE) — the reverse of
+     Approach 1, where the more complex model won; stated as a deliberate, disclosed contrast.
+  Writes 9 metric CSVs to `docs/` and models to `data/processed/models/`.
+- **Deliverables** — `deliverables/report/` (17-page HTML+PDF consulting report) and
   `deliverables/presentation/` (exactly 10 HTML+PDF slides) both built and rendered via
   `src/export_pdfs.py` (Playwright + system Chrome — `--print-to-pdf-no-header` CLI flag doesn't
   work on recent Chrome, use the DevTools Protocol path instead). Both visually QA'd at full
-  resolution (rendered to PNG via PyMuPDF) — no overflow/collisions.
+  resolution (rendered to PNG via PyMuPDF) — no overflow/collisions. Report follows the exact
+  section spec from the guidelines PDF: Executive Summary, Business Context (incl. Industry
+  Background with real NRF/Appriss Retail citations), Data Understanding, Enterprise Architecture,
+  Data Engineering, Machine Learning (5.1/5.2/5.3 per approach), **Business Insights** (§6) and
+  **Strategic Recommendations** (§7) as two separate sections (not combined), Appendix.
 - **docs/** — per-model results write-ups (`fraud-classification-results.md`,
-  `quality-clustering-results.md`), each with an explicit **weaknesses** section. Structure mirrors
-  a stronger reference project from the same course (see below).
+  `quality-clustering-results.md`, `regression-results.md`), each with an explicit **weaknesses**
+  section. Structure mirrors a stronger reference project from the same course (see below).
 - **Deck slide 10** ends with a short video (`deliverables/presentation/assets/thank-you.mp4`,
   ~13s) — live `<video controls>` in the HTML, falls back to a Playwright-captured poster frame
   (`thank-you-poster.jpg`) under `@media print` since it can't play inside a static PDF.
@@ -55,7 +68,13 @@ it. Do not casually rename these top-level folders again without checking notebo
 1. ~~Fill in the team table~~ — done, see Team above.
 2. ~~Push to GitHub with meaningful commit history~~ — done, pushed to
    `github.com/yatharthvij/big-data-analytics-project`.
-3. Optional polish: the architecture diagram's Sqoop-box annotation slightly touches its connector
+3. ~~Deepen analysis vs. the reference project~~ — done: added baseline comparison, cost-sensitive
+   threshold sweep, quality deep-dive, silhouette-sweep chart, a full third ML approach
+   (regression), and a real-citation Industry Background section, closing the explicit rubric gaps
+   found by re-reading the guidelines PDF (Business Insights/Recommendations were one combined
+   section, should be two; "return probability" in the project's own title had no model behind it;
+   Industry Background was entirely absent).
+4. Optional polish: the architecture diagram's Sqoop-box annotation slightly touches its connector
    line in the report SVG (cosmetic only, still legible) — revisit if there's time.
 
 Note: timelines/submission dates are deliberately not mentioned anywhere in this repo (README,
