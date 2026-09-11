@@ -208,7 +208,7 @@ tr.hi td{background:rgba(30,158,114,.055)}
       <div class="cap"><b>43.8%</b> of all refund dollars requested, from just <b>29.9%</b> of orders — bad actors skew toward higher-value claims</div></div>
     <div class="p g"><div class="eye">Classifier performance (test set)</div>
       <div class="n xl go">0.999</div>
-      <div class="cap">weighted F1, Random Forest — see slide 7 before reading this as a production guarantee</div></div>
+      <div class="cap">weighted F1, Random Forest — synthetic-dataset caveat on slide 6, not a production guarantee</div></div>
     <div class="p j"><div class="eye">Hidden in the "legitimate" majority</div>
       <div class="n xl gr">38%</div>
       <div class="cap">of returns in the largest, 96%-legitimate customer segment are still quality-issue driven</div></div>
@@ -219,7 +219,7 @@ tr.hi td{background:rgba(30,158,114,.055)}
     Fraudulent Return claims average <b>$434.73</b> vs. <b>$141.14</b> for legitimate returns — a
     <b>3.1×</b> gap &nbsp;·&nbsp; two independent PySpark MLlib approaches: multi-class classification
     (Random Forest vs. Logistic Regression) and K-Means clustering &nbsp;·&nbsp; this dataset is
-    synthetic — the honest read on that starts on slide 7.
+    synthetic, so treat 0.999 F1 as a pipeline proof, not a production number (more on slide 6).
   </p>
   <p class="cap u" style="margin-top:9px">NMIMS MBA · Big Data Analytics · Consulting Presentation &nbsp;·&nbsp; Subham Ranjan A017 · Shriya A023 · Abhinav Kumar A035 · Dev Vagrecha A049 · Samruddhi Pradhan A054 · Yatharth Vij A072</p>
 </section>
@@ -469,76 +469,17 @@ tr.hi td{background:rgba(30,158,114,.055)}
       <p class="cap">Engineered ratios rank alongside raw behavioral fields — the payoff of Phase 2.</p>
     </div>
   </div>
+
+  <p class="cap u" style="margin-top:12px;max-width:none">
+  <b>Honest note:</b> this is a Kaggle synthetic dataset, so 0.999 F1 is higher than we'd expect in
+  production — feature importance is spread across ~15 features with no single leak, but a realistic
+  target on live data is <b>80–90% F1</b>. We treat this model as proof of the pipeline, not a
+  performance guarantee. Full discussion in <code class="m">docs/fraud-classification-results.md</code>.
+  </p>
 </section>
 
-<!-- ==================================================== 07 · honest limitations -->
+<!-- ============================================================= 07 · model 2 -->
 <section class="s" id="s7">
-  <div class="u">
-    <div class="kick" style="color:var(--red-lt)">Where we don't trust the number</div>
-    <h2>0.999 F1 isn't a promise — it's a <span class="r">synthetic dataset</span> being too clean to be real.</h2>
-    <p class="sub">Every deliverable in this project carries this caveat, not just this slide. If
-    there's one thing to remember from this presentation, it's this one.</p>
-  </div>
-
-  <div class="row c-46 u">
-    <div class="p" style="padding:14px 16px">
-      <div class="eye">Confusion matrix — Random Forest, test set (row %)</div>
-      <svg viewBox="0 0 520 190" width="100%" role="img" aria-label="Confusion matrix heatmap">
-        <g font-family="-apple-system,sans-serif">
-          <g font-size="9" fill="#57606C" font-weight="600" text-anchor="middle">
-            <text x="220" y="10">Legit</text><text x="298" y="10">Policy Ab.</text>
-            <text x="376" y="10">Fraud Ret.</text><text x="454" y="10">Wardrobe</text>
-          </g>
-          <text x="0" y="30" font-size="9.5" fill="#131A24" font-weight="600">Legitimate</text>
-          <rect x="182" y="16" width="76" height="26" fill="#154D82"/><text x="220" y="33" text-anchor="middle" fill="#fff" font-size="9" font-weight="600">100%</text>
-          <rect x="260" y="16" width="76" height="26" fill="#FCFCFB" stroke="#D8E1EC"/><text x="298" y="33" text-anchor="middle" fill="#838D99" font-size="9">0%</text>
-          <rect x="338" y="16" width="76" height="26" fill="#FCFCFB" stroke="#D8E1EC"/><text x="376" y="33" text-anchor="middle" fill="#838D99" font-size="9">0%</text>
-          <rect x="416" y="16" width="76" height="26" fill="#FCFCFB" stroke="#D8E1EC"/><text x="454" y="33" text-anchor="middle" fill="#838D99" font-size="9">0%</text>
-
-          <text x="0" y="62" font-size="9.5" fill="#131A24" font-weight="600">Policy Abuser</text>
-          <rect x="182" y="48" width="76" height="26" fill="#FCFCFB" stroke="#D8E1EC"/><text x="220" y="65" text-anchor="middle" fill="#838D99" font-size="9">0%</text>
-          <rect x="260" y="48" width="76" height="26" fill="#154D82"/><text x="298" y="65" text-anchor="middle" fill="#fff" font-size="9" font-weight="600">99.6%</text>
-          <rect x="338" y="48" width="76" height="26" fill="#E7EFF7" stroke="#D8E1EC"/><text x="376" y="65" text-anchor="middle" fill="#57606C" font-size="9">0.2%</text>
-          <rect x="416" y="48" width="76" height="26" fill="#E7EFF7" stroke="#D8E1EC"/><text x="454" y="65" text-anchor="middle" fill="#57606C" font-size="9">0.2%</text>
-
-          <text x="0" y="94" font-size="9.5" fill="#131A24" font-weight="600">Fraud. Return</text>
-          <rect x="182" y="80" width="76" height="26" fill="#FCFCFB" stroke="#D8E1EC"/><text x="220" y="97" text-anchor="middle" fill="#838D99" font-size="9">0%</text>
-          <rect x="260" y="80" width="76" height="26" fill="#E7EFF7" stroke="#D8E1EC"/><text x="298" y="97" text-anchor="middle" fill="#57606C" font-size="9">0.1%</text>
-          <rect x="338" y="80" width="76" height="26" fill="#154D82"/><text x="376" y="97" text-anchor="middle" fill="#fff" font-size="9" font-weight="600">99.9%</text>
-          <rect x="416" y="80" width="76" height="26" fill="#FCFCFB" stroke="#D8E1EC"/><text x="454" y="97" text-anchor="middle" fill="#838D99" font-size="9">0%</text>
-
-          <text x="0" y="126" font-size="9.5" fill="#131A24" font-weight="600">Wardrobing</text>
-          <rect x="182" y="112" width="76" height="26" fill="#FCFCFB" stroke="#D8E1EC"/><text x="220" y="129" text-anchor="middle" fill="#838D99" font-size="9">0%</text>
-          <rect x="260" y="112" width="76" height="26" fill="#E7EFF7" stroke="#D8E1EC"/><text x="298" y="129" text-anchor="middle" fill="#57606C" font-size="9">0.1%</text>
-          <rect x="338" y="112" width="76" height="26" fill="#FCFCFB" stroke="#D8E1EC"/><text x="376" y="129" text-anchor="middle" fill="#838D99" font-size="9">0%</text>
-          <rect x="416" y="112" width="76" height="26" fill="#154D82"/><text x="454" y="129" text-anchor="middle" fill="#fff" font-size="9" font-weight="600">99.9%</text>
-          <text x="0" y="152" font-size="9" fill="#838D99">↑ Actual class, n=14,888</text>
-        </g>
-      </svg>
-    </div>
-    <div>
-      <div class="brk">
-        <div class="gl">The honest read</div>
-        <p>This is a <b>Kaggle synthetic dataset</b>. Synthetic label generators typically compose the
-        target from a fairly clean rule, producing near-separable classes real transactional data
-        never gives you. Expect a <b>noisier boundary between Policy Abuser and Wardrobing</b>
-        specifically — they share the most behavioral overlap — and <b>no temporal holdout exists
-        here</b>, so concept drift is unmeasured. <b>A realistic production target is 80–90% F1</b>,
-        not 99.9%.</p>
-      </div>
-      <div class="ground" style="margin-top:11px">
-        <div class="gl">What's real anyway</div>
-        <p>Feature importance (previous slide) is spread across <b>~15 features with no single
-        dominant leak</b> — this isn't a one-column shortcut. We present this model as <b>proof of
-        the pipeline and methodology</b>: the architecture, feature engineering, and evaluation
-        approach transfer to production. This specific accuracy number does not.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============================================================= 08 · model 2 -->
-<section class="s" id="s8">
   <div class="u">
     <div class="kick">Approach 2 — Clustering</div>
     <h2>K-Means finds 3 behavioral segments <em>the fraud label can't see</em>.</h2>
@@ -587,8 +528,8 @@ tr.hi td{background:rgba(30,158,114,.055)}
   </div>
 </section>
 
-<!-- ==================================================== 09 · recommendations -->
-<section class="s" id="s9">
+<!-- ==================================================== 08 · recommendations -->
+<section class="s" id="s8">
   <div class="u">
     <div class="kick">What we're recommending</div>
     <h2>Three interventions, three owners — <em>ship the free one first</em>.</h2>
@@ -622,8 +563,8 @@ tr.hi td{background:rgba(30,158,114,.055)}
   </div>
 </section>
 
-<!-- ============================================================== 10 · close -->
-<section class="s" id="s10">
+<!-- ============================================================= 09 · close -->
+<section class="s" id="s9">
   <div class="row c-64 u" style="align-items:center">
     <div class="video-wrap">
       <video controls preload="metadata" poster="assets/thank-you-poster.jpg">
@@ -636,7 +577,7 @@ tr.hi td{background:rgba(30,158,114,.055)}
       <h1 style="font-size:clamp(30px,4.6vw,58px)">Thank you.<br>Questions <em>welcome</em>.</h1>
       <p class="sub">We'd rather be asked about the caveats than the number — <b>$4.64M</b> of
       non-legitimate refund exposure, <b>$1.88M</b> of it reachable today with a single no-ML
-      policy rule, the rest behind the honest-limitations discussion on slide 7.</p>
+      policy rule.</p>
       <div class="chips" style="margin-top:6px">
         <span class="chip" style="background:rgba(42,111,176,.1);color:var(--cyan-lt)">Subham Ranjan · A017</span>
         <span class="chip" style="background:rgba(193,101,46,.1);color:var(--gold-lt)">Shriya · A023</span>
@@ -657,7 +598,7 @@ tr.hi td{background:rgba(30,158,114,.055)}
     <div class="p flat"><div class="eye">Reproducibility</div><p class="note">seed=42 throughout · every number here read from the notebooks' own output</p></div>
   </div>
 
-  <p class="cap u" style="margin-top:10px;max-width:none">Dataset: <code class="m">ecommerce_return_abuse_dataset.csv</code> (Kaggle) · full caveats on slide 7 · references, AI-usage disclosure and team contributions in the consulting report's Appendix.</p>
+  <p class="cap u" style="margin-top:10px;max-width:none">Dataset: <code class="m">ecommerce_return_abuse_dataset.csv</code> (Kaggle) · references, AI-usage disclosure and team contributions in the consulting report's Appendix.</p>
 </section>
 
 </div>

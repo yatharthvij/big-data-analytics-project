@@ -53,9 +53,10 @@ it. Do not casually rename these top-level folders again without checking notebo
 ## Remaining before submission
 
 1. ~~Fill in the team table~~ — done, see Team above.
-2. Confirm the actual submission/presentation dates — guidelines list "8 Sept (tentative)" /
-   "11–12 Sept (tentative)"; user has not confirmed final dates as of this writing.
-3. ~~Push to GitHub with meaningful commit history~~ — done, pushed to
+2. ~~Push to GitHub with meaningful commit history~~ — done, pushed to
    `github.com/yatharthvij/big-data-analytics-project`.
-4. Optional polish: the architecture diagram's Sqoop-box annotation slightly touches its connector
+3. Optional polish: the architecture diagram's Sqoop-box annotation slightly touches its connector
    line in the report SVG (cosmetic only, still legible) — revisit if there's time.
+
+Note: timelines/submission dates are deliberately not mentioned anywhere in this repo (README,
+report, deck) — user's instruction. Don't reintroduce specific dates without asking.

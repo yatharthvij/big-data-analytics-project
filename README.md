@@ -117,13 +117,6 @@ python3 src/export_pdfs.py
 Outputs land in `data/processed/` (Parquet tables + saved models) and `docs/*.csv` (metric CSVs
 consumed by the report and deck).
 
-## Timeline
-
-| Date (2026) | Milestone |
-|---|---|
-| **8 Sept** | Submission (tentative, per guidelines) — deck, executable notebook, consulting report |
-| 11–12 Sept | Presentations (tentative, per guidelines) |
-
 ## Team
 
 | Name | Roll no. | Workstream owned | Artifacts |
