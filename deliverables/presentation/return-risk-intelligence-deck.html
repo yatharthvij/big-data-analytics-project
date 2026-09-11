@@ -423,41 +423,43 @@ tr.hi td{background:rgba(30,158,114,.055)}
   </div>
 </section>
 
-<!-- ==================================================== 06 · feature engineering -->
+<!-- ==================================================== 06 · key findings & risks -->
 <section class="s" id="s6">
   <div class="u">
-    <div class="kick">Data engineering</div>
-    <h2>Engineered features <em>validated</em> before they ever reach a model.</h2>
+    <div class="kick">Key findings <span style="color:var(--gold-lt)">· and what could still go wrong</span></div>
+    <h2>What the three models actually tell us — <em>and the risks that travel with them</em>.</h2>
   </div>
 
-  <div class="row c-46 u">
-    <div class="p" style="padding:14px 16px">
-      <table class="seg">
-        <thead><tr><th>Feature</th><th>Serves</th></tr></thead>
-        <tbody>
-          <tr><td class="nm m">fraud_signal_score</td><td>Return fraud</td></tr>
-          <tr><td class="nm m">return_to_order_ratio</td><td>Return risk</td></tr>
-          <tr><td class="nm m">refund_to_order_value_ratio</td><td>Return fraud</td></tr>
-          <tr><td class="nm m">is_quality_issue_reason</td><td>Product quality</td></tr>
-          <tr><td class="nm m">high_value_no_evidence</td><td>Return fraud</td></tr>
-        </tbody>
-      </table>
-      <p class="cap">Outliers capped at 1st/99th percentile, not deleted — extreme values are often
-      the fraud signal itself, not noise to remove.</p>
+  <div class="row c2 u">
+    <div class="p b" style="padding:14px 16px">
+      <div class="eye" style="color:var(--cyan-lt)">Key findings</div>
+      <ul class="ql">
+        <li><b>Non-legit returns skew expensive, not just frequent.</b> 29.9% of orders carry
+        43.8% of refund dollars ($4.64M) — fraud claims average 3.1× a legitimate return.</li>
+        <li><b>The classifier earns its complexity.</b> Random Forest hits perfect precision/
+        recall where a free 4-flag heuristic tops out at F1 0.61.</li>
+        <li><b>The quality problem is broad-based, not one vendor.</b> Quality-issue rates band
+        31.5%–35.2% across all 12 categories — a systemic pattern, not a vendor hunt.</li>
+        <li><b>A simpler model wins honestly on refund pricing.</b> Linear Regression beats both
+        a naive baseline (40% RMSE) and a more complex GBTRegressor.</li>
+        <li><b>Our dataset's fraud rate is industry-realistic.</b> 17.9% (Fraud + Wardrobing) sits
+        close to Appriss Retail's reported 15.14% — the scale here is real.</li>
+      </ul>
     </div>
-    <div class="ground">
-      <div class="gl">Verified — printed by the run, not claimed</div>
-      <p>Mean <b class="m">fraud_signal_score</b>: <b>2.73</b> for Fraudulent Return vs. <b>0.84</b> for
-      Legitimate. Mean <b class="m">return_to_order_ratio</b>: <b>0.47</b> vs. <b>0.05</b>. Clear
-      separation confirmed <i>before</i> trusting these features for modeling — not assumed.
-      <code class="m">notebooks/01_data_engineering.ipynb</code> §4.</p>
-      <table class="seg" style="margin-top:10px">
-        <thead><tr><th></th><th class="r">Fraudulent Return</th><th class="r">Legitimate</th></tr></thead>
-        <tbody>
-          <tr><td>fraud_signal_score</td><td class="r m">2.73</td><td class="r m">0.84</td></tr>
-          <tr><td>return_to_order_ratio</td><td class="r m">0.47</td><td class="r m">0.05</td></tr>
-        </tbody>
-      </table>
+    <div class="p r" style="padding:14px 16px">
+      <div class="eye" style="color:var(--red-lt)">Risks &amp; future roadmap</div>
+      <ul class="ql">
+        <li><b>Risk — synthetic-data overfit.</b> Treat this model as a pipeline proof-of-concept;
+        re-train on real labeled outcomes before go-live, budgeting for 80–90% F1, not 99.9%.</li>
+        <li><b>Risk — no production ground-truth labels.</b> Real retailers rarely have a clean
+        <code class="m">abuse_type</code> column — build human-in-the-loop labeling from the
+        review queue this system creates.</li>
+        <li><b>Risk — the quality finding explains <i>what</i>, not <i>why</i>.</b> Broad-based
+        isn't root-caused; that needs a packaging/supplier QA audit this dataset can't run.</li>
+        <li><b>Roadmap.</b> Real-time scoring at return-request time, a feedback loop from
+        reviewer overrides back into re-training, and a rolling time-based validation window
+        once live data exists.</li>
+      </ul>
     </div>
   </div>
 </section>
@@ -603,10 +605,8 @@ tr.hi td{background:rgba(30,158,114,.055)}
       reserve-accounting input independent of whether it turns out to be fraud, abuse, or genuine.</p>
       <div class="own">Owner · Finance / Customer Ops</div></div></div>
   </div>
-  <p class="cap u" style="margin-top:10px;"><b>Risks &amp; roadmap:</b> re-validate on real labeled
-  outcomes before trusting this dataset's metrics; no temporal holdout here, so add a rolling
-  time-based validation window in production; build the human-in-the-loop labeling loop from the
-  review queue this system creates.</p>
+  <p class="cap u" style="margin-top:10px;">Full risks &amp; roadmap on slide 6 — none of this ships
+  without re-validating on real labeled outcomes first.</p>
 </section>
 
 <!-- ============================================================= 10 · close -->
