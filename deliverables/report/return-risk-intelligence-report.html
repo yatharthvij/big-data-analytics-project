@@ -185,7 +185,7 @@
     <tr><td><b>Volume</b></td><td>60,000 orders × 35 features today; production scale is millions of orders/day across a real retailer's transactional + event-log systems (see Architecture, Section 3).</td></tr>
     <tr><td><b>Velocity</b></td><td>Batch in this project (static CSV); production design ingests transactional data on a daily incremental batch (Sqoop) and clickstream/return events near-real-time (Flume/API).</td></tr>
     <tr><td><b>Variety</b></td><td>Structured order/customer fields, categorical behavioral flags, and (in production) unstructured carrier tracking + support-ticket text.</td></tr>
-    <tr><td><b>Veracity</b></td><td>This dataset is clean (0 missing values, no duplicate <code>order_id</code>, verified in Section 5) but is <b>Kaggle-synthetic</b> — see the explicit caveat in Section 5.1 before treating model metrics as production-representative.</td></tr>
+    <tr><td><b>Veracity</b></td><td>This dataset is clean (0 missing values, no duplicate <code>order_id</code>, verified in Section 4.1) but is <b>Kaggle-synthetic</b> — see the explicit caveat in Section 5.1 before treating model metrics as production-representative.</td></tr>
     <tr><td><b>Value</b></td><td>Triage automation redirects manual review capacity to the ~30% of returns that need it, and gives QA a category-level quality signal that doesn't exist in the current process.</td></tr>
   </table>
 
