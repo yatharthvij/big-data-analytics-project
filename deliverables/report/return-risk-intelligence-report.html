@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Return Risk Intelligence — Consulting Report</title>
+<title>Return Risk Intelligence - Consulting Report</title>
 <style>
   :root{
     --surface-1:#fcfcfb; --page:#f9f9f7; --ink:#0b0b0b; --ink-2:#52514e; --muted:#898781;
@@ -72,22 +72,22 @@
   <span class="tag">NMIMS MBA · BIG DATA ANALYTICS · GROUP PROJECT</span>
   <h1>Return Risk Intelligence: Predicting Return Probability, Return Fraud &amp; Product Quality Issues</h1>
   <p class="sub">A PySpark/MLlib solution that separates genuine returns, product-quality failures,
-  and fraud/abuse at the point of return request — so a retailer's return-audit team can act on
+  and fraud/abuse at the point of return request - so a retailer's return-audit team can act on
   the 1-in-3 returns worth a second look, instead of reviewing all of them.</p>
   <p class="meta" style="margin-top:40px;">Consulting Report · E-commerce Domain<br>
-  Dataset: <code>ecommerce_return_abuse_dataset.csv</code> (Kaggle) — 60,000 orders × 35 features</p>
+  Dataset: <code>ecommerce_return_abuse_dataset.csv</code> (Kaggle) - 60,000 orders × 35 features</p>
 </section>
 
 <section class="break">
   <h2>Executive Summary</h2>
   <p>Retailers processing high return volumes cannot scale spreadsheet-based manual audits. This
-  project builds an end-to-end Big Data Analytics pipeline — architecture, feature engineering,
-  and three independent PySpark MLlib models — that triages every return request into <b>legitimate</b>,
+  project builds an end-to-end Big Data Analytics pipeline - architecture, feature engineering,
+  and three independent PySpark MLlib models - that triages every return request into <b>legitimate</b>,
   <b>policy abuse</b>, <b>fraudulent return</b>, or <b>wardrobing</b>, and separately segments
   customers/returns by behavior to surface product-quality problems the fraud label alone can't see.</p>
 
   <div class="kpi-row">
-    <div class="kpi"><div class="v">$4.64M</div><div class="l">refund dollars requested by non-legitimate returns — 43.8% of all refund $, from 29.9% of orders</div></div>
+    <div class="kpi"><div class="v">$4.64M</div><div class="l">refund dollars requested by non-legitimate returns - 43.8% of all refund $, from 29.9% of orders</div></div>
     <div class="kpi"><div class="v">0.999</div><div class="l">weighted F1, Random Forest classifier (test set)</div></div>
     <div class="kpi"><div class="v">3</div><div class="l">behavioral customer segments identified (K-Means)</div></div>
     <div class="kpi"><div class="v">38%</div><div class="l">of returns in the core legitimate segment are quality-issue driven</div></div>
@@ -96,22 +96,22 @@
   <p><b>Five findings drive the recommendations:</b></p>
   <ol>
     <li><b>Non-legitimate returns are disproportionately expensive, not just disproportionately
-    frequent.</b> They're 29.9% of orders but <b>43.8% of refund dollars requested</b> — fraudulent
+    frequent.</b> They're 29.9% of orders but <b>43.8% of refund dollars requested</b> - fraudulent
     returns alone average <b>$434.73</b> per claim vs. <b>$141.14</b> for legitimate returns, a
     <b>3.1×</b> gap. Bad actors aren't just more numerous, they're targeting higher-value claims.</li>
     <li><b>Fraud is classifiable with high confidence</b> from behavioral and evidence signals
     (tracking validity, photo evidence, address changes, refund-to-different-account) combined
-    into an engineered <code>fraud_signal_score</code> — a Random Forest model built on these
+    into an engineered <code>fraud_signal_score</code> - a Random Forest model built on these
     features reaches nearly perfect separation on this dataset (see the model-evaluation caveat
     in Section 5.1 before reading that number as a production guarantee), and beats a free
     rule-based heuristic decisively (F1 1.00 vs. 0.61).</li>
     <li><b>Return fraud and product quality are largely separate problems</b> that get conflated
     in a single "return rate" metric. Clustering on behavior alone (no fraud label) finds a
-    73%-of-customers "core legitimate" segment whose returns are still 38% quality-issue driven —
+    73%-of-customers "core legitimate" segment whose returns are still 38% quality-issue driven -
     this is a QA problem, not a fraud problem, and needs a different owner and fix. It is also a
     <b>broad-based</b> one: quality-issue rates band tightly (31.5%–35.2%) across every product
     category, not one bad vendor (Section 6).</li>
-    <li><b>Refund exposure is close to linear in order value</b> — a simple Linear Regression model
+    <li><b>Refund exposure is close to linear in order value</b> - a simple Linear Regression model
     prices expected refund dollars at the moment a return is filed, cutting error 40% versus a naive
     "refund = order value" guess, and beating a more complex GBTRegressor honestly (Section 5.3).</li>
     <li><b>A production system needs three different interventions</b>, not one: automated
@@ -127,7 +127,7 @@
   manually. That does not scale: return volume grows faster than headcount, audit criteria are
   applied inconsistently across reviewers, and the team has no systematic way to tell whether a
   spike in returns for a product category is <i>fraud</i>, <i>abuse of a lenient return policy</i>,
-  or a genuine <i>quality defect</i> that needs a vendor escalation — three problems that call for
+  or a genuine <i>quality defect</i> that needs a vendor escalation - three problems that call for
   three different responses, currently indistinguishable in a spreadsheet.</p>
 
   <p>We map this one dataset onto three sub-problems:</p>
@@ -141,12 +141,12 @@
   <h3>Industry background</h3>
   <p>This is not a hypothetical problem. E-commerce retailers face structurally higher return
   burdens than brick-and-mortar: the <b>National Retail Federation (NRF)</b> forecasts consumers
-  will return <b>$849.9 billion</b> in merchandise in 2025 — <b>15.8%</b> of all retail
-  purchases — with <b>online sales specifically returned at 19.3%</b>, well above the all-channel
+  will return <b>$849.9 billion</b> in merchandise in 2025 - <b>15.8%</b> of all retail
+  purchases - with <b>online sales specifically returned at 19.3%</b>, well above the all-channel
   average.<sup>1</sup> Return fraud and abuse compound this: <b>Appriss Retail's</b> 2024 industry
   study (60+ retailers, with Deloitte) found <b>15.14%</b> of all returns were fraudulent, costing
   retailers <b>$103 billion</b> in 2024 alone, up from $101B in 2023.<sup>2</sup>
-  <b>Wardrobing</b> specifically — one of this project's four target classes — is flagged by
+  <b>Wardrobing</b> specifically - one of this project's four target classes - is flagged by
   <b>60% of retail executives</b> as a major fraud pattern in that same study, and <b>85% of
   retailers</b> now deploy AI to detect and prevent return fraud.<sup>2</sup> This project sits
   squarely inside that industry-wide shift, not ahead of or apart from it.</p>
@@ -154,24 +154,24 @@
   <div class="callout">
   <b>How our dataset compares:</b> this dataset's combined Fraudulent Return + Wardrobing rate
   (10.2% + 7.7% = <b>17.9%</b>) sits close to Appriss's reported <b>15.14%</b> industry-wide fraud
-  rate — the class <i>prevalence</i> is realistically calibrated to real-world reporting, even
+  rate - the class <i>prevalence</i> is realistically calibrated to real-world reporting, even
   though (per the caveat in Section 5.1) the <i>separability</i> of the classes is not.
   </div>
 
   <h3>Why this matters financially</h3>
   <p>Of 60,000 orders in the dataset, <b>17,940 (29.9%)</b> are non-legitimate returns
   (Policy Abuser 12.0%, Fraudulent Return 10.2%, Wardrobing 7.7%). Every one of those returns
-  today gets the same manual-review treatment as a genuine defective-product return — the highest-value
+  today gets the same manual-review treatment as a genuine defective-product return - the highest-value
   lever is triage, not blanket policy tightening, which would punish the 70% of legitimate customers too.</p>
 
   <div class="callout">
   <b>The dollar exposure is concentrated, not evenly spread:</b> non-legitimate returns account for
-  <b>$4.64M of the $10.57M</b> in total refund dollars requested across the dataset — 43.8% of the
+  <b>$4.64M of the $10.57M</b> in total refund dollars requested across the dataset - 43.8% of the
   money, from 29.9% of the orders. <b>Fraudulent Return</b> claims alone total <b>$2.66M</b> at an
-  average <b>$434.73</b> per claim — <b>3.1×</b> the $141.14 average for legitimate returns. A
+  average <b>$434.73</b> per claim - <b>3.1×</b> the $141.14 average for legitimate returns. A
   further <b>$1.88M</b> sits in a single specific, rule-based pattern independent of any ML model:
   non-legitimate returns that are both a high-value item <i>and</i> missing photo evidence
-  (4,673 orders) — an immediately actionable policy (require photo evidence above a value
+  (4,673 orders) - an immediately actionable policy (require photo evidence above a value
   threshold) that doesn't need to wait for the classifier to ship. Figures computed directly from
   <code>data/processed/silver</code>; see Section 7 for how they translate into recommendations.
   </div>
@@ -185,16 +185,16 @@
     <tr><td><b>Volume</b></td><td>60,000 orders × 35 features today; production scale is millions of orders/day across a real retailer's transactional + event-log systems (see Architecture, Section 3).</td></tr>
     <tr><td><b>Velocity</b></td><td>Batch in this project (static CSV); production design ingests transactional data on a daily incremental batch (Sqoop) and clickstream/return events near-real-time (Flume/API).</td></tr>
     <tr><td><b>Variety</b></td><td>Structured order/customer fields, categorical behavioral flags, and (in production) unstructured carrier tracking + support-ticket text.</td></tr>
-    <tr><td><b>Veracity</b></td><td>This dataset is clean (0 missing values, no duplicate <code>order_id</code>, verified in Section 4.1) but is <b>Kaggle-synthetic</b> — see the explicit caveat in Section 5.1 before treating model metrics as production-representative.</td></tr>
+    <tr><td><b>Veracity</b></td><td>This dataset is clean (0 missing values, no duplicate <code>order_id</code>, verified in Section 4.1) but is <b>Kaggle-synthetic</b> - see the explicit caveat in Section 5.1 before treating model metrics as production-representative.</td></tr>
     <tr><td><b>Value</b></td><td>Triage automation redirects manual review capacity to the ~30% of returns that need it, and gives QA a category-level quality signal that doesn't exist in the current process.</td></tr>
   </table>
 
   <h3>Target variable</h3>
   <div class="kpi-row">
-    <div class="kpi"><div class="v" style="color:var(--blue)">70.1%</div><div class="l">Legitimate — 42,060 orders</div></div>
-    <div class="kpi"><div class="v" style="color:var(--orange)">12.0%</div><div class="l">Policy Abuser — 7,192 orders</div></div>
-    <div class="kpi"><div class="v" style="color:var(--aqua)">10.2%</div><div class="l">Fraudulent Return — 6,112 orders</div></div>
-    <div class="kpi"><div class="v" style="color:var(--yellow)">7.7%</div><div class="l">Wardrobing — 4,636 orders</div></div>
+    <div class="kpi"><div class="v" style="color:var(--blue)">70.1%</div><div class="l">Legitimate - 42,060 orders</div></div>
+    <div class="kpi"><div class="v" style="color:var(--orange)">12.0%</div><div class="l">Policy Abuser - 7,192 orders</div></div>
+    <div class="kpi"><div class="v" style="color:var(--aqua)">10.2%</div><div class="l">Fraudulent Return - 6,112 orders</div></div>
+    <div class="kpi"><div class="v" style="color:var(--yellow)">7.7%</div><div class="l">Wardrobing - 4,636 orders</div></div>
   </div>
   <svg viewBox="0 0 700 46" width="100%" height="46" role="img" aria-label="Stacked bar of abuse_type class distribution">
     <rect x="0" y="10" width="490.7" height="26" fill="#2a78d6"/>
@@ -222,7 +222,7 @@
 <section class="break">
   <h2>3 · Enterprise Architecture</h2>
   <p>The working notebook runs directly on the static Kaggle CSV as a practical stand-in. The
-  architecture below is the <b>production-scale design</b> this pipeline is built to generalize to —
+  architecture below is the <b>production-scale design</b> this pipeline is built to generalize to -
   it is not stood up against this CSV, but every transformation in the notebook (Sections 5–6) is
   written as the Bronze→Silver→Gold pattern this diagram formalizes.</p>
 
@@ -303,7 +303,7 @@
     <path d="M610,63 L646,63" stroke="#898781" stroke-width="1.4" marker-end="url(#arrow)"/>
     <path d="M610,63 Q630,90 646,123" stroke="#898781" stroke-width="1.4" fill="none" marker-end="url(#arrow)"/>
 
-    <text x="10" y="250" font-size="10.5" fill="#898781">Sources are batch (DB) / streaming (events) / API-pulled — matched to the ingestion tool suited to each pattern, landing untouched in Bronze.</text>
+    <text x="10" y="250" font-size="10.5" fill="#898781">Sources are batch (DB) / streaming (events) / API-pulled - matched to the ingestion tool suited to each pattern, landing untouched in Bronze.</text>
     <text x="10" y="266" font-size="10.5" fill="#898781">This notebook's Phase 2/3 pipeline implements the Silver→Gold transformation and MLlib consumption stages directly on the CSV stand-in.</text>
   </svg>
   </div>
@@ -329,15 +329,15 @@
   <h3>4.3 Feature engineering</h3>
   <table>
     <tr><th>Feature</th><th>Serves</th><th>Rationale</th></tr>
-    <tr><td><code>fraud_signal_score</code></td><td>Fraud</td><td>Additive count of 6 red-flags (address change, refund-to-different-account, multiple accounts, invalid tracking, no photo evidence, tampered packaging) — a single interpretable risk score</td></tr>
+    <tr><td><code>fraud_signal_score</code></td><td>Fraud</td><td>Additive count of 6 red-flags (address change, refund-to-different-account, multiple accounts, invalid tracking, no photo evidence, tampered packaging) - a single interpretable risk score</td></tr>
     <tr><td><code>return_to_order_ratio</code></td><td>Return risk</td><td>Independently recomputed cross-check of the provided <code>return_rate_pct</code></td></tr>
-    <tr><td><code>refund_to_order_value_ratio</code></td><td>Fraud</td><td>Refund requested relative to order value — abuse/fraud skews this ratio</td></tr>
-    <tr><td><code>is_quality_issue_reason</code></td><td>Quality</td><td>Flags Defective/Broken, Quality Issue, Not As Described — the slice QA owns vs. fraud</td></tr>
+    <tr><td><code>refund_to_order_value_ratio</code></td><td>Fraud</td><td>Refund requested relative to order value - abuse/fraud skews this ratio</td></tr>
+    <tr><td><code>is_quality_issue_reason</code></td><td>Quality</td><td>Flags Defective/Broken, Quality Issue, Not As Described - the slice QA owns vs. fraud</td></tr>
     <tr><td><code>high_value_no_evidence</code></td><td>Fraud</td><td>Interaction flag for a known abuse pattern: high-value item + no photo evidence</td></tr>
   </table>
   <div class="callout">
   <b>Validation, not assumption:</b> mean <code>fraud_signal_score</code> is 2.73 for Fraudulent
-  Return vs. 0.84 for Legitimate, and mean <code>return_to_order_ratio</code> is 0.47 vs. 0.05 —
+  Return vs. 0.84 for Legitimate, and mean <code>return_to_order_ratio</code> is 0.47 vs. 0.05 -
   confirmed in the notebook before these features were trusted for modeling.
   </div>
 
@@ -346,21 +346,21 @@
   return reason, shipping carrier) → <code>StringIndexer</code> + <code>OneHotEncoder</code>.
   <code>customer_segment</code> → ordinal map (New&lt;Bronze&lt;Silver&lt;Gold&lt;Platinum), since
   loyalty tiers have a natural order a one-hot encoding would discard. Continuous features →
-  <code>StandardScaler</code> — required for the distance-based K-Means model (Section 5.2); tree
+  <code>StandardScaler</code> - required for the distance-based K-Means model (Section 5.2); tree
   models don't need it but reuse the same pipeline for consistency. 75/25 train/test split, seed=42:
   45,112 train / 14,888 test rows.</p>
 </section>
 
 <section class="break">
   <h2>5 · Machine Learning (Phase 3)</h2>
-  <p>Three independent PySpark MLlib approaches — classification, clustering, and regression —
+  <p>Three independent PySpark MLlib approaches - classification, clustering, and regression -
   implemented in <code>notebooks/02_ml_modeling.ipynb</code>, one per named sub-problem in the
   project's own scope and exceeding the brief's ≥2-approach requirement.</p>
 
-  <h3>5.1 Approach 1 — Multi-class classification (return fraud)</h3>
+  <h3>5.1 Approach 1 - Multi-class classification (return fraud)</h3>
   <p>Random Forest (200 trees, maxDepth=10, class-weighted) vs. multinomial Logistic Regression
   baseline, on <code>abuse_label</code>. <b>Spark MLlib's GBTClassifier only supports binary
-  classification</b> — not usable for this 4-class target — so Random Forest, which natively
+  classification</b> - not usable for this 4-class target - so Random Forest, which natively
   supports multi-class, is the primary model.</p>
 
   <table>
@@ -370,7 +370,7 @@
   </table>
 
   <p>Class imbalance (70/12/10/8) was handled via inverse-frequency <code>weightCol</code>
-  training weights, not resampling — evaluation reports per-class precision/recall/F1, not
+  training weights, not resampling - evaluation reports per-class precision/recall/F1, not
   headline accuracy alone, since a "predict Legitimate always" model would score ~70% accuracy
   while catching zero fraud.</p>
 
@@ -421,7 +421,7 @@
       <text x="0" y="212" font-size="9.5" fill="#898781">↑ Actual class (test set, n=14,888 total)</text>
     </g>
   </svg>
-  <p style="font-size:12px;color:var(--ink-2);">Diagonal-dominant, as expected from the headline F1 —
+  <p style="font-size:12px;color:var(--ink-2);">Diagonal-dominant, as expected from the headline F1 -
   read alongside the caveat below rather than as evidence the leakage concern is resolved: a
   synthetic near-deterministic label produces exactly this kind of clean diagonal.</p>
 
@@ -465,7 +465,7 @@
 
   <h4>Does the model earn its complexity?</h4>
   <p>Before trusting a 200-tree Random Forest, it should beat what a fraud analyst could build in an
-  afternoon with no ML at all — an OR-rule over four already-known red flags
+  afternoon with no ML at all - an OR-rule over four already-known red flags
   (<code>tracking_number_valid</code>, <code>refund_to_different_account</code>,
   <code>multiple_accounts_flag</code>, <code>address_change_before_delivery</code>), framed as the
   same binary "does this return deserve a second look" decision an audit team actually makes:</p>
@@ -475,12 +475,12 @@
     <tr><td><b>Random Forest (any non-Legitimate prediction)</b></td><td class="num"><b>1.000</b></td><td class="num"><b>1.000</b></td><td class="num"><b>1.000</b></td><td class="num">4,401</td></tr>
   </table>
   <p style="font-size:12px;color:var(--ink-2);">The free rule catches only 49% of non-legitimate
-  returns (recall 0.489) and still misfires on 501 legitimate orders — the model is not solving a
+  returns (recall 0.489) and still misfires on 501 legitimate orders - the model is not solving a
   problem a spreadsheet formula already solved. Full numbers in
   <code>docs/baseline-comparison-results.csv</code>.</p>
 
   <h4>Cost-sensitive threshold analysis</h4>
-  <p>The default prediction picks whichever class has the highest probability — an implicit cutoff
+  <p>The default prediction picks whichever class has the highest probability - an implicit cutoff
   that treats every misclassification as equally costly. It isn't: a false
   "Legitimate → Fraudulent Return" flag burns customer trust, while a missed fraud case is a direct
   dollar loss. Sweeping the decision threshold on the Random Forest's <b>Fraudulent Return</b>
@@ -495,7 +495,7 @@
     <tr><td class="num">0.9</td><td class="num">1,320</td><td class="num">1.000</td><td class="num">0.887</td></tr>
   </table>
   <p style="font-size:12px;color:var(--ink-2);">Precision stays high across the whole sweep, but
-  recall degrades past ~0.7 — the point where a stricter cutoff starts costing caught fraud faster
+  recall degrades past ~0.7 - the point where a stricter cutoff starts costing caught fraud faster
   than it buys back precision. Full 9-point sweep in <code>docs/threshold-analysis-results.csv</code>;
   the sweep methodology, not this specific threshold, is what should carry over to production, since
   real data will sit at a different point on this curve.</p>
@@ -503,7 +503,7 @@
   <div class="callout warn">
   <b>Model-evaluation caveat (see also <code>docs/fraud-classification-results.md</code>):</b>
   weighted F1 of 0.998–0.999 is unrealistically high for a live fraud operation. Feature importance
-  is spread across ~15 features with no single dominant leak — this isn't a one-column shortcut —
+  is spread across ~15 features with no single dominant leak - this isn't a one-column shortcut -
   but this is a <b>Kaggle synthetic dataset</b>, and synthetic label generators typically compose
   the target from a fairly clean rule, producing near-separable classes real transactional data
   never gives you. We present this as <b>proof of the pipeline and methodology</b>: the
@@ -512,16 +512,16 @@
   recommend budgeting for that expectation, not this one, in any business case.
   </div>
 
-  <h3>5.2 Approach 2 — K-Means clustering (quality &amp; customer segmentation)</h3>
+  <h3>5.2 Approach 2 - K-Means clustering (quality &amp; customer segmentation)</h3>
   <p>An independent, unsupervised lens: features deliberately <b>exclude the fraud-flag columns</b>
   used by the classifier, so clustering surfaces behavior/quality patterns a supervised fraud label
   can't. k=3 selected by silhouette score over k=2..6.</p>
 
   <table>
     <tr><th>Cluster</th><th class="num">n</th><th class="num">Avg return rate</th><th class="num">Avg order value</th><th class="num">% quality-issue returns</th><th>Dominant mix</th></tr>
-    <tr><td><b>0 — High-value fraud-risk</b></td><td class="num">6,646</td><td class="num">44.8%</td><td class="num">$484.01</td><td class="num">22%</td><td>Fraudulent Return-heavy</td></tr>
-    <tr><td><b>1 — Core legitimate base</b></td><td class="num">43,829</td><td class="num">6.8%</td><td class="num">$157.25</td><td class="num"><b>38%</b></td><td>96% Legitimate</td></tr>
-    <tr><td><b>2 — Frequent policy-abuse</b></td><td class="num">9,525</td><td class="num">57.7%</td><td class="num">$129.18</td><td class="num">19%</td><td>Policy Abuser-heavy</td></tr>
+    <tr><td><b>0 - High-value fraud-risk</b></td><td class="num">6,646</td><td class="num">44.8%</td><td class="num">$484.01</td><td class="num">22%</td><td>Fraudulent Return-heavy</td></tr>
+    <tr><td><b>1 - Core legitimate base</b></td><td class="num">43,829</td><td class="num">6.8%</td><td class="num">$157.25</td><td class="num"><b>38%</b></td><td>96% Legitimate</td></tr>
+    <tr><td><b>2 - Frequent policy-abuse</b></td><td class="num">9,525</td><td class="num">57.7%</td><td class="num">$129.18</td><td class="num">19%</td><td>Policy Abuser-heavy</td></tr>
   </table>
 
   <svg viewBox="0 0 620 190" width="100%" role="img" aria-label="Grouped bar chart comparing average return rate and quality-issue return rate across the three clusters">
@@ -551,7 +551,7 @@
     <span><span class="sw" style="background:#eb6834"></span>% of returns that are quality-issue driven</span>
   </div>
   <p style="font-size:12px;color:var(--ink-2);margin-top:6px;">Cluster 1 has by far the lowest
-  return rate but the <i>highest</i> quality-issue share — the two metrics move in opposite
+  return rate but the <i>highest</i> quality-issue share - the two metrics move in opposite
   directions, which is exactly why a single blended "return rate" KPI hides this segment's problem.</p>
 
   <h4>Choosing k by silhouette score, shown not just claimed</h4>
@@ -560,11 +560,11 @@
     <tr><td>Silhouette score</td><td class="num">0.512</td><td class="num"><b>0.560</b></td><td class="num">0.217</td><td class="num">0.296</td><td class="num">0.273</td></tr>
   </table>
   <p style="font-size:12px;color:var(--ink-2);">k=3 is the genuine maximum across the sweep, not a
-  business-convenience compromise — scores drop sharply past k=3, meaning finer segmentations mostly
+  business-convenience compromise - scores drop sharply past k=3, meaning finer segmentations mostly
   split noise rather than real structure. Full sweep in
   <code>docs/silhouette-selection-results.csv</code>.</p>
 
-  <h4>Quality deep-dive — closing the loop on our own recommendation</h4>
+  <h4>Quality deep-dive - closing the loop on our own recommendation</h4>
   <p>Rather than leaving "cross-reference category and reason" as a suggestion, we did it: every
   quality-issue return in the full dataset, ranked by dollar exposure.</p>
   <table>
@@ -578,47 +578,47 @@
   <p style="font-size:12px;color:var(--ink-2);">Full 12-category table in
   <code>docs/quality-deep-dive-results.csv</code>. <b>The honest finding here is a negative one:</b>
   the quality-issue share of each category's own orders is tightly banded (31.5%–35.2% across all 12
-  categories) — no single category or vendor stands out as a disproportionate offender. Clothing
+  categories) - no single category or vendor stands out as a disproportionate offender. Clothing
   tops the dollar-exposure ranking simply because it is the largest category by volume, not because
   it has an unusually elevated defect rate. <b>This is a broad-based quality problem, not a one-vendor
-  problem</b> — the recommendation in Section 7 is scoped accordingly.</p>
+  problem</b> - the recommendation in Section 7 is scoped accordingly.</p>
 
   <p>Full weaknesses discussion (cluster stability, k-choice sensitivity, causal limits) in
   <code>docs/quality-clustering-results.md</code>.</p>
 
-  <h3>5.3 Approach 3 — Regression (return probability, reframed honestly)</h3>
+  <h3>5.3 Approach 3 - Regression (return probability, reframed honestly)</h3>
   <p><b>Why not literally "predict P(this order gets returned)":</b> every row in this dataset is
-  already a return — there is no non-returning-order population to compare against, so the literal
+  already a return - there is no non-returning-order population to compare against, so the literal
   return-probability question is not answerable from this data without fabricating a negative class
   we don't have. The operationally useful analog <i>is</i> answerable: predict the <b>dollar size of
-  the refund exposure</b> the moment a return is filed, before any manual audit happens — directly
+  the refund exposure</b> the moment a return is filed, before any manual audit happens - directly
   useful for finance/reserve accounting and for prioritizing high-dollar returns regardless of fraud
   status. This gives the project a genuine third analytical approach, satisfying the "return
   probability" naming in its own scope honestly rather than leaving it unaddressed.</p>
 
   <p><b>Leakage guard:</b> <code>refund_to_order_value_ratio</code> is algebraically
-  <code>refund_amount_requested_usd / avg_order_value_usd</code> — an exact derivative of the
-  target — so it is excluded from this model's features, along with the target itself (which was a
+  <code>refund_amount_requested_usd / avg_order_value_usd</code> - an exact derivative of the
+  target - so it is excluded from this model's features, along with the target itself (which was a
   legitimate feature for the <i>classification</i> model in 5.1, predicting abuse type, but would be
   pure leakage here).</p>
 
   <table>
     <tr><th>Model</th><th class="num">RMSE ($)</th><th class="num">MAE ($)</th><th class="num">R²</th></tr>
-    <tr><td>Naive: refund = order value (no ML)</td><td class="num">18.63</td><td class="num">13.88</td><td class="num">—</td></tr>
+    <tr><td>Naive: refund = order value (no ML)</td><td class="num">18.63</td><td class="num">13.88</td><td class="num">-</td></tr>
     <tr class="hi"><td><b>Linear Regression (final)</b></td><td class="num"><b>11.11</b></td><td class="num"><b>8.62</b></td><td class="num"><b>0.993</b></td></tr>
     <tr><td>Gradient-Boosted Trees (GBTRegressor)</td><td class="num">18.39</td><td class="num">10.64</td><td class="num">0.982</td></tr>
   </table>
 
   <div class="callout">
-  <b>An honest, slightly unexpected result:</b> Linear Regression beats GBTRegressor here — the
+  <b>An honest, slightly unexpected result:</b> Linear Regression beats GBTRegressor here - the
   reverse of Section 5.1, where the more complex model won. <code>avg_order_value_usd</code> alone
   drives <b>92.5%</b> of feature importance (see
   <code>docs/regression-feature-importance.csv</code>): refund amount is close to linear in order
   value, so a linear model fits that shape better than a tree ensemble tuned for non-linear
-  interactions. The naive "refund = order value" baseline is a real bar, not a strawman — Linear
+  interactions. The naive "refund = order value" baseline is a real bar, not a strawman - Linear
   Regression cuts its error by <b>40%</b> (RMSE $18.63 → $11.11), while GBTRegressor barely clears
   it. <b>The lesson we're stating explicitly:</b> model complexity should match the problem's actual
-  shape, not default to "more complex is better" — unlike Section 5.1's classifier, where
+  shape, not default to "more complex is better" - unlike Section 5.1's classifier, where
   Random Forest's non-linear splits earned their keep, this target is genuinely close to linear and
   a simpler model wins honestly.
   </div>
@@ -626,7 +626,7 @@
 
 <section class="break">
   <h2>6 · Business Insights</h2>
-  <p>What the three models, taken together, actually tell us — before translating any of it into
+  <p>What the three models, taken together, actually tell us - before translating any of it into
   action in Section 7.</p>
   <ol>
     <li><b>Non-legitimate returns are disproportionately expensive, not just disproportionately
@@ -634,19 +634,19 @@
     average 3.1× a legitimate return.</li>
     <li><b>The classifier earns its complexity.</b> Random Forest reaches perfect precision/recall
     on the binary "needs a second look" framing where a free 4-flag heuristic tops out at F1 0.61
-    (Section 5.1) — though the 0.999 multi-class F1 itself is a synthetic-data artifact, not a
+    (Section 5.1) - though the 0.999 multi-class F1 itself is a synthetic-data artifact, not a
     production expectation.</li>
     <li><b>The quality problem is broad-based, not one bad vendor.</b> The Section 5.2 deep-dive
-    found quality-issue rates banded tightly (31.5%–35.2%) across all 12 product categories — Cluster
+    found quality-issue rates banded tightly (31.5%–35.2%) across all 12 product categories - Cluster
     1's 38% quality-issue share is a systemic pattern hiding inside the "legitimate" majority, not a
     single vendor escalation waiting to be found.</li>
     <li><b>A simpler model wins honestly on refund-exposure sizing.</b> Linear Regression beats both
     the naive "refund = order value" baseline (40% RMSE reduction) and the more complex GBTRegressor
-    (Section 5.3) — refund amount is close to linear in order value, and forcing a non-linear model
+    (Section 5.3) - refund amount is close to linear in order value, and forcing a non-linear model
     onto a linear relationship doesn't help.</li>
     <li><b>The dataset's class prevalence is realistically calibrated, even if separability isn't.</b>
     Our combined Fraudulent Return + Wardrobing rate (17.9%) sits close to Appriss Retail's
-    industry-reported 15.14% fraud rate (Section 1) — the scale of the problem this project targets
+    industry-reported 15.14% fraud rate (Section 1) - the scale of the problem this project targets
     is real, even though the classifier's near-perfect accuracy on this specific dataset is not one
     to expect on live data.</li>
   </ol>
@@ -655,46 +655,46 @@
 <section class="break">
   <h2>7 · Strategic Recommendations</h2>
   <ol>
-    <li><b>Require photo evidence above a value threshold — ship this before the model.</b> The
+    <li><b>Require photo evidence above a value threshold - ship this before the model.</b> The
     "high-value item + no photo evidence" pattern alone touches <b>$1.88M</b> of non-legitimate
     refund exposure (4,673 orders) and needs no ML: a policy rule, live immediately, independent of
     the classifier's rollout timeline.</li>
     <li><b>Deploy the fraud classifier as a triage score, not an auto-block.</b> Route the highest
     <code>fraud_signal_score</code> decile plus Cluster 0 members to manual fraud review; auto-approve
     the lowest-risk tail. Re-validate precision/recall on live traffic before trusting this
-    dataset's 0.999 F1 — budget for 80–90% in the initial production SLA. Prioritize Fraudulent
+    dataset's 0.999 F1 - budget for 80–90% in the initial production SLA. Prioritize Fraudulent
     Return claims specifically: at $434.73 average vs. $141.14 for legitimate returns, each one
     caught is worth ~3× a typical legitimate claim in review effort saved.</li>
     <li><b>Give Cluster 1's 38% quality-issue rate to QA as a systemic review, not a vendor hunt.</b>
     Section 6's finding that quality-issue rates are broad-based (31.5%–35.2% across every category)
     means the fix is a general QA/packaging/description-accuracy audit, not a search for one bad
-    vendor — Tools (35.2%) and Electronics (34.2%) are the highest-rate starting points if a
+    vendor - Tools (35.2%) and Electronics (34.2%) are the highest-rate starting points if a
     sequenced rollout is needed.</li>
     <li><b>Tighten policy, don't investigate, for Cluster 2.</b> High order/return volume, low
-    order value, Policy-Abuser-dominated — a shorter return window or restocking fee targets this
+    order value, Policy-Abuser-dominated - a shorter return window or restocking fee targets this
     segment more precisely than a fraud investigation would.</li>
     <li><b>Re-threshold before deployment, using the Section 5.1 sweep.</b> A false
     "Legitimate → Fraudulent Return" flag costs more in customer trust than a slow manual review
-    costs in ops time — the precision/recall trade-off across thresholds 0.1–0.9 is already mapped;
+    costs in ops time - the precision/recall trade-off across thresholds 0.1–0.9 is already mapped;
     picking a production threshold needs real cost estimates, not a re-run of the analysis.</li>
     <li><b>Feed the refund-exposure regressor to Finance, not just Fraud &amp; Risk.</b> Section
-    5.3's Linear Regression prices expected refund dollars the moment a return is filed — a reserve-
+    5.3's Linear Regression prices expected refund dollars the moment a return is filed - a reserve-
     accounting input independent of whether the return turns out to be fraud, abuse, or genuine.</li>
     <li><b>Re-validate quarterly.</b> Fraud patterns adapt to whatever the model learns; without a
-    temporal holdout in this dataset, we cannot measure drift here — production deployment needs a
+    temporal holdout in this dataset, we cannot measure drift here - production deployment needs a
     rolling time-based validation window from day one.</li>
   </ol>
 
   <h3>Risks &amp; future roadmap</h3>
   <ul>
-    <li><b>Risk — synthetic-data overfit to production:</b> mitigated by treating this model as a
+    <li><b>Risk - synthetic-data overfit to production:</b> mitigated by treating this model as a
     pipeline proof-of-concept and re-training on real labeled fraud outcomes before go-live.</li>
-    <li><b>Risk — no ground-truth fraud labels in production:</b> real retailers rarely have a
+    <li><b>Risk - no ground-truth fraud labels in production:</b> real retailers rarely have a
     clean <code>abuse_type</code> column; roadmap includes a human-in-the-loop labeling process
     from the manual review queue this system creates.</li>
-    <li><b>Risk — broad-based quality findings need root-cause work we didn't do.</b> Section 6's
+    <li><b>Risk - broad-based quality findings need root-cause work we didn't do.</b> Section 6's
     quality deep-dive tells us the problem isn't one vendor, but not <i>why</i> defect rates are
-    banded around 33% everywhere — that's a follow-up analysis (packaging audit, supplier QA
+    banded around 33% everywhere - that's a follow-up analysis (packaging audit, supplier QA
     sampling), not something this dataset can answer on its own.</li>
     <li><b>Future:</b> real-time scoring at return-request time (not batch), a feedback loop from
     review-team overrides back into re-training, extending clustering features with unstructured
@@ -710,7 +710,7 @@
   drafting the PySpark data-engineering and MLlib modeling notebooks, generating this report and
   the accompanying executive deck, and proposing the feature-engineering rationale in Section 4.3.
   All code was executed end-to-end against the real 60,000-row dataset (not fabricated output) and
-  every metric quoted in this report was read directly from that execution — see
+  every metric quoted in this report was read directly from that execution - see
   <code>docs/fraud-classification-results.csv</code>, <code>docs/rf-feature-importance.csv</code>,
   <code>docs/quality-clustering-results.csv</code>, <code>docs/baseline-comparison-results.csv</code>,
   <code>docs/threshold-analysis-results.csv</code>, <code>docs/silhouette-selection-results.csv</code>,
@@ -734,17 +734,17 @@
   <h3>C. References</h3>
   <ul>
     <li>Dataset: <code>ecommerce_return_abuse_dataset.csv</code>, Kaggle.</li>
-    <li>Apache Spark MLlib documentation — classification, regression, clustering, and feature transformers.</li>
+    <li>Apache Spark MLlib documentation - classification, regression, clustering, and feature transformers.</li>
     <li>Project brief: <code>docs/ProjectGuideLines Big_Data_Analytics_Project_Guidelines.pdf</code>.</li>
-    <li id="ref1">1. National Retail Federation, <i>2025 Retail Returns Landscape</i> —
+    <li id="ref1">1. National Retail Federation, <i>2025 Retail Returns Landscape</i> -
     <a href="https://nrf.com/research/2025-retail-returns-landscape">nrf.com/research/2025-retail-returns-landscape</a>.</li>
     <li id="ref2">2. Appriss Retail (with Deloitte), <i>Fraudulent Returns and Claims Cost Retailers
-    $103B in 2024</i> —
+    $103B in 2024</i> -
     <a href="https://apprissretail.com/news/appriss-retail-annual-research-fraudulent-returns-and-claims-cost-retailers-103b-in-2024/">apprissretail.com</a>.</li>
   </ul>
 
   <footer class="pagefoot">
-    <span>Return Risk Intelligence — Consulting Report</span>
+    <span>Return Risk Intelligence - Consulting Report</span>
     <span>NMIMS MBA · Big Data Analytics</span>
   </footer>
 </section>
