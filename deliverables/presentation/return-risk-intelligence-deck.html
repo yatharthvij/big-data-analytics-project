@@ -6,12 +6,13 @@
 <title>Return Risk Intelligence — Executive Deck</title>
 <style>
 :root{
-  --bg:#EEF2F7; --paper:#FFFFFF; --panel2:#E9EEF5; --line:#D8E1EC; --line2:#C7D3E1;
-  --cyan:#2A6FB0; --cyan-lt:#154D82;
-  --gold:#C1652E; --gold-lt:#8A4720;
-  --red:#C7413A;  --red-lt:#9C302A;
-  --green:#1E9E72; --green-lt:#146B4D;
-  --ink:#131A24; --body:#2B3542; --soft:#57606C; --dim:#838D99;
+  --bg:#14181F; --paper:#1D222B; --panel2:#242A35; --line:#313846; --line2:#414B5C;
+  --cyan:#4C93D9; --cyan-lt:#8FC1F0;
+  --gold:#D68A4A; --gold-lt:#F0B378;
+  --red:#E0645C;  --red-lt:#F5928B;
+  --green:#3FBE8E; --green-lt:#7FE0B8;
+  --purple:#8B6FC9;
+  --ink:#F2F4F7; --body:#C7CDD6; --soft:#A7AFBC; --dim:#8A93A3;
   --serif:Georgia,"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",serif;
   --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   --mono:"SF Mono",ui-monospace,Menlo,Consolas,"Liberation Mono",monospace;
@@ -23,8 +24,8 @@ body{
   font-family:var(--sans);color:var(--ink);font-size:16px;-webkit-font-smoothing:antialiased;
   overflow:hidden;
   background:
-    radial-gradient(1000px 620px at 88% -12%, rgba(42,111,176,.12) 0%, rgba(238,242,247,0) 58%),
-    radial-gradient(900px 600px at -5% 108%, rgba(193,101,46,.10) 0%, rgba(238,242,247,0) 60%),
+    radial-gradient(1000px 620px at 88% -12%, rgba(76,147,217,.18) 0%, rgba(20,24,31,0) 58%),
+    radial-gradient(900px 600px at -5% 108%, rgba(214,138,74,.16) 0%, rgba(20,24,31,0) 60%),
     var(--bg);
 }
 .deck{position:relative;width:100vw;height:100vh}
@@ -79,7 +80,7 @@ h1 .c,h2 .c{font-style:italic;color:var(--cyan-lt)}
 .chip{display:inline-block;padding:3px 9px;border-radius:4px;font-size:10.5px;font-weight:700;
   letter-spacing:.06em;font-family:var(--mono)}
 .chips{display:flex;flex-wrap:wrap;gap:7px}
-.todo{border:1px dashed var(--gold);background:rgba(193,101,46,.10);color:var(--gold-lt);
+.todo{border:1px dashed var(--gold);background:rgba(214,138,74,.16);color:var(--gold-lt);
   padding:2px 8px;border-radius:4px;font-weight:700;font-size:11.5px}
 .pull{font-family:var(--serif);font-style:italic;font-size:clamp(15px,1.8vw,21px);
   line-height:1.4;color:var(--ink);padding-left:18px;border-left:3px solid var(--gold);margin:4px 0}
@@ -97,7 +98,7 @@ h1 .c,h2 .c{font-style:italic;color:var(--cyan-lt)}
 .fs h4{font-size:13.5px;font-weight:750;margin:5px 0 4px;color:var(--ink)}
 .fs p{font-size:11.6px;color:var(--soft);line-height:1.5}
 .fs .big{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--cyan-lt);margin-top:6px}
-.fs.hi{background:linear-gradient(180deg,rgba(42,111,176,.07),rgba(42,111,176,0));border-radius:9px}
+.fs.hi{background:linear-gradient(180deg,rgba(76,147,217,.12),rgba(76,147,217,0));border-radius:9px}
 .fs.rd .big{color:var(--red-lt)}
 
 table.seg,table.rank{width:100%;border-collapse:collapse;font-size:12.6px}
@@ -110,15 +111,15 @@ table tr:last-child td{border-bottom:none}
 td.nm{font-weight:750;color:var(--ink)}
 td .ss{display:block;font-size:10.3px;color:var(--dim);font-weight:400}
 td.m,td .m{font-family:var(--mono)}
-tr.hi td{background:rgba(30,158,114,.055)}
+tr.hi td{background:rgba(63,190,142,.10)}
 
-.ground{background:rgba(30,158,114,.07);border:1px solid rgba(30,158,114,.3);
+.ground{background:rgba(63,190,142,.13);border:1px solid rgba(63,190,142,.42);
   border-radius:var(--rad);padding:12px 15px}
 .ground .gl{font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:800;
   color:var(--green-lt);margin-bottom:5px}
 .ground p{font-size:12.3px;color:var(--body);line-height:1.55}
 .ground b{color:var(--ink);font-weight:700}
-.brk{background:rgba(199,65,58,.06);border:1px solid rgba(199,65,58,.28);
+.brk{background:rgba(224,100,92,.12);border:1px solid rgba(224,100,92,.4);
   border-radius:var(--rad);padding:12px 15px}
 .brk .gl{font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:800;
   color:var(--red-lt);margin-bottom:5px}
@@ -152,7 +153,7 @@ tr.hi td{background:rgba(30,158,114,.055)}
   transition:width .4s cubic-bezier(.2,.7,.3,1)}
 .hud{position:fixed;left:0;right:0;bottom:0;z-index:30;
   padding:11px clamp(26px,4.2vw,68px);display:flex;align-items:center;justify-content:space-between;
-  background:linear-gradient(0deg,rgba(238,242,247,.97),rgba(238,242,247,0));
+  background:linear-gradient(0deg,rgba(20,24,31,.97),rgba(20,24,31,0));
   font-size:10.8px;color:var(--soft)}
 .hud .w{letter-spacing:.12em;text-transform:uppercase;font-weight:800}
 .hud .w b{color:var(--cyan-lt)}
@@ -173,7 +174,7 @@ tr.hi td{background:rgba(30,158,114,.055)}
    Export with src/export_pdfs.py (Playwright + system Chrome, width 297mm / height 167mm). */
 @page{size:297mm 167mm;margin:0}
 @media print{
-  html,body{height:auto;overflow:visible;background:#fff;
+  html,body{height:auto;overflow:visible;background:var(--bg);
     -webkit-print-color-adjust:exact;print-color-adjust:exact}
   .rail,.hud{display:none}
   .deck{width:auto;height:auto}
@@ -314,16 +315,16 @@ tr.hi td{background:rgba(30,158,114,.055)}
 
   <div class="p u" style="padding:14px 16px">
     <svg viewBox="0 0 900 46" width="100%" height="46" role="img" aria-label="Stacked bar of abuse_type class distribution">
-      <rect x="0" y="10" width="630.9" height="26" fill="#2A6FB0"/>
-      <rect x="630.9" y="10" width="108" height="26" fill="#C1652E"/>
-      <rect x="738.9" y="10" width="91.8" height="26" fill="#1E9E72"/>
-      <rect x="830.7" y="10" width="69.3" height="26" fill="#C7413A"/>
+      <rect x="0" y="10" width="630.9" height="26" fill="#4C93D9"/>
+      <rect x="630.9" y="10" width="108" height="26" fill="#D68A4A"/>
+      <rect x="738.9" y="10" width="91.8" height="26" fill="#3FBE8E"/>
+      <rect x="830.7" y="10" width="69.3" height="26" fill="#E0645C"/>
     </svg>
     <div class="legend">
-      <span><span class="sw" style="background:#2A6FB0"></span>Legitimate — 70.1% (42,060 orders, $5.94M requested)</span>
-      <span><span class="sw" style="background:#C1652E"></span>Policy Abuser — 12.0% (7,192, $0.76M)</span>
-      <span><span class="sw" style="background:#1E9E72"></span>Fraudulent Return — 10.2% (6,112, $2.66M)</span>
-      <span><span class="sw" style="background:#C7413A"></span>Wardrobing — 7.7% (4,636, $1.22M)</span>
+      <span><span class="sw" style="background:#4C93D9"></span>Legitimate — 70.1% (42,060 orders, $5.94M requested)</span>
+      <span><span class="sw" style="background:#D68A4A"></span>Policy Abuser — 12.0% (7,192, $0.76M)</span>
+      <span><span class="sw" style="background:#3FBE8E"></span>Fraudulent Return — 10.2% (6,112, $2.66M)</span>
+      <span><span class="sw" style="background:#E0645C"></span>Wardrobing — 7.7% (4,636, $1.22M)</span>
     </div>
   </div>
 
@@ -354,58 +355,58 @@ tr.hi td{background:rgba(30,158,114,.055)}
 
   <div class="p u" style="padding:16px 18px">
     <svg viewBox="0 0 1000 220" width="100%" role="img" aria-label="architecture diagram">
-      <defs><marker id="a1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#838D99"/></marker></defs>
-      <g font-size="12.5" fill="#131A24" font-family="-apple-system,sans-serif">
-        <rect x="10" y="10" width="180" height="48" rx="6" fill="#FCF3EC" stroke="#C1652E" stroke-width="1.5"/>
+      <defs><marker id="a1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#8A93A3"/></marker></defs>
+      <g font-size="12.5" fill="#F2F4F7" font-family="-apple-system,sans-serif">
+        <rect x="10" y="10" width="180" height="48" rx="6" fill="#2E2416" stroke="#D68A4A" stroke-width="1.5"/>
         <text x="100" y="31" text-anchor="middle" font-weight="600">Transactional DB</text>
-        <text x="100" y="47" text-anchor="middle" fill="#838D99" font-size="10.5">orders, returns</text>
+        <text x="100" y="47" text-anchor="middle" fill="#8A93A3" font-size="10.5">orders, returns</text>
 
-        <rect x="10" y="76" width="180" height="48" rx="6" fill="#FCF3EC" stroke="#C1652E" stroke-width="1.5"/>
+        <rect x="10" y="76" width="180" height="48" rx="6" fill="#2E2416" stroke="#D68A4A" stroke-width="1.5"/>
         <text x="100" y="97" text-anchor="middle" font-weight="600">Event/Log Streams</text>
-        <text x="100" y="113" text-anchor="middle" fill="#838D99" font-size="10.5">clickstream</text>
+        <text x="100" y="113" text-anchor="middle" fill="#8A93A3" font-size="10.5">clickstream</text>
 
-        <rect x="10" y="142" width="180" height="48" rx="6" fill="#FCF3EC" stroke="#C1652E" stroke-width="1.5"/>
+        <rect x="10" y="142" width="180" height="48" rx="6" fill="#2E2416" stroke="#D68A4A" stroke-width="1.5"/>
         <text x="100" y="163" text-anchor="middle" font-weight="600">Carrier/Support APIs</text>
-        <text x="100" y="179" text-anchor="middle" fill="#838D99" font-size="10.5">tracking, tickets</text>
+        <text x="100" y="179" text-anchor="middle" fill="#8A93A3" font-size="10.5">tracking, tickets</text>
 
-        <rect x="270" y="10" width="180" height="48" rx="6" fill="#EEF3FA" stroke="#2A6FB0" stroke-width="1.5"/>
+        <rect x="270" y="10" width="180" height="48" rx="6" fill="#16222E" stroke="#4C93D9" stroke-width="1.5"/>
         <text x="360" y="31" text-anchor="middle" font-weight="600">Sqoop</text>
-        <text x="360" y="47" text-anchor="middle" fill="#838D99" font-size="10.5">incremental batch</text>
+        <text x="360" y="47" text-anchor="middle" fill="#8A93A3" font-size="10.5">incremental batch</text>
 
-        <rect x="270" y="76" width="180" height="48" rx="6" fill="#EEF3FA" stroke="#2A6FB0" stroke-width="1.5"/>
+        <rect x="270" y="76" width="180" height="48" rx="6" fill="#16222E" stroke="#4C93D9" stroke-width="1.5"/>
         <text x="360" y="97" text-anchor="middle" font-weight="600">Flume</text>
-        <text x="360" y="113" text-anchor="middle" fill="#838D99" font-size="10.5">streaming ingestion</text>
+        <text x="360" y="113" text-anchor="middle" fill="#8A93A3" font-size="10.5">streaming ingestion</text>
 
-        <rect x="270" y="142" width="180" height="48" rx="6" fill="#EEF3FA" stroke="#2A6FB0" stroke-width="1.5"/>
+        <rect x="270" y="142" width="180" height="48" rx="6" fill="#16222E" stroke="#4C93D9" stroke-width="1.5"/>
         <text x="360" y="163" text-anchor="middle" font-weight="600">API Connectors</text>
-        <text x="360" y="179" text-anchor="middle" fill="#838D99" font-size="10.5">scheduled pulls</text>
+        <text x="360" y="179" text-anchor="middle" fill="#8A93A3" font-size="10.5">scheduled pulls</text>
 
-        <rect x="540" y="2" width="220" height="200" rx="8" fill="#FFFFFF" stroke="#131A24" stroke-opacity=".15" stroke-width="1.5"/>
+        <rect x="540" y="2" width="220" height="200" rx="8" fill="#1D222B" stroke="#F2F4F7" stroke-opacity=".15" stroke-width="1.5"/>
         <text x="650" y="22" text-anchor="middle" font-weight="700" font-size="13.5">Lakehouse</text>
-        <rect x="554" y="34" width="192" height="44" rx="5" fill="#F2F2F0" stroke="#838D99"/>
-        <text x="650" y="53" text-anchor="middle" font-weight="600">Bronze</text><text x="650" y="68" text-anchor="middle" fill="#838D99" font-size="10">raw, replayable</text>
-        <rect x="554" y="88" width="192" height="44" rx="5" fill="#EAF6F0" stroke="#1E9E72"/>
-        <text x="650" y="107" text-anchor="middle" font-weight="600">Silver</text><text x="650" y="122" text-anchor="middle" fill="#838D99" font-size="10">validated, features</text>
-        <rect x="554" y="142" width="192" height="44" rx="5" fill="#FCF1E3" stroke="#C1652E"/>
-        <text x="650" y="161" text-anchor="middle" font-weight="600">Gold</text><text x="650" y="176" text-anchor="middle" fill="#838D99" font-size="10">encoded, model-ready</text>
-        <text x="650" y="196" text-anchor="middle" fill="#838D99" font-size="10">partitioned by date &amp; country</text>
+        <rect x="554" y="34" width="192" height="44" rx="5" fill="#262B33" stroke="#8A93A3"/>
+        <text x="650" y="53" text-anchor="middle" font-weight="600">Bronze</text><text x="650" y="68" text-anchor="middle" fill="#8A93A3" font-size="10">raw, replayable</text>
+        <rect x="554" y="88" width="192" height="44" rx="5" fill="#16281F" stroke="#3FBE8E"/>
+        <text x="650" y="107" text-anchor="middle" font-weight="600">Silver</text><text x="650" y="122" text-anchor="middle" fill="#8A93A3" font-size="10">validated, features</text>
+        <rect x="554" y="142" width="192" height="44" rx="5" fill="#2E2416" stroke="#D68A4A"/>
+        <text x="650" y="161" text-anchor="middle" font-weight="600">Gold</text><text x="650" y="176" text-anchor="middle" fill="#8A93A3" font-size="10">encoded, model-ready</text>
+        <text x="650" y="196" text-anchor="middle" fill="#8A93A3" font-size="10">partitioned by date &amp; country</text>
 
-        <rect x="810" y="42" width="180" height="48" rx="6" fill="#F5F0FA" stroke="#6B4A9E" stroke-width="1.5"/>
+        <rect x="810" y="42" width="180" height="48" rx="6" fill="#221A2E" stroke="#8B6FC9" stroke-width="1.5"/>
         <text x="900" y="63" text-anchor="middle" font-weight="600">PySpark MLlib</text>
-        <text x="900" y="79" text-anchor="middle" fill="#838D99" font-size="10.5">fraud + clustering</text>
+        <text x="900" y="79" text-anchor="middle" fill="#8A93A3" font-size="10.5">fraud + clustering</text>
 
-        <rect x="810" y="108" width="180" height="48" rx="6" fill="#F5F0FA" stroke="#6B4A9E" stroke-width="1.5"/>
+        <rect x="810" y="108" width="180" height="48" rx="6" fill="#221A2E" stroke="#8B6FC9" stroke-width="1.5"/>
         <text x="900" y="129" text-anchor="middle" font-weight="600">BI Dashboards</text>
-        <text x="900" y="145" text-anchor="middle" fill="#838D99" font-size="10.5">ops review queues</text>
+        <text x="900" y="145" text-anchor="middle" fill="#8A93A3" font-size="10.5">ops review queues</text>
       </g>
-      <path d="M190,34 L266,34" stroke="#838D99" stroke-width="1.4" marker-end="url(#a1)"/>
-      <path d="M190,100 L266,100" stroke="#838D99" stroke-width="1.4" marker-end="url(#a1)"/>
-      <path d="M190,166 L266,166" stroke="#838D99" stroke-width="1.4" marker-end="url(#a1)"/>
-      <path d="M450,34 Q500,34 536,56" stroke="#838D99" stroke-width="1.4" fill="none" marker-end="url(#a1)"/>
-      <path d="M450,100 L536,100" stroke="#838D99" stroke-width="1.4" marker-end="url(#a1)"/>
-      <path d="M450,166 Q500,166 536,112" stroke="#838D99" stroke-width="1.4" fill="none" marker-end="url(#a1)"/>
-      <path d="M762,55 L806,66" stroke="#838D99" stroke-width="1.4" marker-end="url(#a1)"/>
-      <path d="M762,55 Q790,95 806,132" stroke="#838D99" stroke-width="1.4" fill="none" marker-end="url(#a1)"/>
+      <path d="M190,34 L266,34" stroke="#8A93A3" stroke-width="1.4" marker-end="url(#a1)"/>
+      <path d="M190,100 L266,100" stroke="#8A93A3" stroke-width="1.4" marker-end="url(#a1)"/>
+      <path d="M190,166 L266,166" stroke="#8A93A3" stroke-width="1.4" marker-end="url(#a1)"/>
+      <path d="M450,34 Q500,34 536,56" stroke="#8A93A3" stroke-width="1.4" fill="none" marker-end="url(#a1)"/>
+      <path d="M450,100 L536,100" stroke="#8A93A3" stroke-width="1.4" marker-end="url(#a1)"/>
+      <path d="M450,166 Q500,166 536,112" stroke="#8A93A3" stroke-width="1.4" fill="none" marker-end="url(#a1)"/>
+      <path d="M762,55 L806,66" stroke="#8A93A3" stroke-width="1.4" marker-end="url(#a1)"/>
+      <path d="M762,55 Q790,95 806,132" stroke="#8A93A3" stroke-width="1.4" fill="none" marker-end="url(#a1)"/>
     </svg>
   </div>
 
@@ -490,19 +491,19 @@ tr.hi td{background:rgba(30,158,114,.055)}
     <div class="p g" style="padding:14px 16px">
       <div class="eye" style="color:var(--gold-lt)">Top feature importances</div>
       <svg viewBox="0 0 480 150" width="100%" role="img" aria-label="Top 6 Random Forest feature importances">
-        <g font-size="9.5" fill="#131A24" font-family="-apple-system,sans-serif">
-          <text x="0" y="9" fill="#57606C">days_to_return</text>
-          <rect x="130" y="1" width="290" height="10" fill="#2A6FB0"/><text x="424" y="9" font-size="9">0.152</text>
-          <text x="0" y="29" fill="#57606C">wishlist_to_cart_time_hrs</text>
-          <rect x="130" y="21" width="240" height="10" fill="#2A6FB0"/><text x="374" y="29" font-size="9">0.126</text>
-          <text x="0" y="49" fill="#57606C">return_rate_pct</text>
-          <rect x="130" y="41" width="224" height="10" fill="#2A6FB0"/><text x="358" y="49" font-size="9">0.117</text>
-          <text x="0" y="69" fill="#57606C">return_to_order_ratio</text>
-          <rect x="130" y="61" width="219" height="10" fill="#2A6FB0"/><text x="353" y="69" font-size="9">0.115</text>
-          <text x="0" y="89" fill="#57606C">tracking_number_valid</text>
-          <rect x="130" y="81" width="138" height="10" fill="#6FA0CE"/><text x="272" y="89" font-size="9">0.072</text>
-          <text x="0" y="109" fill="#57606C">total_returns_lifetime</text>
-          <rect x="130" y="101" width="130" height="10" fill="#6FA0CE"/><text x="264" y="109" font-size="9">0.068</text>
+        <g font-size="9.5" fill="#F2F4F7" font-family="-apple-system,sans-serif">
+          <text x="0" y="9" fill="#A7AFBC">days_to_return</text>
+          <rect x="130" y="1" width="290" height="10" fill="#4C93D9"/><text x="424" y="9" font-size="9">0.152</text>
+          <text x="0" y="29" fill="#A7AFBC">wishlist_to_cart_time_hrs</text>
+          <rect x="130" y="21" width="240" height="10" fill="#4C93D9"/><text x="374" y="29" font-size="9">0.126</text>
+          <text x="0" y="49" fill="#A7AFBC">return_rate_pct</text>
+          <rect x="130" y="41" width="224" height="10" fill="#4C93D9"/><text x="358" y="49" font-size="9">0.117</text>
+          <text x="0" y="69" fill="#A7AFBC">return_to_order_ratio</text>
+          <rect x="130" y="61" width="219" height="10" fill="#4C93D9"/><text x="353" y="69" font-size="9">0.115</text>
+          <text x="0" y="89" fill="#A7AFBC">tracking_number_valid</text>
+          <rect x="130" y="81" width="138" height="10" fill="#7FB4E0"/><text x="272" y="89" font-size="9">0.072</text>
+          <text x="0" y="109" fill="#A7AFBC">total_returns_lifetime</text>
+          <rect x="130" y="101" width="130" height="10" fill="#7FB4E0"/><text x="264" y="109" font-size="9">0.068</text>
         </g>
       </svg>
       <p class="cap">Engineered ratios rank alongside raw behavioral fields — the payoff of Phase 2.</p>
@@ -541,18 +542,18 @@ tr.hi td{background:rgba(30,158,114,.055)}
   <div class="row c-46 u" style="margin-top:14px">
     <svg viewBox="0 0 620 190" width="100%" role="img" aria-label="Grouped bar chart: return rate vs quality-issue rate per cluster">
       <g font-family="-apple-system,sans-serif">
-        <line x1="0" y1="150" x2="600" y2="150" stroke="#C7D3E1" stroke-width="1"/>
-        <rect x="60" y="52.9" width="36" height="97.1" fill="#2A6FB0"/><text x="78" y="46" text-anchor="middle" font-size="10.5" fill="#131A24">44.8%</text>
-        <rect x="106" y="102.3" width="36" height="47.7" fill="#C1652E"/><text x="124" y="96" text-anchor="middle" font-size="10.5" fill="#131A24">22%</text>
-        <text x="101" y="168" text-anchor="middle" font-size="10.5" fill="#131A24" font-weight="600">Cluster 0</text>
+        <line x1="0" y1="150" x2="600" y2="150" stroke="#414B5C" stroke-width="1"/>
+        <rect x="60" y="52.9" width="36" height="97.1" fill="#4C93D9"/><text x="78" y="46" text-anchor="middle" font-size="10.5" fill="#F2F4F7">44.8%</text>
+        <rect x="106" y="102.3" width="36" height="47.7" fill="#D68A4A"/><text x="124" y="96" text-anchor="middle" font-size="10.5" fill="#F2F4F7">22%</text>
+        <text x="101" y="168" text-anchor="middle" font-size="10.5" fill="#F2F4F7" font-weight="600">Cluster 0</text>
 
-        <rect x="280" y="135.3" width="36" height="14.7" fill="#2A6FB0"/><text x="298" y="129" text-anchor="middle" font-size="10.5" fill="#131A24">6.8%</text>
-        <rect x="326" y="67.7" width="36" height="82.3" fill="#C1652E"/><text x="344" y="61" text-anchor="middle" font-size="10.5" fill="#131A24" font-weight="700">38%</text>
-        <text x="321" y="168" text-anchor="middle" font-size="10.5" fill="#131A24" font-weight="600">Cluster 1</text>
+        <rect x="280" y="135.3" width="36" height="14.7" fill="#4C93D9"/><text x="298" y="129" text-anchor="middle" font-size="10.5" fill="#F2F4F7">6.8%</text>
+        <rect x="326" y="67.7" width="36" height="82.3" fill="#D68A4A"/><text x="344" y="61" text-anchor="middle" font-size="10.5" fill="#F2F4F7" font-weight="700">38%</text>
+        <text x="321" y="168" text-anchor="middle" font-size="10.5" fill="#F2F4F7" font-weight="600">Cluster 1</text>
 
-        <rect x="500" y="25.0" width="36" height="125.0" fill="#2A6FB0"/><text x="518" y="18" text-anchor="middle" font-size="10.5" fill="#131A24">57.7%</text>
-        <rect x="546" y="108.8" width="36" height="41.2" fill="#C1652E"/><text x="564" y="102" text-anchor="middle" font-size="10.5" fill="#131A24">19%</text>
-        <text x="541" y="168" text-anchor="middle" font-size="10.5" fill="#131A24" font-weight="600">Cluster 2</text>
+        <rect x="500" y="25.0" width="36" height="125.0" fill="#4C93D9"/><text x="518" y="18" text-anchor="middle" font-size="10.5" fill="#F2F4F7">57.7%</text>
+        <rect x="546" y="108.8" width="36" height="41.2" fill="#D68A4A"/><text x="564" y="102" text-anchor="middle" font-size="10.5" fill="#F2F4F7">19%</text>
+        <text x="541" y="168" text-anchor="middle" font-size="10.5" fill="#F2F4F7" font-weight="600">Cluster 2</text>
       </g>
     </svg>
     <div class="p j">
@@ -625,14 +626,14 @@ tr.hi td{background:rgba(30,158,114,.055)}
       non-legitimate refund exposure, <b>$1.88M</b> of it reachable today with a single no-ML
       policy rule.</p>
       <div class="chips" style="margin-top:6px">
-        <span class="chip" style="background:rgba(42,111,176,.1);color:var(--cyan-lt)">Subham Ranjan · A017</span>
-        <span class="chip" style="background:rgba(193,101,46,.1);color:var(--gold-lt)">Shriya · A023</span>
-        <span class="chip" style="background:rgba(30,158,114,.1);color:var(--green-lt)">Abhinav Kumar · A035</span>
+        <span class="chip" style="background:rgba(76,147,217,.18);color:var(--cyan-lt)">Subham Ranjan · A017</span>
+        <span class="chip" style="background:rgba(214,138,74,.18);color:var(--gold-lt)">Shriya · A023</span>
+        <span class="chip" style="background:rgba(63,190,142,.18);color:var(--green-lt)">Abhinav Kumar · A035</span>
       </div>
       <div class="chips" style="margin-top:6px">
-        <span class="chip" style="background:rgba(199,65,58,.1);color:var(--red-lt)">Dev Vagrecha · A049</span>
-        <span class="chip" style="background:rgba(42,111,176,.1);color:var(--cyan-lt)">Samruddhi Pradhan · A054</span>
-        <span class="chip" style="background:rgba(193,101,46,.1);color:var(--gold-lt)">Yatharth Vij · A072</span>
+        <span class="chip" style="background:rgba(224,100,92,.18);color:var(--red-lt)">Dev Vagrecha · A049</span>
+        <span class="chip" style="background:rgba(76,147,217,.18);color:var(--cyan-lt)">Samruddhi Pradhan · A054</span>
+        <span class="chip" style="background:rgba(214,138,74,.18);color:var(--gold-lt)">Yatharth Vij · A072</span>
       </div>
     </div>
   </div>
