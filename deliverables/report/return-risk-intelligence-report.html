@@ -26,14 +26,21 @@
   small, .muted{color:var(--muted);}
   .subtitle{color:var(--ink-2);font-size:15px;margin:0 0 4px;}
   .meta{color:var(--muted);font-size:12.5px;}
-  .cover{padding-top:70px;text-align:center;}
-  .cover .inst{font-size:17px;font-weight:700;letter-spacing:.01em;margin:0 0 4px;}
-  .cover .school{font-size:14px;font-weight:700;letter-spacing:.01em;margin:0 0 46px;}
-  .cover .subject{font-size:24px;font-weight:700;margin:0 0 46px;}
-  .cover h1{font-size:22px;font-weight:700;color:var(--accent);max-width:640px;
-      margin:0 auto 10px;line-height:1.35;}
-  .cover .sub{font-size:14px;color:var(--ink-2);max-width:560px;margin:0 auto 46px;}
-  .cover .to,.cover .by{font-size:14px;font-weight:700;margin:0 0 6px;}
+  .cover{padding-top:36px;text-align:center;}
+  .cover .inst{font-size:15px;font-weight:700;letter-spacing:.01em;margin:0 0 2px;}
+  .cover .school{font-size:12.5px;font-weight:700;letter-spacing:.01em;margin:0 0 14px;}
+  .cover .logo{height:64px;margin:0 auto 14px;display:block;}
+  .cover .subject{font-size:22px;font-weight:700;margin:0 0 22px;}
+  .cover h1{font-size:19px;font-weight:700;color:var(--accent);max-width:640px;
+      margin:0 auto 8px;line-height:1.35;}
+  .cover .sub{font-size:13px;color:var(--ink-2);max-width:560px;margin:0 auto 18px;}
+  .cover .to,.cover .by{font-size:13px;font-weight:700;margin:0 0 5px;}
+  .cover .team{display:grid;grid-template-columns:repeat(3,1fr);gap:14px 18px;
+      max-width:560px;margin:26px auto 0;}
+  .cover .team figure{margin:0;}
+  .cover .team img{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:4px;
+      border:1px solid var(--border);display:block;background:#fff;}
+  .cover .team figcaption{font-size:11px;font-weight:700;margin-top:6px;line-height:1.3;}
   table{width:100%;border-collapse:collapse;margin:10px 0 18px;font-size:13px;}
   th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--grid);}
   th{color:var(--ink-2);font-weight:600;font-size:12px;border-bottom:2px solid var(--baseline);}
@@ -74,6 +81,7 @@
 <section class="cover">
   <p class="inst">NARSEE MONJEE INSTITUTE OF MANAGEMENT STUDIES</p>
   <p class="school">SCHOOL OF BUSINESS MANAGEMENT</p>
+  <img class="logo" src="assets/nmims-logo.png" alt="SVKM's NMIMS - Deemed to be University">
   <p class="subject">Big Data Analytics</p>
   <h1>Predicting Return Probability, Return Fraud, and Product Quality Issues</h1>
   <p class="sub">A PySpark/MLlib solution that separates genuine returns, product-quality failures,
@@ -81,7 +89,17 @@
   the 1-in-3 returns worth a second look, instead of reviewing all of them.</p>
   <p class="to">Submitted to: Prof. Abhishek Sarkar</p>
   <p class="by">Submitted by: Group 3</p>
-  <p class="meta" style="margin-top:30px;">Dataset: <code>ecommerce_return_abuse_dataset.csv</code> (Kaggle) - 60,000 orders × 35 features</p>
+
+  <div class="team">
+    <figure><img src="assets/team-dev-vagrecha.jpeg" alt="Dev Vagrecha"><figcaption>Dev Vagrecha - A049</figcaption></figure>
+    <figure><img src="assets/team-samruddhi-pradhan.jpeg" alt="Samruddhi Pradhan"><figcaption>Samruddhi Pradhan - A054</figcaption></figure>
+    <figure><img src="assets/team-abhinav-kumar.jpeg" alt="Abhinav Kumar"><figcaption>Abhinav Kumar - A035</figcaption></figure>
+    <figure><img src="assets/team-subham-ranjan.jpeg" alt="Subham Ranjan"><figcaption>Subham Ranjan - A017</figcaption></figure>
+    <figure><img src="assets/team-yatharth-vij.jpeg" alt="Yatharth Vij"><figcaption>Yatharth Vij - A072</figcaption></figure>
+    <figure><img src="assets/team-shriya.jpeg" alt="Shriya"><figcaption>Shriya - A023</figcaption></figure>
+  </div>
+
+  <p class="meta" style="margin-top:24px;">Dataset: <code>ecommerce_return_abuse_dataset.csv</code> (Kaggle) - 60,000 orders × 35 features</p>
 </section>
 
 <section class="break">
