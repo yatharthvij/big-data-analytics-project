@@ -87,7 +87,7 @@ big-data-analytics-project/
 ├── data/                       The data lake — raw + processed (Bronze/Silver/Gold). Gitignored.
 ├── deliverables/
 │   ├── report/                       Consulting report — 17 pages, HTML + PDF
-│   └── presentation/                 Executive deck — 10 slides (HTML + PDF), click-through nav
+│   └── presentation/                 Executive deck — 8 slides (HTML + PDF), click-through nav
 │       └── assets/                       Closing-slide video + poster fallback for the PDF export
 ├── src/
 │   └── export_pdfs.py                Renders both deliverables' HTML to PDF (Playwright + Chrome)
@@ -179,12 +179,12 @@ consumed by the report and deck). The deck (`deliverables/presentation/*.html`) 
 
 | Criterion | Marks | Where it's addressed |
 |---|---|---|
-| Business Problem Definition & Executive Storytelling | 3 | This README · Report §1 (incl. Industry Background) · Deck slides 1–3 |
-| Data Engineering & Architecture | 4 | `notebooks/01_data_engineering.ipynb` · Report §3–4 · Deck slides 4–5 |
+| Business Problem Definition & Executive Storytelling | 3 | This README · Report §1 (incl. Industry Background) · Deck slides 1–2 |
+| Data Engineering & Architecture | 4 | `notebooks/01_data_engineering.ipynb` · Report §3–4 · Deck slide 3 |
 | Feature Engineering & Data Preparation | 3 | `notebooks/01_data_engineering.ipynb` §4 · Report §4.3 |
-| Machine Learning Implementation | 4 | `notebooks/02_ml_modeling.ipynb` (3 approaches) · Report §5.1–5.3 · Deck slides 7–8 |
-| Model Evaluation & Interpretation | 2 | `docs/*-results.md` weaknesses sections · baseline/threshold/silhouette analyses · Deck slide 6 |
-| Business Recommendations & Strategic Value | 2 | Report §6–7 · Deck slides 6, 9 |
+| Machine Learning Implementation | 4 | `notebooks/02_ml_modeling.ipynb` (3 approaches) · Report §5.1–5.3 · Deck slides 5–6 |
+| Model Evaluation & Interpretation | 2 | `docs/*-results.md` weaknesses sections · baseline/threshold/silhouette analyses · Deck slide 4 |
+| Business Recommendations & Strategic Value | 2 | Report §6–7 · Deck slides 4, 7 |
 | Professionalism, Documentation & Presentation | 2 | This README · `CLAUDE.md` · phased git history · HTML+PDF deliverables |
 
 ## Team

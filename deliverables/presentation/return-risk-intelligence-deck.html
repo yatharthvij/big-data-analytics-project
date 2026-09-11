@@ -169,7 +169,7 @@ tr.hi td{background:rgba(63,190,142,.10)}
 .s.on .u:nth-child(3){animation-delay:.14s}.s.on .u:nth-child(4){animation-delay:.2s}
 @media(prefers-reduced-motion:reduce){.s.on .u{animation:none}.rail{transition:none}}
 
-/* One slide == one page: printed PDF is exactly ten pages.
+/* One slide == one page: printed PDF is exactly eight pages.
    Export with src/export_pdfs.py (Playwright + system Chrome, width 297mm / height 167mm). */
 @page{size:297mm 167mm;margin:0}
 @media print{
@@ -208,7 +208,7 @@ tr.hi td{background:rgba(63,190,142,.10)}
       <div class="cap"><b>43.8%</b> of all refund dollars requested, from just <b>29.9%</b> of orders — bad actors skew toward higher-value claims</div></div>
     <div class="p g"><div class="eye">Classifier performance (test set)</div>
       <div class="n xl go">0.999</div>
-      <div class="cap">weighted F1, Random Forest — synthetic-dataset caveat on slide 7, not a production guarantee</div></div>
+      <div class="cap">weighted F1, Random Forest — synthetic-dataset caveat on slide 5, not a production guarantee</div></div>
     <div class="p j"><div class="eye">Hidden in the "legitimate" majority</div>
       <div class="n xl gr">38%</div>
       <div class="cap">of returns in the largest, 96%-legitimate customer segment are still quality-issue driven</div></div>
@@ -219,63 +219,20 @@ tr.hi td{background:rgba(63,190,142,.10)}
     Fraudulent Return claims average <b>$434.73</b> vs. <b>$141.14</b> for legitimate returns — a
     <b>3.1×</b> gap &nbsp;·&nbsp; three independent PySpark MLlib approaches: multi-class classification
     (Random Forest vs. Logistic Regression), K-Means clustering, and refund-exposure regression &nbsp;·&nbsp; this dataset is
-    synthetic, so treat 0.999 F1 as a pipeline proof, not a production number (more on slide 7).
+    synthetic, so treat 0.999 F1 as a pipeline proof, not a production number (more on slide 5).
   </p>
   <p class="cap u" style="margin-top:9px">NMIMS MBA · Big Data Analytics · Consulting Presentation &nbsp;·&nbsp; Subham Ranjan A017 · Shriya A023 · Abhinav Kumar A035 · Dev Vagrecha A049 · Samruddhi Pradhan A054 · Yatharth Vij A072</p>
 </section>
 
-<!-- ==================================================== 02 · business problem -->
+<!-- ==================================================== 02 · business problem + industry -->
 <section class="s" id="s2">
   <div class="u">
-    <div class="kick">The business problem</div>
-    <h2>One review queue, <em>three different problems</em> wearing the same form.</h2>
-    <p class="sub">A return-audit team currently reviews every disputed return the same way. It has no
-    systematic way to tell whether a spike in returns is fraud, abuse of a lenient policy, or a
-    genuine quality defect — three problems that need three different owners, currently
-    indistinguishable in a spreadsheet.</p>
-  </div>
-
-  <div class="flow u">
-    <div class="fs"><span class="fn">01 · CUSTOMERS RETURN</span><h4>Most returns are genuine</h4>
-      <p>Defective items, wrong fit, changed mind — the normal cost of running an e-commerce store.</p>
-      <div class="big">70.1% legitimate</div></div>
-    <div class="fs"><span class="fn">02 · SOME ABUSE IT</span><h4>Policy abuse, fraud, wardrobing</h4>
-      <p>Exploiting lenient terms, deceptive claims, or wearing-and-returning — three distinct behaviors.</p>
-      <div class="big">29.9% of orders</div></div>
-    <div class="fs hi"><span class="fn">03 · ALL LOOK THE SAME</span><h4>One manual-review process</h4>
-      <p>Every disputed return gets identical treatment today, regardless of which of the three it actually is.</p>
-      <div class="big">1 review queue</div></div>
-    <div class="fs rd"><span class="fn">04 · THE WRONG FIX</span><h4>Blanket policy tightening</h4>
-      <p>Punishes the 70% of legitimate customers to catch the fraction who abuse the system.</p>
-      <div class="big">wrong lever</div></div>
-  </div>
-
-  <div class="row c-64 u" style="margin-top:16px">
-    <div class="p b">
-      <div class="eye" style="color:var(--cyan-lt)">The question this project answers</div>
-      <p class="pull" style="margin-top:6px">Which returns are fraud, which are policy abuse, and which are genuine quality failures — and what does each one actually cost?</p>
-      <p class="note">Three sub-problems, one dataset: <b>return fraud</b> → classification on
-      <code class="m">abuse_type</code>; <b>product quality</b> → return-reason patterns cut by
-      cluster and category; <b>return risk</b> → lifetime order/return history per customer.</p>
-    </div>
-    <div class="p j">
-      <div class="eye" style="color:var(--green-lt)">Why this is a triage problem, not a policy problem</div>
-      <p class="note">The highest-value lever is routing each return to the right team fast — not
-      tightening policy across the board, which would punish the 70% of customers who did nothing
-      wrong. <b>Three different interventions, three different owners</b>, is the recommendation
-      this whole pipeline builds toward.</p>
-    </div>
-  </div>
-</section>
-
-<!-- ==================================================== 03 · industry background -->
-<section class="s" id="s3">
-  <div class="u">
-    <div class="kick">Industry background</div>
-    <h2>This is not a hypothetical problem — <em>the industry is already living it</em>.</h2>
-    <p class="sub">E-commerce carries a structurally higher return burden than brick-and-mortar, and
-    fraud/abuse is a large, growing share of it. This project sits squarely inside an industry-wide
-    shift already underway.</p>
+    <div class="kick">The business problem <span style="color:var(--gold-lt)">· and the industry backdrop</span></div>
+    <h2>One review queue, <em>three different problems</em> — and the industry already knows it.</h2>
+    <p class="sub">A return-audit team currently reviews every disputed return the same way, with no
+    systematic way to tell fraud from policy abuse from a genuine quality defect. This isn't
+    hypothetical: e-commerce carries a structurally higher return burden than brick-and-mortar, and
+    this project sits squarely inside an industry-wide shift already underway.</p>
   </div>
 
   <div class="row c3 u">
@@ -285,75 +242,59 @@ tr.hi td{background:rgba(63,190,142,.10)}
       $849.9B in merchandise returns forecast for 2025.</div></div>
     <div class="p g"><div class="eye" style="color:var(--gold-lt)">Appriss Retail × Deloitte · 2024</div>
       <div class="n lg go">15.14%</div>
-      <div class="cap">of all returns are fraudulent — $103B lost in 2024 (up from $101B in 2023),
-      across 60+ retailers studied.</div></div>
-    <div class="p j"><div class="eye" style="color:var(--green-lt)">Same 2024 study</div>
-      <div class="n lg gr">60%</div>
-      <div class="cap">of retail executives specifically flag <b>wardrobing</b> — one of our four
-      target classes — as a major fraud pattern. 85% now deploy AI to fight it.</div></div>
+      <div class="cap">of all returns are fraudulent — $103B lost in 2024, across 60+ retailers
+      studied. 60% of execs flag wardrobing specifically; 85% now deploy AI to fight it.</div></div>
+    <div class="p j"><div class="eye" style="color:var(--green-lt)">Our dataset, by comparison</div>
+      <div class="n lg gr">17.9%</div>
+      <div class="cap">our Fraudulent Return + Wardrobing rate — close to Appriss's 15.14%. Class
+      <b>prevalence</b> is realistic; class <b>separability</b> is not (see slide 5).</div></div>
   </div>
 
-  <div class="ground u" style="margin-top:14px;">
-    <div class="gl">How our dataset compares</div>
-    <p>This dataset's combined Fraudulent Return + Wardrobing rate is <b>10.2% + 7.7% = 17.9%</b> —
-    close to Appriss's industry-wide <b>15.14%</b> fraud rate. The class <b>prevalence</b> here is
-    realistically calibrated to real-world reporting, even though (see slide 7) the class
-    <b>separability</b> the model achieves is not something to expect on live data.</p>
+  <div class="row c-64 u" style="margin-top:14px">
+    <div class="p b">
+      <div class="eye" style="color:var(--cyan-lt)">The question this project answers</div>
+      <p class="pull" style="margin-top:6px">Which returns are fraud, which are policy abuse, and which are genuine quality failures — and what does each one actually cost?</p>
+      <p class="note">Three sub-problems, one dataset: <b>return fraud</b> → classification on
+      <code class="m">abuse_type</code>; <b>product quality</b> → clustering cut by category;
+      <b>return risk</b> → refund-exposure regression.</p>
+    </div>
+    <div class="p j">
+      <div class="eye" style="color:var(--green-lt)">Why this is a triage problem, not a policy problem</div>
+      <p class="note">The highest-value lever is routing each return to the right team fast — not
+      tightening policy across the board, which would punish the 70% of customers who did nothing
+      wrong. <b>Three different interventions, three different owners</b>, is the recommendation
+      this whole pipeline builds toward.</p>
+    </div>
   </div>
   <p class="cap u" style="margin-top:8px;">Sources: National Retail Federation, <i>2025 Retail
   Returns Landscape</i> (nrf.com) · Appriss Retail with Deloitte, <i>Fraudulent Returns and Claims
   Cost Retailers $103B in 2024</i> (apprissretail.com). Full citations in the report's Appendix C.</p>
 </section>
 
-<!-- ====================================================== 04 · data overview -->
-<section class="s" id="s4">
+<!-- ====================================================== 03 · data overview + architecture -->
+<section class="s" id="s3">
   <div class="u">
-    <div class="kick">Data overview <span style="color:var(--gold-lt)">· 60,000 orders, 35 features</span></div>
-    <h2>A realistic imbalance — and the dollars don't split the way the order counts do.</h2>
+    <div class="kick">Data &amp; architecture <span style="color:var(--gold-lt)">· 60,000 orders, 35 features</span></div>
+    <h2>A realistic imbalance, engineered into a <em>Bronze→Silver→Gold</em> pipeline.</h2>
   </div>
 
-  <div class="p u" style="padding:14px 16px">
-    <svg viewBox="0 0 900 46" width="100%" height="46" role="img" aria-label="Stacked bar of abuse_type class distribution">
+  <div class="p u" style="padding:9px 14px">
+    <svg viewBox="0 0 900 46" width="100%" height="34" role="img" aria-label="Stacked bar of abuse_type class distribution">
       <rect x="0" y="10" width="630.9" height="26" fill="#4C93D9"/>
       <rect x="630.9" y="10" width="108" height="26" fill="#D68A4A"/>
       <rect x="738.9" y="10" width="91.8" height="26" fill="#3FBE8E"/>
       <rect x="830.7" y="10" width="69.3" height="26" fill="#E0645C"/>
     </svg>
-    <div class="legend">
-      <span><span class="sw" style="background:#4C93D9"></span>Legitimate — 70.1% (42,060 orders, $5.94M requested)</span>
-      <span><span class="sw" style="background:#D68A4A"></span>Policy Abuser — 12.0% (7,192, $0.76M)</span>
-      <span><span class="sw" style="background:#3FBE8E"></span>Fraudulent Return — 10.2% (6,112, $2.66M)</span>
-      <span><span class="sw" style="background:#E0645C"></span>Wardrobing — 7.7% (4,636, $1.22M)</span>
+    <div class="legend" style="margin-top:3px">
+      <span><span class="sw" style="background:#4C93D9"></span>Legitimate — 70.1% ($5.94M)</span>
+      <span><span class="sw" style="background:#D68A4A"></span>Policy Abuser — 12.0% ($0.76M)</span>
+      <span><span class="sw" style="background:#3FBE8E"></span>Fraudulent Return — 10.2% ($2.66M)</span>
+      <span><span class="sw" style="background:#E0645C"></span>Wardrobing — 7.7% ($1.22M)</span>
     </div>
   </div>
 
-  <div class="row c3 u" style="margin-top:14px">
-    <div class="p"><h4 style="font-size:13px;margin-bottom:5px;color:var(--ink)">Behavioral signals</h4><p class="note">Photo evidence, tracking validity, address changes, refund-to-different-account, multiple accounts, dispute history</p></div>
-    <div class="p"><h4 style="font-size:13px;margin-bottom:5px;color:var(--ink)">Customer history</h4><p class="note">Lifetime orders/returns, return rate, account age, loyalty segment</p></div>
-    <div class="p"><h4 style="font-size:13px;margin-bottom:5px;color:var(--ink)">Context</h4><p class="note">12 product categories, 12 return reasons, 8 countries, payment method, shipping carrier</p></div>
-  </div>
-
-  <div class="ground u" style="margin-top:12px">
-    <div class="gl">Verified — checked programmatically, not assumed</div>
-    <p><b>0 missing values</b> across all 35 columns, <b>0 duplicate</b> <code class="m">order_id</code>,
-    <b>0 logical violations</b> (no return-before-order dates, no returns exceeding lifetime orders,
-    no implausible ages) — confirmed in <code class="m">notebooks/01_data_engineering.ipynb</code> §2
-    before anything downstream trusted this data.</p>
-  </div>
-</section>
-
-<!-- ====================================================== 05 · architecture -->
-<section class="s" id="s5">
-  <div class="u">
-    <div class="kick">Solution architecture <span style="color:var(--gold-lt)">· one picture</span></div>
-    <h2>Sqoop / Flume / API ingestion → <em>Bronze/Silver/Gold lakehouse</em> → PySpark MLlib.</h2>
-    <p class="sub">This notebook runs directly on the static Kaggle CSV as a practical stand-in — the
-    diagram below is the production-scale design the Silver→Gold transformation logic is built to
-    generalize to.</p>
-  </div>
-
-  <div class="p u" style="padding:16px 18px">
-    <svg viewBox="0 0 1000 220" width="100%" role="img" aria-label="architecture diagram">
+  <div class="p u" style="padding:8px 16px;margin-top:8px">
+    <svg viewBox="0 0 1000 210" width="100%" role="img" aria-label="architecture diagram">
       <defs><marker id="a1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#8A93A3"/></marker></defs>
       <g font-size="12.5" fill="#F2F4F7" font-family="-apple-system,sans-serif">
         <rect x="10" y="10" width="180" height="48" rx="6" fill="#2E2416" stroke="#D68A4A" stroke-width="1.5"/>
@@ -409,22 +350,20 @@ tr.hi td{background:rgba(63,190,142,.10)}
     </svg>
   </div>
 
-  <div class="row c3 u" style="margin-top:14px">
-    <div class="p b"><div class="eye" style="color:var(--cyan-lt)">Why Bronze/Silver/Gold</div>
-      <p class="note">Bronze keeps a permanent, replayable raw record. Silver is cleaned and
-      feature-engineered once, reused by both models. Gold is the only layer anything ML touches.</p></div>
-    <div class="p g"><div class="eye" style="color:var(--gold-lt)">Explicit schema, not inferred</div>
-      <p class="note">The notebook loads the CSV with an explicit <code class="m">StructType</code> —
-      never <code class="m">inferSchema</code> in production, which forces a full extra scan and can
-      silently mis-type columns on drift.</p></div>
-    <div class="p j"><div class="eye" style="color:var(--green-lt)">Cap outliers, don't delete</div>
-      <p class="note">Extreme values are often the fraud signal itself. 8 continuous fields IQR-capped
-      at the 1st/99th percentile — preserving row count and the extremeness of the behavior.</p></div>
+  <div class="ground u" style="margin-top:8px">
+    <div class="gl">Verified, then generalized to production scale</div>
+    <p><b>0 missing values</b>, <b>0 duplicate order_id</b>, <b>0 logical violations</b> — checked
+    programmatically before anything downstream trusted this data. Bronze keeps a permanent,
+    replayable raw record (explicit <code class="m">StructType</code>, not inferred); Silver is
+    cleaned and feature-engineered once, with outliers IQR-capped rather than deleted (extreme
+    values are often the fraud signal itself); Gold is the only layer any model touches. This
+    notebook runs directly on the static CSV — Sqoop/Flume/API ingestion above is the
+    production-scale design the pipeline is built to generalize to.</p>
   </div>
 </section>
 
-<!-- ==================================================== 06 · key findings & risks -->
-<section class="s" id="s6">
+<!-- ==================================================== 04 · key findings & risks -->
+<section class="s" id="s4">
   <div class="u">
     <div class="kick">Key findings <span style="color:var(--gold-lt)">· and what could still go wrong</span></div>
     <h2>What the three models actually tell us — <em>and the risks that travel with them</em>.</h2>
@@ -464,8 +403,8 @@ tr.hi td{background:rgba(63,190,142,.10)}
   </div>
 </section>
 
-<!-- ============================================================= 07 · model 1 -->
-<section class="s" id="s7">
+<!-- ============================================================= 05 · model 1 -->
+<section class="s" id="s5">
   <div class="u">
     <div class="kick">Approach 1 — Classification</div>
     <h2>Random Forest vs. Logistic Regression on <em>return-fraud type</em>.</h2>
@@ -517,8 +456,8 @@ tr.hi td{background:rgba(63,190,142,.10)}
   </p>
 </section>
 
-<!-- ============================================================= 08 · model 2 -->
-<section class="s" id="s8">
+<!-- ============================================================= 06 · model 2 -->
+<section class="s" id="s6">
   <div class="u">
     <div class="kick">Approach 2 — Clustering</div>
     <h2>K-Means finds 3 behavioral segments <em>the fraud label can't see</em>.</h2>
@@ -567,8 +506,8 @@ tr.hi td{background:rgba(63,190,142,.10)}
   </div>
 </section>
 
-<!-- ==================================================== 09 · recommendations -->
-<section class="s" id="s9">
+<!-- ==================================================== 07 · recommendations -->
+<section class="s" id="s7">
   <div class="u">
     <div class="kick">What we're recommending</div>
     <h2>Four interventions, four owners — <em>ship the free one first</em>.</h2>
@@ -605,12 +544,12 @@ tr.hi td{background:rgba(63,190,142,.10)}
       reserve-accounting input independent of whether it turns out to be fraud, abuse, or genuine.</p>
       <div class="own">Owner · Finance / Customer Ops</div></div></div>
   </div>
-  <p class="cap u" style="margin-top:10px;">Full risks &amp; roadmap on slide 6 — none of this ships
+  <p class="cap u" style="margin-top:10px;">Full risks &amp; roadmap on slide 4 — none of this ships
   without re-validating on real labeled outcomes first.</p>
 </section>
 
-<!-- ============================================================= 10 · close -->
-<section class="s" id="s10">
+<!-- ============================================================= 08 · close -->
+<section class="s" id="s8">
   <div class="row c-64 u" style="align-items:center">
     <div class="video-wrap">
       <video controls preload="metadata" poster="assets/thank-you-poster.jpg">
@@ -653,7 +592,7 @@ tr.hi td{background:rgba(63,190,142,.10)}
   <div class="w">Return Risk Intelligence &nbsp;·&nbsp; <b>fraud, quality &amp; return-risk triage</b></div>
   <div class="c">
     <button id="prev" aria-label="Previous slide">&#8249;</button>
-    <span class="ct" id="ct">01 / 10</span>
+    <span class="ct" id="ct">01 / 08</span>
     <button id="next" aria-label="Next slide">&#8250;</button>
   </div>
 </div>
