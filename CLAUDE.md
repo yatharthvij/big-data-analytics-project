@@ -27,41 +27,45 @@ project back up.
      Approach 1, where the more complex model won; stated as a deliberate, disclosed contrast.
   Writes 9 metric CSVs to `docs/` and models to `data/processed/models/`.
 - **Deliverables** — `deliverables/report/` (17-page HTML+PDF consulting report) and
-  `deliverables/presentation/` (exactly 8 HTML+PDF slides — 7 informative + closing video slide)
-  both built and rendered via `src/export_pdfs.py` (Playwright + system Chrome —
-  `--print-to-pdf-no-header` CLI flag doesn't work on recent Chrome, use the DevTools Protocol path
-  instead). Both visually QA'd at full resolution (rendered to PNG via PyMuPDF) — no
-  overflow/collisions. Report follows the exact section spec from the guidelines PDF: Executive
-  Summary, Business Context (incl. Industry Background with real NRF/Appriss Retail citations),
-  Data Understanding, Enterprise Architecture, Data Engineering, Machine Learning (5.1/5.2/5.3 per
-  approach), **Business Insights** (§6) and **Strategic Recommendations** (§7) as two separate
-  sections (not combined), Appendix. (The 17-page report keeps this full section split even though
-  the 8-slide deck condenses some of the same material onto fewer slides — see below.)
+  `deliverables/presentation/` (exactly 9 HTML+PDF slides — dedicated cover/team page + 7
+  informative + closing video slide) both built and rendered via `src/export_pdfs.py` (Playwright +
+  system Chrome — `--print-to-pdf-no-header` CLI flag doesn't work on recent Chrome, use the
+  DevTools Protocol path instead). Both visually QA'd at full resolution (rendered to PNG via
+  PyMuPDF) — no overflow/collisions. Report follows the exact section spec from the guidelines PDF:
+  Executive Summary, Business Context (incl. Industry Background with real NRF/Appriss Retail
+  citations), Data Understanding, Enterprise Architecture, Data Engineering, Machine Learning
+  (5.1/5.2/5.3 per approach), **Business Insights** (§6) and **Strategic Recommendations** (§7) as
+  two separate sections (not combined), Appendix. (The 17-page report keeps this full section split
+  even though the 9-slide deck condenses some of the same material onto fewer slides — see below.)
 - **docs/** — per-model results write-ups (`fraud-classification-results.md`,
   `quality-clustering-results.md`, `regression-results.md`), each with an explicit **weaknesses**
   section. Structure mirrors a stronger reference project from the same course (see below).
-- **Deck slide count**: 1 title, 2 business problem + industry background (merged), 3 data overview
-  + architecture (merged), 4 key findings & risks, 5 Approach 1 — Classification, 6 Approach 2 —
-  Clustering, 7 recommendations, 8 thank-you/video. Originally 10 slides; slides 2+3 and 4+5 of the
-  old numbering were each merged into one slide per user request ("7 informative slides + thank-you
-  as the 8th") — content wasn't cut, just consolidated (the old 3-industry-stat-card row, the old
-  data-distribution chart, and the old architecture diagram all survive, just sharing slides with
-  their related content instead of getting a full slide each).
-- **Deck slide 8** ends with a short video (`deliverables/presentation/assets/thank-you.mp4`,
+- **Deck slide count**: 1 cover/team (title, "Group 3", full name+roll-no.+workstream table — no
+  headline content, added per user request as a dedicated title page distinct from slide 2), 2
+  title/stats (the original headline slide — $4.64M/0.999/38% stat cards — now counts as informative
+  page 1 of 7), 3 business problem + industry background (merged), 4 data overview + architecture
+  (merged), 5 key findings & risks, 6 Approach 1 — Classification, 7 Approach 2 — Clustering, 8
+  recommendations, 9 thank-you/video. Originally 10 slides; slides 2+3 and 4+5 of that original
+  numbering were merged per an earlier user request ("7 informative + thank-you as the 8th"),
+  landing at 8; a dedicated cover/team page was then added in front per a follow-up request ("title
+  page as slide 1 with names/roll nos/Group 3, then 7 informative, then thank-you as slide 9"),
+  landing at 9. Content wasn't cut at either step, only consolidated or prefixed.
+- **Deck slide 9** ends with a short video (`deliverables/presentation/assets/thank-you.mp4`,
   ~13s) — live `<video controls>` in the HTML, falls back to a Playwright-captured poster frame
   (`thank-you-poster.jpg`) under `@media print` since it can't play inside a static PDF.
 - **Deck is dark-themed** (screen and exported PDF both) — a full palette flip, not just a CSS
   variable swap, since the SVG charts and several inline styles use hardcoded hex rather than the
   `:root` custom properties. If you touch deck colors again, search for literal hex codes
   (`grep -oE '#[0-9A-Fa-f]{6}'`) as well as `var(--...)` — both exist in this file.
-- **Deck slide 4** is "Key findings & Risks/roadmap" (two-column), not Feature Engineering —
+- **Deck slide 5** is "Key findings & Risks/roadmap" (two-column), not Feature Engineering —
   repurposed since Feature Engineering isn't one of the guidelines' 8 named exec-deck topics and
-  is already covered in the notebook + Report §4.3. Slide 1 (title, "more on slide 5"), slide 2
-  ("see slide 5"), slide 5 ("caveat on slide 5"), and slide 7 (recommendations, "roadmap on slide
-  4") all cross-reference slide numbers explicitly — keep those in sync if slides move again.
+  is already covered in the notebook + Report §4.3. Slide 2 (title/stats, "more on slide 6"), slide
+  3 ("see slide 6"), slide 6 ("caveat on slide 6"), and slide 8 (recommendations, "roadmap on slide
+  5") all cross-reference slide numbers explicitly — keep those in sync if slides move again.
 - **Team**: Subham Ranjan (A017), Shriya (A023), Abhinav Kumar (A035), Dev Vagrecha (A049),
-  Samruddhi Pradhan (A054), Yatharth Vij (A072) — filled in identically in `README.md`, the
-  report's Appendix B, and the deck's title/closing slides.
+  Samruddhi Pradhan (A054), Yatharth Vij (A072) — **Group 3** — filled in identically in
+  `README.md`, the report's Appendix B, and the deck's cover slide (name/roll no./workstream table),
+  title/stats slide footer, and closing slide chips.
 
 ## Known caveat baked into every deliverable
 

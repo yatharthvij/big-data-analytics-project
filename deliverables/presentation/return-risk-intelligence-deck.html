@@ -169,7 +169,7 @@ tr.hi td{background:rgba(63,190,142,.10)}
 .s.on .u:nth-child(3){animation-delay:.14s}.s.on .u:nth-child(4){animation-delay:.2s}
 @media(prefers-reduced-motion:reduce){.s.on .u{animation:none}.rail{transition:none}}
 
-/* One slide == one page: printed PDF is exactly eight pages.
+/* One slide == one page: printed PDF is exactly nine pages.
    Export with src/export_pdfs.py (Playwright + system Chrome, width 297mm / height 167mm). */
 @page{size:297mm 167mm;margin:0}
 @media print{
@@ -190,8 +190,37 @@ tr.hi td{background:rgba(63,190,142,.10)}
 <div class="rail" id="rail"></div>
 <div class="deck" id="deck">
 
-<!-- ============================================================ 01 · title -->
+<!-- ============================================================ 01 · cover / team -->
 <section class="s on" id="s1">
+  <div class="u">
+    <div class="kick">NMIMS MBA · Big Data Analytics · Group Project <span style="color:var(--gold-lt)">· Group 3</span></div>
+    <h1>Return Risk Intelligence</h1>
+    <p class="sub">Predicting <b>Return Probability</b>, <b>Return Fraud</b> &amp; <b>Product Quality
+    Issues</b> in e-commerce — a PySpark/MLlib consulting presentation on <b>60,000 orders</b> from
+    a Kaggle e-commerce return-abuse dataset.</p>
+  </div>
+
+  <div class="p u" style="padding:6px 18px">
+    <table class="seg">
+      <thead><tr><th>Name</th><th>Roll no.</th><th>Workstream</th></tr></thead>
+      <tbody>
+        <tr><td class="nm">Subham Ranjan</td><td class="m">A017</td><td>Data acquisition &amp; Bronze/Silver pipeline</td></tr>
+        <tr><td class="nm">Shriya</td><td class="m">A023</td><td>Feature engineering &amp; Gold layer</td></tr>
+        <tr><td class="nm">Abhinav Kumar</td><td class="m">A035</td><td>Classification modeling &amp; evaluation</td></tr>
+        <tr><td class="nm">Dev Vagrecha</td><td class="m">A049</td><td>Clustering, quality deep-dive &amp; regression</td></tr>
+        <tr><td class="nm">Samruddhi Pradhan</td><td class="m">A054</td><td>Architecture &amp; enterprise design</td></tr>
+        <tr><td class="nm">Yatharth Vij</td><td class="m">A072</td><td>Narrative, report &amp; deck</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="cap u" style="margin-top:14px;max-width:none">Dataset:
+  <code class="m">ecommerce_return_abuse_dataset.csv</code> (Kaggle) · 60,000 orders × 35 features ·
+  Consulting Presentation, Group 3</p>
+</section>
+
+<!-- ============================================================ 02 · title (stats) -->
+<section class="s" id="s2">
   <div class="u">
     <div class="kick">Big Data Analytics · NMIMS MBA Group Project <span style="color:var(--gold-lt)">· Return Risk Intelligence</span></div>
     <h1>29.9% of returns aren't genuine. They carry <em>$4.64M</em> of refund dollars — and now we know which ones.</h1>
@@ -208,7 +237,7 @@ tr.hi td{background:rgba(63,190,142,.10)}
       <div class="cap"><b>43.8%</b> of all refund dollars requested, from just <b>29.9%</b> of orders — bad actors skew toward higher-value claims</div></div>
     <div class="p g"><div class="eye">Classifier performance (test set)</div>
       <div class="n xl go">0.999</div>
-      <div class="cap">weighted F1, Random Forest — synthetic-dataset caveat on slide 5, not a production guarantee</div></div>
+      <div class="cap">weighted F1, Random Forest — synthetic-dataset caveat on slide 6, not a production guarantee</div></div>
     <div class="p j"><div class="eye">Hidden in the "legitimate" majority</div>
       <div class="n xl gr">38%</div>
       <div class="cap">of returns in the largest, 96%-legitimate customer segment are still quality-issue driven</div></div>
@@ -219,13 +248,13 @@ tr.hi td{background:rgba(63,190,142,.10)}
     Fraudulent Return claims average <b>$434.73</b> vs. <b>$141.14</b> for legitimate returns — a
     <b>3.1×</b> gap &nbsp;·&nbsp; three independent PySpark MLlib approaches: multi-class classification
     (Random Forest vs. Logistic Regression), K-Means clustering, and refund-exposure regression &nbsp;·&nbsp; this dataset is
-    synthetic, so treat 0.999 F1 as a pipeline proof, not a production number (more on slide 5).
+    synthetic, so treat 0.999 F1 as a pipeline proof, not a production number (more on slide 6).
   </p>
   <p class="cap u" style="margin-top:9px">NMIMS MBA · Big Data Analytics · Consulting Presentation &nbsp;·&nbsp; Subham Ranjan A017 · Shriya A023 · Abhinav Kumar A035 · Dev Vagrecha A049 · Samruddhi Pradhan A054 · Yatharth Vij A072</p>
 </section>
 
-<!-- ==================================================== 02 · business problem + industry -->
-<section class="s" id="s2">
+<!-- ==================================================== 03 · business problem + industry -->
+<section class="s" id="s3">
   <div class="u">
     <div class="kick">The business problem <span style="color:var(--gold-lt)">· and the industry backdrop</span></div>
     <h2>One review queue, <em>three different problems</em> — and the industry already knows it.</h2>
@@ -247,7 +276,7 @@ tr.hi td{background:rgba(63,190,142,.10)}
     <div class="p j"><div class="eye" style="color:var(--green-lt)">Our dataset, by comparison</div>
       <div class="n lg gr">17.9%</div>
       <div class="cap">our Fraudulent Return + Wardrobing rate — close to Appriss's 15.14%. Class
-      <b>prevalence</b> is realistic; class <b>separability</b> is not (see slide 5).</div></div>
+      <b>prevalence</b> is realistic; class <b>separability</b> is not (see slide 6).</div></div>
   </div>
 
   <div class="row c-64 u" style="margin-top:14px">
@@ -271,8 +300,8 @@ tr.hi td{background:rgba(63,190,142,.10)}
   Cost Retailers $103B in 2024</i> (apprissretail.com). Full citations in the report's Appendix C.</p>
 </section>
 
-<!-- ====================================================== 03 · data overview + architecture -->
-<section class="s" id="s3">
+<!-- ====================================================== 04 · data overview + architecture -->
+<section class="s" id="s4">
   <div class="u">
     <div class="kick">Data &amp; architecture <span style="color:var(--gold-lt)">· 60,000 orders, 35 features</span></div>
     <h2>A realistic imbalance, engineered into a <em>Bronze→Silver→Gold</em> pipeline.</h2>
@@ -362,8 +391,8 @@ tr.hi td{background:rgba(63,190,142,.10)}
   </div>
 </section>
 
-<!-- ==================================================== 04 · key findings & risks -->
-<section class="s" id="s4">
+<!-- ==================================================== 05 · key findings & risks -->
+<section class="s" id="s5">
   <div class="u">
     <div class="kick">Key findings <span style="color:var(--gold-lt)">· and what could still go wrong</span></div>
     <h2>What the three models actually tell us — <em>and the risks that travel with them</em>.</h2>
@@ -403,8 +432,8 @@ tr.hi td{background:rgba(63,190,142,.10)}
   </div>
 </section>
 
-<!-- ============================================================= 05 · model 1 -->
-<section class="s" id="s5">
+<!-- ============================================================= 06 · model 1 -->
+<section class="s" id="s6">
   <div class="u">
     <div class="kick">Approach 1 — Classification</div>
     <h2>Random Forest vs. Logistic Regression on <em>return-fraud type</em>.</h2>
@@ -456,8 +485,8 @@ tr.hi td{background:rgba(63,190,142,.10)}
   </p>
 </section>
 
-<!-- ============================================================= 06 · model 2 -->
-<section class="s" id="s6">
+<!-- ============================================================= 07 · model 2 -->
+<section class="s" id="s7">
   <div class="u">
     <div class="kick">Approach 2 — Clustering</div>
     <h2>K-Means finds 3 behavioral segments <em>the fraud label can't see</em>.</h2>
@@ -506,8 +535,8 @@ tr.hi td{background:rgba(63,190,142,.10)}
   </div>
 </section>
 
-<!-- ==================================================== 07 · recommendations -->
-<section class="s" id="s7">
+<!-- ==================================================== 08 · recommendations -->
+<section class="s" id="s8">
   <div class="u">
     <div class="kick">What we're recommending</div>
     <h2>Four interventions, four owners — <em>ship the free one first</em>.</h2>
@@ -544,12 +573,12 @@ tr.hi td{background:rgba(63,190,142,.10)}
       reserve-accounting input independent of whether it turns out to be fraud, abuse, or genuine.</p>
       <div class="own">Owner · Finance / Customer Ops</div></div></div>
   </div>
-  <p class="cap u" style="margin-top:10px;">Full risks &amp; roadmap on slide 4 — none of this ships
+  <p class="cap u" style="margin-top:10px;">Full risks &amp; roadmap on slide 5 — none of this ships
   without re-validating on real labeled outcomes first.</p>
 </section>
 
-<!-- ============================================================= 08 · close -->
-<section class="s" id="s8">
+<!-- ============================================================= 09 · close -->
+<section class="s" id="s9">
   <div class="row c-64 u" style="align-items:center">
     <div class="video-wrap">
       <video controls preload="metadata" poster="assets/thank-you-poster.jpg">
@@ -592,7 +621,7 @@ tr.hi td{background:rgba(63,190,142,.10)}
   <div class="w">Return Risk Intelligence &nbsp;·&nbsp; <b>fraud, quality &amp; return-risk triage</b></div>
   <div class="c">
     <button id="prev" aria-label="Previous slide">&#8249;</button>
-    <span class="ct" id="ct">01 / 08</span>
+    <span class="ct" id="ct">01 / 09</span>
     <button id="next" aria-label="Next slide">&#8250;</button>
   </div>
 </div>
