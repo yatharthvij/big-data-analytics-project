@@ -1,0 +1,13 @@
+.DS_Store
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+venv/
+.spark-warehouse/
+metastore_db/
+derby.log
+
+# Data lake contents: regenerable from notebooks/01_data_engineering.ipynb, kept out of git
+# (raw CSV is downloaded from Kaggle per data/README.md; processed/ is Parquet + saved models)
+data/*.csv
+data/processed/
